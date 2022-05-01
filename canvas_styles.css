@@ -1,0 +1,129 @@
+* {
+  background-color: maroon;
+  font-family: Arial;
+}
+
+h2 {
+  color: white;
+  padding-left: 15%;
+}
+
+@media (min-width: 768px) {
+  #main {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+  }
+
+  #main_menu {
+    flex: 10%;
+    background-color: darkgray;
+    font-weight: bold;
+    font-size: 120%;
+  }
+
+  #course_menu {
+    flex: 10%;
+    background-color: darkgray;
+    font-weight: bold;
+    padding-top: 0.1%;
+    padding-bottom: 0.3%;
+  }
+
+  #announcements_panel {
+    flex: 43%;
+    display: flex;
+    flex-direction: column;
+    padding: 1%;
+  }
+
+  #assignments_panel {
+    flex: 17%;
+    display: flex;
+    flex-direction: column;
+    padding: 1%;
+  }
+}
+
+@media (max-width: 767px) {
+  #main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #main_menu {
+    flex: 100%;
+    background-color: darkgray;
+    font-weight: bold;
+    font-size: 120%;
+  }
+
+  #course_menu {
+    flex: 100%;
+    background-color: darkgray;
+    font-weight: bold;
+    padding-top: 0.1%;
+    padding-bottom: 0.3%;
+  }
+
+  #announcements_panel {
+    flex: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 1%;
+  }
+
+  #assignments_panel {
+    flex: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 1%;
+  }
+}
+
+.column {
+  margin: 1%;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0%;
+}
+
+a {
+  text-decoration: none;
+}
+
+.main_menu_items {
+  background-color: dimgray;
+  color: white;
+}
+
+li.main_menu_items {
+  border-bottom: 3px solid darkgray;
+  padding: 8% 12% 8% 12%;
+}
+
+li.course_menu_items {
+  border-top: 2px solid darkgray;
+  padding: 6%;
+}
+
+h3, h4, p, .course_menu_items, #announcements_panel, .announcement, .announcement_title, #assignments_panel, .assignment, .assignment_section, .assignment_section_title, .assignment_title {
+  background-color: white;
+}
+
+.announcement, .assignment_section {
+  border: 2px solid darkgray;
+  border-radius: 10px;
+  margin: 1%;
+  padding: 0% 3% 0% 3%;
+}
+
+.announcement_title, .assignment_section_title {
+  color: black;
+}
+
+.assignment_title {
+  font-weight: normal;
+}
