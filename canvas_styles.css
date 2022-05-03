@@ -7,12 +7,16 @@ h2 {
   color: white;
 }
 
+#dashboard_header {
+  padding-left: 21.5%;
+}
+
 #course_header {
   padding-left: 15%;
 }
 
-#dashboard_header {
-  padding-left: 21.5%;
+#course_header_announcements {
+  padding-left: 22.5%
 }
 
 @media (min-width: 768px) {
