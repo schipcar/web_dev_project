@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel=stylesheet href="canvas_styles.css" TYPE="text/css">
+  <script src="canvas_functions.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Announcements</title>
+</head>
+
+<body>
+
+<div id="header">
+  <h2 id="course_header_announcements">[Insert course name]</h2>
+</div>
+
+<div id="main">
+
+   <div class="column" id="main_menu">
+     <ul class="main_menu_items">
+       <li class="main_menu_items"><a href="[insert link]" class="main_menu_items">My Account</a></li>
+       <li class="main_menu_items"><a href="[insert link]" class="main_menu_items">Dashboard</a></li>
+       <li class="main_menu_items"><a href="[insert link]" class="main_menu_items">Courses</a></li>
+       <li class="main_menu_items"><a href="[insert link]" class="main_menu_items">Settings</a></li>
+       <li class="main_menu_items"><a href="[insert link]" class="main_menu_items">Logout</a></li>
+     </ul>
+   </div>
+
+   <div class="column" id="course_menu">
+     <ul class="course_menu_items">
+       <li class="course_menu_items"><a href="[insert link]" class="course_menu_items">Course Home</a></li>
+       <li class="course_menu_items"><a href="[insert link]" class="course_menu_items">Announcements</a></li>
+       <li class="course_menu_items"><a href="[insert link]" class="course_menu_items">Assignments</a></li>
+       <li class="course_menu_items"><a href="[insert link]" class="course_menu_items">Grades</a></li>
+     </ul>
+  </div>
+
+  <div class="column" id="announcements_panel">
+    <h3>Announcements</h3>
+    <div class="announcement">
+      <h4 class="announcement_title"><a href="[insert link]" class="announcement_title">[Insert announcement subject]</a></h4>
+      <p><br>[Insert announcement text]</p>
+    </div>
+    <div class="announcement">
+      <h4 class="announcement_title"><a href="[insert link]" class="announcement_title">[Insert announcement subject]</a></h4>
+      <p>[Insert announcement text]</p>
+    </div>
+    <button onclick="add_announcement_form()">Create a new announcement</button>
+  </div>
+</div>
+
+</body>
+</html>

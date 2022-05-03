@@ -135,7 +135,7 @@ li.course_menu_items {
   padding: 6%;
 }
 
-h3, p, .course_menu_items, #announcements_panel, .announcement, .announcement_title, #assignments_panel, .assignment, .assignment_section, .assignment_section_title, .assignment_title {
+h3, p, .course_menu_items, #announcements_panel, .announcement, .announcement_title, #assignments_panel, .assignment, .assignment_section, .assignment_section_title, .assignment_title, .announcement_form {
   background-color: white;
 }
 
@@ -164,4 +164,16 @@ h3, p, .course_menu_items, #announcements_panel, .announcement, .announcement_ti
 
 .assignment_title {
   font-weight: normal;
+}
+
+.announcement_form {
+  width: 100%;
+}
+
+button {
+  background-color: lightgray;
+  width: 40%;
+  margin: auto;
+  margin-top: 2%;
+  padding: 1% 0% 1% 0%;
 }
