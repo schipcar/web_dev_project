@@ -3,8 +3,9 @@
 
 <head>
   <link rel=stylesheet href="canvas_styles.css" TYPE="text/css">
+  <script src="canvas_functions.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Announcements</title>
+  <title>[Insert Assignment Name]</title>
 </head>
 
 <body>
@@ -35,14 +36,15 @@
   </div>
 
   <div class="column" id="main_panel">
-    <h3>Announcements</h3>
-    <div class="announcement">
-      <h4 class="announcement_title">[Insert announcement subject]</h4>
-      <p><br>[Insert announcement text]</p>
-    </div>
-    <div class="announcement">
-      <h4 class="announcement_title">[Insert announcement subject]</h4>
-      <p>[Insert announcement text]</p>
+    <div class="assignment_section">
+      <h3 class="assignment_section_title">[Insert Assignment Name]</h3>
+      <p>Due Date: [Insert due date]
+      <br>
+      Point Total: [Insert point total]
+      <br>
+      Description: [Insert description]
+      </p>
+      <button onclick="add_submission_form()">Submit assignment</button>
     </div>
   </div>
 </div>

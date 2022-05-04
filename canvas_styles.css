@@ -41,7 +41,7 @@ h2 {
     padding-bottom: 0.3%;
   }
 
-  #announcements_panel {
+  #main_panel {
     flex: 43%;
     display: flex;
     flex-direction: column;
@@ -85,7 +85,7 @@ h2 {
     padding-bottom: 0.3%;
   }
 
-  #announcements_panel {
+  #main_panel {
     flex: 100%;
     display: flex;
     flex-direction: column;
@@ -135,7 +135,7 @@ li.course_menu_items {
   padding: 6%;
 }
 
-h3, p, .course_menu_items, #announcements_panel, .announcement, .announcement_title, #assignments_panel, .assignment, .assignment_section, .assignment_section_title, .assignment_title, .announcement_form {
+h3, p, .course_menu_items, #main_panel, .announcement, .announcement_title, #assignments_panel, .assignment, .assignment_section, .assignment_section_title, .assignment_title, .announcement_form, .assignment_form {
   background-color: white;
 }
 
@@ -159,14 +159,14 @@ h3, p, .course_menu_items, #announcements_panel, .announcement, .announcement_ti
 
 .course_title {
   background-color: orange;
-  font-size: 120%;
+  font-size: 110%;
 }
 
 .assignment_title {
   font-weight: normal;
 }
 
-.announcement_form {
+.announcement_form, .assignment_form {
   width: 100%;
 }
 
@@ -175,5 +175,6 @@ button {
   width: 40%;
   margin: auto;
   margin-top: 2%;
+  margin-bottom: 2%;
   padding: 1% 0% 1% 0%;
 }
