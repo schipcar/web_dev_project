@@ -23,23 +23,30 @@
                 </ul>
             </div>
 
-            <div class="column" id="users">
-                <input type="text" id="name_email_search" onkeyup="[insert js fcn]" placeholder="Search users by name or email">
+            <div class="column" id="settings_user_panel">
+                <form id="user_search">
+                    <input type="text" id="name_email_search" onkeyup="[insert js fcn]" placeholder="Search users by name or email"/><br/>
+                    <input type="checkbox" id="active_users_checkbox"/>
+                        <label class="checkbox_label" for="active_users_checkbox">Display active users</label><br/>
+                    <input type="checkbox" id="inactive_users_checkbox"/>
+                        <label class="checkbox_label" for="inactive_users_checkbox">Display inactive users</label>
+                </form>
+
                 <ul id="users_list">
-                    <li class="user">
-                        <span>[User name]</span><br/>
-                        <span>[User_email@gmail.com]</span><br/>
-                        <span>[User activity status]</span>
+                    <li class="user_li">
+                        <span class="user_span">Alexander Roche</span><br/>
+                        <span class="user_span">alexanderroche@uchicago.edu</span><br/>
+                        <span class="user_span">Inactive</span>
                     </li>
-                    <li class="user">
-                        <span>[User name]</span><br/>
-                        <span>[User_email@gmail.com]</span><br/>
-                        <span>[User activity status]</span>
+                    <li class="user_li">
+                        <span class="user_span">Carly Schippits</span><br/>
+                        <span class="user_span">cschippits@uchicago.edu</span><br/>
+                        <span class="user_span">Active</span>
                     </li>
-                    <li class="user">
-                        <span>[User name]</span><br/>
-                        <span>[User_email@gmail.com]</span><br/>
-                        <span>[User activity status]</span>
+                    <li class="user_li">
+                        <span class="user_span">Ana Sofia Muñoz Valadez</span><br/>
+                        <span class="user_span">anasofiamvaladez@uchicago.edu</span><br/>
+                        <span class="user_span">Active</span>
                     </li>
                 </ul>
             </div>
