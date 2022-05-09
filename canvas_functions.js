@@ -127,7 +127,7 @@ function searchUsers() {
     for (i = 0; i < usersList.children.length; i++) {
         let user = usersList.children[i];
         let name = user.children[0].innerHTML.toLowerCase();
-        let email = user.children[2].innerHTML.toLowerCase();
+        let email = user.children[2].innerHTML.toLowerCase().split("@", 1)[0];
         if (name.includes(searchVal) || email.includes(searchVal)) {
             if (user.style.display == "none") {
                 let activityState = user.children[7].innerHTML;
