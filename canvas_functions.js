@@ -130,7 +130,7 @@ function searchUsers() {
         let email = user.children[2].innerHTML.toLowerCase();
         if (name.includes(searchVal) || email.includes(searchVal)) {
             if (user.style.display == "none") {
-                let activityState = user.children[4].innerHTML;
+                let activityState = user.children[7].innerHTML;
                 if (activityState == "Active") {
                     let activeCheckbox = document.getElementById("active_users_checkbox");
                     if (activeCheckbox.checked) {
@@ -165,7 +165,7 @@ function toggleUserDisplay(activityState) {
     let usersList = document.getElementById("users_list");
     for (i = 0; i < usersList.children.length; i++) {
         let user = usersList.children[i];
-        if (user.children[4].innerHTML == activityState) {
+        if (user.children[7].innerHTML == activityState) {
             if (checkbox.checked) {
                 let searchVal = document.getElementById("name_email_search").value.toLowerCase();
                 let name = user.children[0].innerHTML.toLowerCase();

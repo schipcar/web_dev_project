@@ -213,3 +213,17 @@ button {
     background-color: lightgray;
     padding-left: 5px;
 }
+
+.class_list {
+    font-size: 110%;
+    background-color: lightgray;
+    padding-left: 5px;
+}
+
+.class_li {
+    display: inline;
+    background-color: lightgray;
+    padding-right: 12px;
+    padding-left: 7px;
+    border-right: 2px solid black;
+}
