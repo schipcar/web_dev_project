@@ -19,7 +19,7 @@ function add_announcement_form() {
     subject_box.setAttribute("type", "text");
     text_box.rows = '4';
 
-    submit_button = document.createElement("button");         
+    submit_button = document.createElement("button");
     submit_button.innerHTML = 'Submit';
     submit_button.addEventListener("click", function() {
         document.getElementById('announcement_form_div').remove();
@@ -28,14 +28,14 @@ function add_announcement_form() {
     linebreak = document.createElement("br");
 
     div.appendChild(subject_prompt);
-    div.appendChild(subject_box);  
-    div.appendChild(linebreak);  
+    div.appendChild(subject_box);
+    div.appendChild(linebreak);
     div.appendChild(text_prompt);
-    div.appendChild(text_box);  
-    div.appendChild(linebreak);  
+    div.appendChild(text_box);
+    div.appendChild(linebreak);
     div.appendChild(submit_button);
     document.getElementById('main_panel').appendChild(div);
- 
+
 }
 
 
@@ -70,7 +70,7 @@ function add_assignment_form() {
     points_box.setAttribute("type", "text");
     description_box.rows = '4';
 
-    submit_button = document.createElement("button");         
+    submit_button = document.createElement("button");
     submit_button.innerHTML = 'Submit';
     submit_button.addEventListener("click", function() {
         document.getElementById('assignment_form_div').remove();
@@ -79,20 +79,20 @@ function add_assignment_form() {
     linebreak = document.createElement("br");
 
     div.appendChild(name_prompt);
-    div.appendChild(name_box);  
-    div.appendChild(linebreak);  
+    div.appendChild(name_box);
+    div.appendChild(linebreak);
     div.appendChild(duedate_prompt);
-    div.appendChild(duedate_box);  
-    div.appendChild(linebreak);  
+    div.appendChild(duedate_box);
+    div.appendChild(linebreak);
     div.appendChild(points_prompt);
-    div.appendChild(points_box);  
-    div.appendChild(linebreak);  
+    div.appendChild(points_box);
+    div.appendChild(linebreak);
     div.appendChild(description_prompt);
-    div.appendChild(description_box);  
-    div.appendChild(linebreak);  
+    div.appendChild(description_box);
+    div.appendChild(linebreak);
     div.appendChild(submit_button);
     document.getElementById('main_panel').appendChild(div);
- 
+
 }
 
 
@@ -106,7 +106,7 @@ function add_submission_form() {
     text_box.className = 'assignment_form';
     text_box.rows = '4';
 
-    submit_button = document.createElement("button");         
+    submit_button = document.createElement("button");
     submit_button.innerHTML = 'Submit';
     submit_button.addEventListener("click", function() {
         document.getElementById('assignment_form_div').remove();
@@ -114,9 +114,69 @@ function add_submission_form() {
 
     linebreak = document.createElement("br");
 
-    div.appendChild(text_box);  
-    div.appendChild(linebreak);  
+    div.appendChild(text_box);
+    div.appendChild(linebreak);
     div.appendChild(submit_button);
     document.getElementById('main_panel').appendChild(div);
- 
+
+}
+
+function searchUsers() {
+    let searchVal = document.getElementById("name_email_search").value.toLowerCase();
+    let usersList = document.getElementById("users_list");
+    for (i = 0; i < usersList.children.length; i++) {
+        let user = usersList.children[i];
+        let name = user.children[0].innerHTML.toLowerCase();
+        let email = user.children[2].innerHTML.toLowerCase();
+        if (name.includes(searchVal) || email.includes(searchVal)) {
+            if (user.style.display == "none") {
+                let activityState = user.children[4].innerHTML;
+                if (activityState == "Active") {
+                    let activeCheckbox = document.getElementById("active_users_checkbox");
+                    if (activeCheckbox.checked) {
+                        user.style.display = "block";
+                    }
+                }
+                else {
+                    let inactiveCheckbox = document.getElementById("inactive_users_checkbox");
+                    if (inactiveCheckbox.checked) {
+                        user.style.display = "block";
+                    }
+                }
+            }
+        }
+        else {
+            if (user.style.display != "none") {
+                user.style.display = "none";
+            }
+        }
+    }
+}
+
+function toggleUserDisplay(activityState) {
+    let checkbox;
+    if (activityState == "Active") {
+        checkbox = document.getElementById("active_users_checkbox");
+    }
+    else {
+        checkbox = document.getElementById("inactive_users_checkbox");
+    }
+
+    let usersList = document.getElementById("users_list");
+    for (i = 0; i < usersList.children.length; i++) {
+        let user = usersList.children[i];
+        if (user.children[4].innerHTML == activityState) {
+            if (checkbox.checked) {
+                let searchVal = document.getElementById("name_email_search").value.toLowerCase();
+                let name = user.children[0].innerHTML.toLowerCase();
+                let email = user.children[2].innerHTML.toLowerCase();
+                if (name.includes(searchVal) || email.includes(searchVal)) {
+                    user.style.display = "block";
+                }
+            }
+            else {
+                user.style.display = "none";
+            }
+        }
+    }
 }

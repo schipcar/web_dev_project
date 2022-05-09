@@ -3,6 +3,7 @@
 <html>
     <head>
       <link rel=stylesheet href="canvas_styles.css" TYPE="text/css">
+      <script src="canvas_functions.js"></script>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Settings</title>
     </head>
@@ -25,10 +26,10 @@
 
             <div class="column" id="settings_user_panel">
                 <form id="user_search">
-                    <input type="text" id="name_email_search" onkeyup="[insert js fcn]" placeholder="Search users by name or email"/><br/>
-                    <input type="checkbox" id="active_users_checkbox"/>
+                    <input type="text" id="name_email_search" onkeyup="searchUsers()" placeholder="Search users by name or email"/><br/>
+                    <input type="checkbox" id="active_users_checkbox" onchange="toggleUserDisplay('Active')" checked/>
                         <label class="checkbox_label" for="active_users_checkbox">Display active users</label><br/>
-                    <input type="checkbox" id="inactive_users_checkbox"/>
+                    <input type="checkbox" id="inactive_users_checkbox" onchange="toggleUserDisplay('Inactive')" checked/>
                         <label class="checkbox_label" for="inactive_users_checkbox">Display inactive users</label>
                 </form>
 
