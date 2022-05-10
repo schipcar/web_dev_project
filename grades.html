@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Grades</title>
+</head>
+
+<body>
+<div id="demo">
+<h1>Notes</h1>
+
+
+
+<div id="demo2"></div>
+<button type="button" onclick="Suggest()">Suggest Activity</button>
+</div>
+<div id="dinamic">
+</div>
+
+<script>
+var counter = 0;
+var Preferences = 0;
+Preferences.id = "tbl"
+
+
+function Suggest() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "http://localhost:8080/getstring", true);
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("demo").innerHTML = this.responseText;
+      let thumbup = document.createElement("button");
+      thumbup.innerHTML = "Thumb up";
+      thumbup.onclick = function () {
+           var dict_t = JSON.parse(document.getElementById("demo").innerHTML);
+           const array1 = [dict_t.name, dict_t.status, dict_t.punctuation, dict_t.possible];   
+           if (counter == 0) {createtable("tbl", array1); counter = 1; this.responseText
+                              } else {appendrow("tbl", array1);}
+                              
+           ;}
+         
+      let thumbdown = document.createElement("button");
+      thumbdown.innerHTML = "Thumb down";
+      thumbdown.onclick = function () {true;}
+      document.body.appendChild(thumbup);
+      document.body.appendChild(thumbdown);}
+  };
+  xhttp.send();
+}
+
+appendrow = function(id, array){
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("demo").innerHTML = this.responseText;
+      var dict_t = JSON.parse(document.getElementById("demo").innerHTML);
+      const array= [dict_t.name, dict_t.status, dict_t.punctuation, dict_t.possible];
+      var table_main = Preferences; 
+      x = table_main.insertRow(-1);
+      var ncells = 4;
+      for (var j=0; j<ncells; j++){
+               var y = x.insertCell(j);
+               y.innerHTML=String(array[j])}
+      var divv = document.getElementById("dinamic")
+      divv.removeChild(divv.lastChild)
+      divv.appendChild(table_main);
+      sortTable();
+      Preferences = table_main;}
+  };
+  xhttp.open("GET", "http://localhost:8080/getstring", true);
+  xhttp.send();
+}
+
+
+
+createtable = function(id, array){
+    var TableDiv = document.getElementById("dinamic");  
+    var nrows = 1;
+    var ncells = 4;
+    var names = ["Name", "Status", "Punctuation", "Possible"];
+    
+    var table = document.createElement('TABLE');
+    table.border='1';
+    var tableBody = document.createElement('TBODY');
+    table.appendChild(tableBody);
+    table.id = id
+    var header = table.createTHead();
+    var row = header.insertRow(0);
+    
+    for (var p=0; p<4; p++){
+           var cell = row.insertCell(p);
+           cell.innerHTML = names[p];
+    }
+
+    for (var i=0; i<nrows; i++){
+       var tr = document.createElement('TR');
+       tableBody.appendChild(tr);
+       
+       for (var j=0; j<ncells; j++){
+           var td = document.createElement('TD');
+           td.appendChild(document.createTextNode(String(array[j])));
+           tr.appendChild(td);
+       }
+    }
+    Preferences = table;
+    TableDiv.appendChild(table)   
+}
+
+function sortTable() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("tbl");
+  switching = true;
+  while (switching) {
+    switching = false;
+    rows = table.rows;
+    for (i = 1; i < (rows.length - 1); i++) {
+      should = false;
+      x = rows[i].getElementsByTagName("TD")[3];
+      y = rows[i + 1].getElementsByTagName("TD")[3];
+      if (x.innerHTML > y.innerHTML) {
+        should = true;
+        break;
+      }
+    }
+    if (should) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+
+</script>
+
+</body>
+</html>
