@@ -139,6 +139,13 @@ a {
   color: white;
 }
 
+.selected_menu_item {
+    background-color: white;
+    color: dimgray;
+    border-bottom: 3px solid darkgray;
+    padding: 8% 12% 8% 12%;
+}
+
 li.main_menu_items {
   border-bottom: 3px solid darkgray;
   padding: 8% 12% 8% 12%;
