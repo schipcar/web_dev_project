@@ -121,6 +121,51 @@ function add_submission_form() {
 
 }
 
+function revealForm() {
+    let addCourseButton = document.getElementById("add_course_button");
+    let form = document.getElementById("add_course_form");
+    let formButton = document.getElementById("submit_course");
+    addCourseButton.style.display = "none";
+    form.style.display = "block";
+    formButton.style.display = "inline";
+}
+
+function addCourse() {
+    let idInp = document.getElementById("course_id_input");
+        let id = idInp.value;
+        idInp.value = "";
+    let nameInp = document.getElementById("course_name_input");
+        let name = nameInp.value;
+        nameInp.value = "";
+    let descInp = document.getElementById("course_desc_input");
+        let desc = descInp.value;
+        descInp.value = "";
+    let capacityInp = document.getElementById("course_capacity_input");
+        let capacity = capacityInp.value;
+        capacityInp.value = "";
+    let teacherInp = document.getElementById("course_teacher_input");
+        let teacher = teacherInp.value;
+        teacherInp.value = "";
+    let tableValues = [id, name, desc, 0, capacity, teacher];
+
+    let courseTable = document.getElementById("all_courses_list");
+    let ctBody = courseTable.children[1];
+    let newRow = document.createElement("tr");
+    ctBody.appendChild(newRow);
+    for (i = 0; i < 6; i++) {
+        let newCell = document.createElement("td");
+        newCell.innerHTML = tableValues[i];
+        newRow.appendChild(newCell);
+    }
+
+    let addCourseButton = document.getElementById("add_course_button");
+    let form = document.getElementById("add_course_form");
+    let formButton = document.getElementById("submit_course");
+    addCourseButton.style.display = "inline";
+    form.style.display = "none";
+    formButton.style.display = "none";
+}
+
 function searchUsers() {
     let searchVal = document.getElementById("name_email_search").value.toLowerCase();
     let usersList = document.getElementById("users_list");
@@ -165,7 +210,7 @@ function toggleUserDisplay(activityState) {
     let usersList = document.getElementById("users_list");
     for (i = 0; i < usersList.children.length; i++) {
         let user = usersList.children[i];
-        if (user.children[7].innerHTML == activityState) {
+        if (user.children[7].innerHTML == activityState + " |") {
             if (checkbox.checked) {
                 let searchVal = document.getElementById("name_email_search").value.toLowerCase();
                 let name = user.children[0].innerHTML.toLowerCase();

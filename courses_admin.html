@@ -25,6 +25,32 @@
             </div>
 
             <div class="column" id="all_courses_div">
+                <div>
+                    <button id="add_course_button" onclick=revealForm()>Add Course</button>
+                    <form id="add_course_form">
+                        <label for="course_id_input">ID:</label>
+                            <input type="text" id="course_id_input" name="ID"/><br/>
+                        <label for="course_name_input">Name:</label>
+                            <input type="text" id="course_name_input" name="Name"/><br/>
+                        <label for="course_desc_input">Description:</label><br/>
+                            <textarea rows=8 cols=50 id="course_desc_input" name="Description"></textarea><br/>
+                        <!-- No input for # students -
+                            should populate with 0 students upon creation -->
+                        <label for="course_capacity_input">Capacity:</label>
+                            <input type="number" id="course_capacity_input" name="Capacity"/><br/>
+                        <label for="course_teacher_input">Teacher:</label>
+                            <input list="teachers_datalist" id ="course_teacher_input" name="Teacher"/><br/>
+                            <datalist id="teachers_datalist">
+                                <option value="Twilight Sparkle"/>
+                                <option value="Pinkie Pie"/>
+                                <option value="Applejack"/>
+                                <option value="Rainbow Dash"/>
+                                <option value="Rarity"/>
+                                <option value="Fluttershy"/>
+                            </datalist>
+                    </form>
+                    <button id="submit_course" onclick=addCourse()>Submit</button>
+                </div>
                 <table id="all_courses_list">
                     <thead>
                         <tr>
@@ -37,9 +63,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td colspan=6><button>Add Course</button></td>
-                        </tr>
                         <tr>
                             <td>HUMA 12050 4</td>
                             <td>Greece and Rome: Texts, Traditions, Transformations I</td>

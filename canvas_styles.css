@@ -259,6 +259,35 @@ button {
   padding: 1% 0% 1% 0%;
 }
 
+form {
+    background-color: gray;
+    border: 1px solid black;
+    width: 50%;
+}
+
+label {
+    background-color: gray;
+    margin-left: 5px;
+}
+
+input, textarea {
+    margin: 3px;
+    background-color: gainsboro;
+}
+
+#add_course_button {
+    width: 150px;
+    height: 100px;
+    font-size: 18pt;
+    padding: 10px;
+    color: white;
+    background-color: dimgray;
+}
+
+#add_course_form, #submit_course {
+    display: none;
+}
+
 #user_search, #user_search>* {
     background-color: lightgray;
 }
