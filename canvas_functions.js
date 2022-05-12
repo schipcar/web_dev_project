@@ -283,6 +283,7 @@ console.log("server initialized");
 
 function LoadCourses() {
   document.getElementById("courses_panel").innerHTML += "<span style='color: white;'>test</span>";
+  console.log('test');
   var xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8090/getcourses", true);
   xhttp.onreadystatechange = function() {
