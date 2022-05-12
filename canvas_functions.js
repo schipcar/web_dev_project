@@ -264,7 +264,6 @@ http.createServer(function(request, response){
 }).listen(8080);
 console.log("server initialized");
 
-/*
 http.createServer(function(request, response){
   var path = url.parse(request.url).pathname;
   if(path=="/getcourses"){
@@ -279,23 +278,19 @@ http.createServer(function(request, response){
   }
 }).listen(8090);
 console.log("server initialized");
-*/
 
 
 
 function LoadCourses() {
-  document.getElementByid("courses_panel").style.color = "white";
-  document.getElementById("courses_panel").innerHTML += "test"; 
-/*  var xhttp = new XMLHttpRequest();
+  document.getElementById("courses_panel").innerHTML += "<span style='color: white;'>test</span>";
+  var xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8090/getcourses", true);
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
            var dict_all = JSON.parse(this.responseText);
-           document.getElementByid("courses_panel").style.color = "white";
-           document.getElementById("courses_panel").innerHTML += "test";
            console.log(dict_all);
            document.getElementById("courses_panel").innerHTML += dict_all; 
      }
    }
-   xhttp.send();*/
+   xhttp.send();
 }
