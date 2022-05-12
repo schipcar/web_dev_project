@@ -225,3 +225,77 @@ function toggleUserDisplay(activityState) {
         }
     }
 }
+
+
+
+var sqlite3 = require('sqlite3').verbose();
+var http = require('http');
+    fs = require('fs');
+    url = require('url');
+var grades_row = 2;
+var courses_row = 2;
+
+let db = new sqlite3.Database('./canvas.db', (err) => {
+  if (err) {
+    console.error(err.message);
+  } 
+  db.all("SELECT * FROM grades", function(err, row) {
+    grades_row=row
+  });
+  db.all("SELECT * FROM courses", function(err, row) {
+    courses_row=row
+  });
+});
+
+
+
+http.createServer(function(request, response){
+  var path = url.parse(request.url).pathname;
+  if(path=="/getdictionary"){
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      response.setHeader('Access-Control-Max-Age', 2592000);
+      response.setHeader('Content-Type', 'application/json');
+      const jsonContent = JSON.stringify(grades_row);
+      response.end(jsonContent);
+      console.log(jsonContent); 
+
+  }
+}).listen(8080);
+console.log("server initialized");
+
+/*
+http.createServer(function(request, response){
+  var path = url.parse(request.url).pathname;
+  if(path=="/getcourses"){
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      response.setHeader('Access-Control-Max-Age', 2592000);
+      response.setHeader('Content-Type', 'application/json');
+      const jsonContent = JSON.stringify(courses_row);
+      response.end(jsonContent);
+      console.log(jsonContent); 
+
+  }
+}).listen(8090);
+console.log("server initialized");
+*/
+
+
+
+function LoadCourses() {
+  document.getElementByid("courses_panel").style.color = "white";
+  document.getElementById("courses_panel").innerHTML += "test"; 
+/*  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "http://localhost:8090/getcourses", true);
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+           var dict_all = JSON.parse(this.responseText);
+           document.getElementByid("courses_panel").style.color = "white";
+           document.getElementById("courses_panel").innerHTML += "test";
+           console.log(dict_all);
+           document.getElementById("courses_panel").innerHTML += dict_all; 
+     }
+   }
+   xhttp.send();*/
+}
