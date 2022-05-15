@@ -494,7 +494,7 @@ function LoadAllAssignmentsStudent() {
            if (upcoming_div.childElementCount==0) {
                upcoming_div.remove()
            }
-           if past_div.childElementCount==0) {
+           if (past_div.childElementCount==0) {
                past_div.remove()
            }
        }
