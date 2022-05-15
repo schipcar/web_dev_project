@@ -582,6 +582,34 @@ function LoadCourseAssignmentsStudent() {
    xhttp.send();
 }
 
+function LoadCourseAssignmentsTeacher() {
+  let xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "http://localhost:8067/getcourseassignments", true);
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+           let assignments = JSON.parse(this.responseText);
+           
+           todo_div = document.createElement("div")
+           todo_div.className = "assignment_section"
+           todo_div.id = "past"  /* for teachers, past assignments go in 'To Do' section*/
+           todo_heading = document.createElement("H4")
+           todo_heading.className = "assignment_title"
+           todo_heading.appendChild(document.createTextNode("To Do")) 
+           todo_div.appendChild(todo_heading)
+           document.getElementById("assignments_panel").appendChild(todo_div)
+          
+           for (let i=0; i<assignments.length; i++) {
+             AddAssignment(assignments[i], "teacher")
+           }
+          
+           if (todo_div.childElementCount==1) {
+               todo_div.innerHTML += "All done!"
+           }
+       }
+   }
+   xhttp.send();
+}
+
 function AddAssignment(assignment, role) {    
     new_div = document.createElement("div")
     new_div.className = "assignment"
