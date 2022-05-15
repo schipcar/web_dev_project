@@ -487,6 +487,16 @@ function LoadAllAssignmentsStudent() {
            for (let i=0; i<assignments.length; i++) {
              AddAssignment(assignments[i], "student")
            }
+          
+           if (todo_div.childElementCount==0) {
+               todo_div.remove()
+           }
+           if (upcoming_div.childElementCount==0) {
+               upcoming_div.remove()
+           }
+           if past_div.childElementCount==0) {
+               past_div.remove()
+           }
        }
    }
    xhttp.send();
