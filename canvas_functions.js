@@ -234,6 +234,7 @@ var http = require('http');
     url = require('url');
 var grades_row = 2;
 var courses_row = 2;
+var courses_row_teacher = 2;
 
 let db = new sqlite3.Database('./canvas.db', (err) => {
   if (err) {
@@ -245,6 +246,10 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   var user = 0001;
   db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
     courses_row=row
+  });
+  var user = 0004;
+  db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
+    courses_row_teacher=row
   });
 });
 
@@ -280,6 +285,21 @@ http.createServer(function(request, response){
 }).listen(8090);
 console.log("server initialized");
 
+
+http.createServer(function(request, response){
+  var path = url.parse(request.url).pathname;
+  if(path=="/getcourses"){
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      response.setHeader('Access-Control-Max-Age', 2592000);
+      response.setHeader('Content-Type', 'application/json');
+      const jsonContent = JSON.stringify(courses_row_teacher);
+      response.end(jsonContent);
+      console.log(jsonContent); 
+
+  }
+}).listen(8095);
+console.log("server initialized");
 
 
 function LoadCourses() {
