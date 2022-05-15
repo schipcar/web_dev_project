@@ -309,7 +309,7 @@ function LoadCoursesStudent() {
     if (this.readyState == 4 && this.status == 200) {
            var courses = JSON.parse(this.responseText);
            for (var i=0; i<courses.length; i++) {
-             AddCourse(courses[i]['name'])
+             AddCourse(courses[i]['name'], "student")
            }
      }
    }
@@ -323,14 +323,14 @@ function LoadCoursesTeacher() {
     if (this.readyState == 4 && this.status == 200) {
            var courses = JSON.parse(this.responseText);
            for (var i=0; i<courses.length; i++) {
-             AddCourse(courses[i]['name'])
+             AddCourse(courses[i]['name'], "teacher")
            }
      }
    }
    xhttp.send();
 }
 
-function AddCourse(course_name) {
+function AddCourse(course_name, role) {
     new_div = document.createElement("div")
     new_div.className = "course"
 
@@ -338,7 +338,7 @@ function AddCourse(course_name) {
     new_heading.className = "course_title"
 
     new_link = document.createElement("a")
-    new_link.href = "course_homepage_student.html"
+    new_link.href = "course_homepage_" + role + ".html"
     new_link.innerHTML += course_name
     new_link.className = "course_title"
 
