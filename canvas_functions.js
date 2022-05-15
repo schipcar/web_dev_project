@@ -503,7 +503,6 @@ function LoadAllAssignmentsStudent() {
 }
 
 function LoadAllAssignmentsTeacher() {
-  document.getElementById("assignments_panel").innerHTML += 'test'
   let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8063/getallassignments_teacher", true);
   xhttp.onreadystatechange = function() {
