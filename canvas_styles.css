@@ -71,10 +71,6 @@ h2 {
     margin: 1%;
     padding: 10% 3% 10% 3%;
   }
-  
-  .announcement_form, .assignment_form {
-    width: 100%;
-  }
 
   #settings_user_panel {
       flex: 50%;
@@ -140,10 +136,6 @@ h2 {
     width: 90%;
     margin: 1%;
     padding: 10% 3% 10% 3%;
-  }
-  
-  .announcement_form, .assignment_form {
-    width: 100%;
   }
 
   #settings_user_panel {
@@ -275,6 +267,11 @@ form {
     background-color: gray;
     border: 1px solid black;
     width: 50%;
+}
+
+.announcement_form, .assignment_form {
+  width: 100%;
+  margin-right: 5%; 
 }
 
 label {
