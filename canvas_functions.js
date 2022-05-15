@@ -523,7 +523,7 @@ function AddAssignment(assignment, role) {
     new_div.appendChild(new_heading)
     new_div.appendChild(new_text)
     
-    let curr_date = new Date()
+    let curr_date = Date.parse(new Date())
     let due_date = Date.parse(assignment["due_date"])
     
     document.getElementById("assignments_panel").innerHTML += "curr" + String(curr_date)
