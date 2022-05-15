@@ -526,9 +526,6 @@ function AddAssignment(assignment, role) {
     let curr_date = Date.parse(new Date())
     let due_date = Date.parse(assignment["due_date"])
     
-    document.getElementById("assignments_panel").innerHTML += "curr" + String(curr_date)
-    document.getElementById("assignments_panel").innerHTML += "due" + String(due_date)
-    
     if (due_date < curr_date) {
         document.getElementById("past").appendChild(new_div)
     } else if ((due_date > curr_date) && (due_date < curr_date + 3 * 24 * 60 * 60 * 1000) && (role=="student")) {
