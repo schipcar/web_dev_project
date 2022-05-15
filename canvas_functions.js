@@ -374,6 +374,8 @@ function LoadAnnouncements() {
               
               new_div = document.createElement("div")
               new_div.className = "announcement"
+              
+              document.getElementById("main_panel").innerHTML += 'test'
 
               new_heading = document.createElement("H4")
               new_heading.className = "announcement_title"
@@ -381,8 +383,6 @@ function LoadAnnouncements() {
          
               new_test = document.createElement("p")
               new_text.innerHTML += announcement["body"]
-              
-              document.getElementById("main_panel").innerHTML += 'test'
 
               new_div.appendChild(new_heading)
               new_div.appendChild(new_text)
