@@ -609,6 +609,7 @@ function LoadAssignment() {
           
           text.appendChild(document.createTextNode("Description: " + assignment["description"]))
           text.appendChild(document.createElement("br"))
+          text.appendChild(document.createElement("br"))
           text.appendChild(document.createTextNode("Due Date: " + assignment["due_date"]))
           text.appendChild(document.createElement("br"))
           text.appendChild(document.createTextNode("Points: " + assignment["points"]))
