@@ -448,3 +448,67 @@ function LoadAnnouncements() {
   }
   xhttp.send();
 }
+
+
+function LoadAllAssignmentsStudent() {
+  let xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "http://localhost:8060/getallassignments_student", true);
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+           let assignments = JSON.parse(this.responseText);
+           
+           todo_div = document.createElement("div")
+           todo_div.className = "assignment_section"
+           todo_div.id = "todo"
+           todo_heading = document.createElement("H4")
+           todo_heading.className = "assignment_title"
+           todo_heading.appendChild(document.createTextNode("To Do")) 
+           todo_div.appendChild(todo_heading)
+           document.getElementById("assignments_panel").appendChild(todo_div)
+          
+           upcoming_div = document.createElement("div")
+           upcoming_div.className = "assignment_section"
+           upcoming_div.id = "upcoming"
+           upcoming_heading = document.createElement("H4")
+           upcoming_heading.className = "assignment_title"
+           upcoming_heading.appendChild(document.createTextNode("Upcoming Assignments")) 
+           upcoming_div.appendChild(upcoming_heading)
+           document.getElementById("assignments_panel").appendChild(upcoming_div)
+          
+           past_div = document.createElement("div")
+           past_div.className = "assignment_section"
+           past_div.id = "past"
+           past_heading = document.createElement("H4")
+           past_heading.className = "assignment_title"
+           past_heading.appendChild(document.createTextNode("Past Assignments")) 
+           past_div.appendChild(past_heading)
+           document.getElementById("assignments_panel").appendChild(past_div)
+          
+           for (let i=0; i<assignments.length; i++) {
+             AddAssignment(assignments[i], "student")
+           }
+       }
+   }
+   xhttp.send();
+}
+
+function AddAssignment(assignment, role) {
+    
+    
+    
+    
+    new_div = document.createElement("div")
+    new_div.className = "course"
+
+    new_heading = document.createElement("H4")
+    new_heading.className = "course_title"
+
+    new_link = document.createElement("a")
+    new_link.href = "course_homepage_" + role + ".html"
+    new_link.innerHTML += course_name
+    new_link.className = "course_title"
+
+    new_heading.appendChild(new_link)
+    new_div.appendChild(new_heading)
+    document.getElementById("courses_panel").appendChild(new_div)
+}
