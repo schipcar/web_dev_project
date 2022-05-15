@@ -32,8 +32,8 @@ INSERT INTO courses_assignments VALUES ("Web Development", "Homework 3");
 INSERT INTO courses_assignments VALUES ("Web Development", "Homework 4");
 
 INSERT INTO assignments VALUES ("Homework 1", "04/20/2022", 100, "This is the description for HW1");
-INSERT INTO assignments VALUES ("Homework 2", "04/27/2022", 100, "This is the description for HW2");
-INSERT INTO assignments VALUES ("Homework 3", "05/13/2022", 100, "This is the description for HW3");
+INSERT INTO assignments VALUES ("Homework 2", "05/17/2022", 100, "This is the description for HW2");
+INSERT INTO assignments VALUES ("Homework 3", "05/20/2022", 100, "This is the description for HW3");
 INSERT INTO assignments VALUES ("Homework 4", "05/31/2022", 100, "This is the description for HW3");
 
 INSERT INTO announcements VALUES ("HW deadline pushed back", "HW3 will now be due on Friday. Good luck!");
