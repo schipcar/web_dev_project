@@ -488,13 +488,13 @@ function LoadAllAssignmentsStudent() {
              AddAssignment(assignments[i], "student")
            }
           
-           if (todo_div.childElementCount==0) {
+           if (todo_div.childElementCount==1) {
                todo_div.remove()
            }
-           if (upcoming_div.childElementCount==0) {
+           if (upcoming_div.childElementCount==1) {
                upcoming_div.remove()
            }
-           if (past_div.childElementCount==0) {
+           if (past_div.childElementCount==1) {
                past_div.remove()
            }
        }
@@ -525,11 +525,12 @@ function AddAssignment(assignment, role) {
     
     let curr_date = new Date()
     let due_date = Date.parse(assignment["due_date"])
+    
     if (due_date < curr_date) {
         document.getElementById("past").appendChild(new_div)
-    } else if ((due_date > curr_date) && (due_date < curr_date + 3 * 24 * 60 * 60 * 1000)) {
-        document.getElementById("past").appendChild(new_div)
-    } else if (due_date > curr_date + 3 * 24 * 60 * 60 * 1000) {
-        document.getElementById("past").appendChild(new_div)
+    } else if ((due_date > curr_date) && (due_date < curr_date + 3 * 24 * 60 * 60 * 1000) && (role=='student')) {
+        document.getElementById("upcoming").appendChild(new_div)
+    } else if ((due_date > curr_date + 3 * 24 * 60 * 60 * 1000) && (role=='student')) {
+        document.getElementById("todo").appendChild(new_div)
     }
 }
