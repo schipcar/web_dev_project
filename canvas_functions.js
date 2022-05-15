@@ -272,7 +272,7 @@ console.log("server initialized");
 
 http.createServer(function(request, response){
   var path = url.parse(request.url).pathname;
-  if(path=="/getcourses"){
+  if(path=="/getcourses_student"){
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
@@ -288,7 +288,7 @@ console.log("server initialized");
 
 http.createServer(function(request, response){
   var path = url.parse(request.url).pathname;
-  if(path=="/getcourses"){
+  if(path=="/getcourses_teacher"){
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
@@ -304,7 +304,7 @@ console.log("server initialized");
 
 function LoadCoursesStudent() {
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8090/getcourses", true);
+  xhttp.open("GET", "http://localhost:8090/getcourses_student", true);
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
            var courses = JSON.parse(this.responseText);
@@ -318,7 +318,7 @@ function LoadCoursesStudent() {
 
 function LoadCoursesTeacher() {
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8095/getcourses", true);
+  xhttp.open("GET", "http://localhost:8095/getcourses_teacher", true);
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
            var courses = JSON.parse(this.responseText);
