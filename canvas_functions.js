@@ -248,7 +248,7 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
     courses_row_student=row
   });
   user = 0004;
-  db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
+  db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = 0004)", function(err, row) {
     courses_row_teacher=row
   });
 });
