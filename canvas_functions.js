@@ -600,7 +600,7 @@ function LoadAssignment() {
   xhttp.open("GET", "http://localhost:8050/getassignment", true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-          let assignment = JSON.parse(this.responseText);
+          let assignment = JSON.parse(this.responseText)[0];
            
           heading = document.querySelector("#main_panel div:nth-child(1) h3:nth-child(1)")
           text = document.querySelector("#main_panel div:nth-child(1) p:nth-child(1)")
