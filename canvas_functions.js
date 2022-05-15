@@ -530,6 +530,58 @@ function LoadAllAssignmentsTeacher() {
    xhttp.send();
 }
 
+function LoadCourseAssignmentsStudent() {
+  let xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "http://localhost:8067/getcourseassignments", true);
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+           let assignments = JSON.parse(this.responseText);
+           
+           todo_div = document.createElement("div")
+           todo_div.className = "assignment_section"
+           todo_div.id = "todo"
+           todo_heading = document.createElement("H4")
+           todo_heading.className = "assignment_title"
+           todo_heading.appendChild(document.createTextNode("To Do")) 
+           todo_div.appendChild(todo_heading)
+           document.getElementById("assignments_panel").appendChild(todo_div)
+          
+           upcoming_div = document.createElement("div")
+           upcoming_div.className = "assignment_section"
+           upcoming_div.id = "upcoming"
+           upcoming_heading = document.createElement("H4")
+           upcoming_heading.className = "assignment_title"
+           upcoming_heading.appendChild(document.createTextNode("Upcoming Assignments")) 
+           upcoming_div.appendChild(upcoming_heading)
+           document.getElementById("assignments_panel").appendChild(upcoming_div)
+          
+           past_div = document.createElement("div")
+           past_div.className = "assignment_section"
+           past_div.id = "past"
+           past_heading = document.createElement("H4")
+           past_heading.className = "assignment_title"
+           past_heading.appendChild(document.createTextNode("Past Assignments")) 
+           past_div.appendChild(past_heading)
+           document.getElementById("assignments_panel").appendChild(past_div)
+          
+           for (let i=0; i<assignments.length; i++) {
+             AddAssignment(assignments[i], "student")
+           }
+          
+           if (todo_div.childElementCount==1) {
+               todo_div.innerHTML += "All done!"
+           }
+           if (upcoming_div.childElementCount==1) {
+               upcoming_div.innerHTML += "You have no upcoming assignments."
+           }
+           if (past_div.childElementCount==1) {
+               past_div.innerHTML += "You have no past assignments."
+           }
+       }
+   }
+   xhttp.send();
+}
+
 function AddAssignment(assignment, role) {    
     new_div = document.createElement("div")
     new_div.className = "assignment"
