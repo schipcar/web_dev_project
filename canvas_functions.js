@@ -381,11 +381,12 @@ function LoadAnnouncements() {
          
               new_test = document.createElement("p")
               new_text.innerHTML += announcement["body"]
+              
+              document.getElementById("main_panel").innerHTML += 'test'
 
               new_div.appendChild(new_heading)
               new_div.appendChild(new_text)
               document.getElementById("main_panel").appendChild(new_div)
-              document.getElementById("main_panel").innerHTML += 'test'
           }
       }
   }
