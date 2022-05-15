@@ -377,6 +377,7 @@ function LoadAnnouncements() {
 
               new_heading = document.createElement("H4")
               new_heading.className = "announcement_title"
+              document.getElementById("main_panel").innerHTML += 'test'
               new_heading.appendChild(document.createTextNode(announcement["subject"]))
          
               new_test = document.createElement("p")
