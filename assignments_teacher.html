@@ -8,7 +8,7 @@
   <title>Assignments</title>
 </head>
 
-<body>
+<body onload="LoadCourseAssignmentsTeacher('main_panel');">
 
 <div id="header">
   <h2 id="course_header_announcements">[Insert course name]</h2>
@@ -37,26 +37,9 @@
 
   <div class="column" id="main_panel">
     <h3>Assignments</h3>
-    <div class="assignment_section">
-      <h4 class="assignment_section_title">Upcoming Assignments</h4>
-      <div class="assignment_section">
-        <h4 class="assignment_title"><a href="assignment_teacher.html" class="assignment_title">[Insert assignment name]</a></h4>
-      </div>
-      <div class="assignment_section">
-        <h4 class="assignment_title"><a href="assignment_teacher.html" class="assignment_title">[Insert assignment name]</a></h4>
-      </div>
-    </div>
-    <div class="assignment_section">
-      <h4 class="assignment_section_title">Past Assignments</h4>
-      <div class="assignment_section">
-        <h4 class="assignment_title"><a href="assignment_teacher.html" class="assignment_title">[Insert assignment name]</a></h4>
-      </div>
-      <div class="assignment_section">
-        <h4 class="assignment_title"><a href="assignment_teacher.html" class="assignment_title">[Insert assignment name]</a></h4>
-      </div>
-    </div>
     <button onclick="add_assignment_form()">Create a new assignment</button>
   </div>
+  
 </div>
 
 </body>
