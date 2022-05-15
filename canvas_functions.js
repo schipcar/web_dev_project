@@ -260,15 +260,15 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
     announcements_row=row
   });
   user = 0001; /* REMOVE LATER */
-  db.all("SELECT * FROM assignments WHERE name IN (SELECT assignment_name FROM courses_assignments WHERE course_name IN (SELECT course_name FROM courses_students WHERE user_id = ?))", [user], function(err, row) {
+  db.all("SELECT * FROM assignments WHERE course_name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
     all_assignments_row_student=row
   });
   user = 0004; /* REMOVE LATER */
-  db.all("SELECT * FROM assignments WHERE name IN (SELECT assignment_name FROM courses_assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)))", [user], function(err, row) {
+  db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?))", [user], function(err, row) {
     all_assignments_row_teacher=row
   });
   course_name = "Web Development"; /* REMOVE LATER */
-  db.all("SELECT * FROM assignments WHERE name IN (SELECT assignment_name FROM courses_assignments WHERE course_name = ?)", [course_name], function(err, row) {
+  db.all("SELECT * FROM assignments WHERE course_name = ?", [course_name], function(err, row) {
     course_assignments_row=row
   });
 });
