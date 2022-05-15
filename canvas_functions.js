@@ -271,6 +271,10 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   db.all("SELECT * FROM assignments WHERE course_name = ?", [course_name], function(err, row) {
     course_assignments_row=row
   });
+  var assignment_name = "Homework 1"; /* REMOVE LATER */
+  db.all("SELECT * FROM assignments WHERE assignment_name = ?", [assignment_name], function(err, row) {
+    assignment_row=row
+  });
 });
 
 
@@ -371,6 +375,20 @@ http.createServer(function(request, response){
       console.log(jsonContent); 
   }
 }).listen(8067);
+console.log("server initialized");
+
+http.createServer(function(request, response){
+  var path = url.parse(request.url).pathname;
+  if(path=="/getassignment"){
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      response.setHeader('Access-Control-Max-Age', 2592000);
+      response.setHeader('Content-Type', 'application/json');
+      const jsonContent = JSON.stringify(assignment_row);
+      response.end(jsonContent);
+      console.log(jsonContent); 
+  }
+}).listen(8050);
 console.log("server initialized");
 
 
@@ -575,4 +593,26 @@ function AddDiv(id, title, main_div_id, j) {
     new_div.appendChild(new_heading)
     prev_child = document.querySelector("#" + main_div_id + " :nth-child(" + j + ")")
     prev_child.parentNode.insertBefore(new_div, prev_child.nextSibling)
+}
+
+function LoadAssignment() {
+  let xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "http://localhost:8050/getassignment", true);
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+          let assignment = JSON.parse(this.responseText);
+           
+          heading = document.querySelector("#main_panel div:nth-child(1) h3:nth-child(1)")
+          text = document.querySelector("#main_panel div:nth-child(1) p:nth-child(1)")
+          
+          heading.appendChild(document.createTextNode(assignment["assignment_name"]))
+          
+          text.appendChild(document.createTextNode("Description: " + assignment["description"]))
+          text.appendChild(document.createElement("br"))
+          text.appendChild(document.createTextNode("Due Date: " + assignment["due_date"]))
+          text.appendChild(document.createElement("br"))
+          text.appendChild(document.createTextNode("Points: " + assignment["points"]))
+       }
+   }
+   xhttp.send();
 }
