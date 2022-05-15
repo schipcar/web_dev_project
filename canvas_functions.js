@@ -462,37 +462,37 @@ function LoadAllAssignmentsStudent(main_div_id) {
    xhttp.send();
 }
 
-function LoadAllAssignmentsTeacher() {
+function LoadAllAssignmentsTeacher(main_div_id) {
   let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8063/getallassignments_teacher", true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
-           AddAssignmentsTeacher(assignments)
+           AddAssignmentsTeacher(assignments, main_div_id)
        }
    }
    xhttp.send();
 }
 
-function LoadCourseAssignmentsStudent() {
+function LoadCourseAssignmentsStudent(main_div_id) {
   let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8067/getcourseassignments", true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
-           AddAssignmentsStudent(assignments)
+           AddAssignmentsStudent(assignments, main_div_id)
        }
    }
    xhttp.send();
 }
 
-function LoadCourseAssignmentsTeacher() {
+function LoadCourseAssignmentsTeacher(main_div_id) {
   let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8067/getcourseassignments", true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
-           AddAssignmentsTeacher(assignments)
+           AddAssignmentsTeacher(assignments, main_div_id)
        }
    }
    xhttp.send();
@@ -518,8 +518,8 @@ function AddAssignmentsStudent(assignments, main_div_id) {
     }
 }
 
-function AddAssignmentsTeacher(assignments) {
-     AddDiv("past", "To Do")  /* for teachers, past assignments go in 'To Do' section*/
+function AddAssignmentsTeacher(assignments, main_div_id) {
+     AddDiv("past", "To Do", main_div_id)  /* for teachers, past assignments go in 'To Do' section*/
      
      for (let i=0; i<assignments.length; i++) {
          AddAssignment(assignments[i], "teacher")
