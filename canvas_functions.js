@@ -493,12 +493,16 @@ function LoadAllAssignmentsStudent() {
 }
 
 function AddAssignment(assignment, role) {
-    
-    
-    
-    
     new_div = document.createElement("div")
-    new_div.className = "course"
+    new_div.className = "assignment"
+    
+    
+    
+    Date.parse(assignment["due_date"])
+    
+    
+    
+    
 
     new_heading = document.createElement("H4")
     new_heading.className = "course_title"
