@@ -331,6 +331,48 @@ http.createServer(function(request, response){
 }).listen(8070);
 console.log("server initialized");
 
+http.createServer(function(request, response){
+  var path = url.parse(request.url).pathname;
+  if(path=="/getallassignments_student"){
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      response.setHeader('Access-Control-Max-Age', 2592000);
+      response.setHeader('Content-Type', 'application/json');
+      const jsonContent = JSON.stringify(all_assignments_row_student);
+      response.end(jsonContent);
+      console.log(jsonContent); 
+  }
+}).listen(8060);
+console.log("server initialized");
+
+http.createServer(function(request, response){
+  var path = url.parse(request.url).pathname;
+  if(path=="/getallassignments_teacher"){
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      response.setHeader('Access-Control-Max-Age', 2592000);
+      response.setHeader('Content-Type', 'application/json');
+      const jsonContent = JSON.stringify(all_assignments_row_teacher);
+      response.end(jsonContent);
+      console.log(jsonContent); 
+  }
+}).listen(8063);
+console.log("server initialized");
+
+http.createServer(function(request, response){
+  var path = url.parse(request.url).pathname;
+  if(path=="/getcourseassignments"){
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      response.setHeader('Access-Control-Max-Age', 2592000);
+      response.setHeader('Content-Type', 'application/json');
+      const jsonContent = JSON.stringify(course_assignments_row);
+      response.end(jsonContent);
+      console.log(jsonContent); 
+  }
+}).listen(8067);
+console.log("server initialized");
+
 
 function LoadCoursesStudent() {
   let xhttp = new XMLHttpRequest();
