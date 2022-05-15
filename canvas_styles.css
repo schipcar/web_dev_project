@@ -233,6 +233,8 @@ h3, p, #main_panel, .announcement, .announcement_title, #assignments_panel, .ass
 .course {
   border-radius: 10px;
   background-color: orange;
+  height: 80%;
+  width: 30%;
   margin: 1%;
   padding: 10% 3% 10% 3%;
 }
@@ -240,6 +242,7 @@ h3, p, #main_panel, .announcement, .announcement_title, #assignments_panel, .ass
 .course_title {
   background-color: orange;
   font-size: 110%;
+  text-align: center;
 }
 
 .assignment_title {

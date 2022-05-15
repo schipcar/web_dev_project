@@ -242,7 +242,8 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   db.all("SELECT * FROM grades", function(err, row) {
     grades_row=row
   });
-  db.all("SELECT * FROM courses", function(err, row) {
+  var user = 0001;
+  db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
     courses_row=row
   });
 });
@@ -282,15 +283,29 @@ console.log("server initialized");
 
 
 function LoadCourses() {
-  document.getElementById("courses_panel").innerHTML += "<span style='color: white;'>test</span>";
-  console.log('test');
   var xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8090/getcourses", true);
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-           var dict_all = JSON.parse(this.responseText);
-           console.log(dict_all);
-           document.getElementById("courses_panel").innerHTML += dict_all; 
+           var courses = JSON.parse(this.responseText);
+           for (var i=0; i<courses.length; i++) {
+             const course = courses[i];
+
+             new_div = document.createElement("div")
+             new_div.className = "course"
+
+             new_heading = document.createElement("H4")
+             new_heading.className = "course_title"
+
+             new_link = document.createElement("a")
+             new_link.href = "course_homepage_student.html"
+             new_link.innerHTML += course["name"]
+             new_link.className = "course_title"
+
+             new_heading.appendChild(new_link)
+             new_div.appendChild(new_heading)
+             document.getElementById("courses_panel").appendChild(new_div)
+           }
      }
    }
    xhttp.send();
