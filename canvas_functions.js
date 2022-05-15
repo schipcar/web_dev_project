@@ -298,7 +298,7 @@ http.createServer(function(request, response){
       console.log(jsonContent); 
 
   }
-}).listen(8095);
+}).listen(8070);
 console.log("server initialized");
 
 
@@ -318,7 +318,7 @@ function LoadCoursesStudent() {
 
 function LoadCoursesTeacher() {
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8095/getcourses_teacher", true);
+  xhttp.open("GET", "http://localhost:8070/getcourses_teacher", true);
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
            var courses = JSON.parse(this.responseText);
