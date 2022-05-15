@@ -235,6 +235,7 @@ var http = require('http');
 var grades_row = 2;
 var courses_row_student = 2;
 var courses_row_teacher = 2;
+var announcements_row = 2;
 
 let db = new sqlite3.Database('./canvas.db', (err) => {
   if (err) {
@@ -250,6 +251,10 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   user = 0004;
   db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
     courses_row_teacher=row
+  });
+  var course_name = "Web Development";
+  db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
+    announcements_row=row
   });
 });
 
@@ -297,6 +302,20 @@ http.createServer(function(request, response){
 }).listen(8095);
 console.log("server initialized");
 
+http.createServer(function(request, response){
+  var path = url.parse(request.url).pathname;
+  if(path=="/getannouncements"){
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      response.setHeader('Access-Control-Max-Age', 2592000);
+      response.setHeader('Content-Type', 'application/json');
+      const jsonContent = JSON.stringify(announcements_row);
+      response.end(jsonContent);
+      console.log(jsonContent); 
+  }
+}).listen(8070);
+console.log("server initialized");
+
 
 function LoadCoursesStudent() {
   let xhttp = new XMLHttpRequest();
@@ -341,4 +360,33 @@ function AddCourse(course_name, role) {
     new_heading.appendChild(new_link)
     new_div.appendChild(new_heading)
     document.getElementById("courses_panel").appendChild(new_div)
+}
+
+
+function LoadAnnouncements() {
+  let xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "http://localhost:8070/getannouncements", true);
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+           let announcements = JSON.parse(this.responseText);
+           for (let i=0; i<announcements.length; i++) {
+               let announcement = announcements[i]
+             
+               new_div = document.createElement("div")
+               new_div.className = "announcement"
+
+               new_heading = document.createElement("H4")
+               new_heading.className = "announcement_title"
+               new_heading.innerHTML += announcement["subject"]
+         
+               new_test = document.createElement("p")
+               new_text.innerHTML += announcement["body"]
+
+               new_div.appendChild(new_heading)
+               new_div.appendChild(new_text)
+               document.getElementById("main_panel").appendChild(new_div)
+           }
+       }
+   }
+   xhttp.send();
 }
