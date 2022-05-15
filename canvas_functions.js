@@ -369,7 +369,7 @@ function LoadAnnouncements() {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
           let announcements = JSON.parse(this.responseText);
-          document.getElementById("main_panel").innerHTML += String(anouncements.length)
+          document.getElementById("main_panel").innerHTML += anouncements
           for (let i=0; i<announcements.length; i++) {
               let announcement = announcements[i]
              
