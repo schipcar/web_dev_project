@@ -499,9 +499,9 @@ function LoadCourseAssignmentsTeacher(main_div_id) {
 }
 
 function AddAssignmentsStudent(assignments, main_div_id) {
-    AddDiv("todo", "To Do", main_div_id)
-    AddDiv("upcoming", "Upcoming Assignments", main_div_id)          
-    AddDiv("past", "Past Assignments", main_div_id)
+    AddDiv("todo", "To Do", main_div_id, "1")
+    AddDiv("upcoming", "Upcoming Assignments", main_div_id, "2")          
+    AddDiv("past", "Past Assignments", main_div_id, "3")
           
     for (let i=0; i<assignments.length; i++) {
         AddAssignment(assignments[i], "student")
@@ -519,7 +519,7 @@ function AddAssignmentsStudent(assignments, main_div_id) {
 }
 
 function AddAssignmentsTeacher(assignments, main_div_id) {
-     AddDiv("past", "To Do", main_div_id)  /* for teachers, past assignments go in 'To Do' section*/
+     AddDiv("past", "To Do", main_div_id, "1")  /* for teachers, past assignments go in 'To Do' section*/
      
      for (let i=0; i<assignments.length; i++) {
          AddAssignment(assignments[i], "teacher")
@@ -565,7 +565,7 @@ function AddAssignment(assignment, role) {
     }
 }
 
-function AddDiv(id, title, main_div_id) {
+function AddDiv(id, title, main_div_id, j) {
     new_div = document.createElement("div")
     new_div.className = "assignment_section"
     new_div.id = id
@@ -573,5 +573,6 @@ function AddDiv(id, title, main_div_id) {
     new_heading.className = "assignment_title"
     new_heading.appendChild(document.createTextNode(title)) 
     new_div.appendChild(new_heading)
-    document.getElementById(main_div_id).appendChild(new_div)
+    prev_child = document.querySelector("#" + main_div_id + " :nth-child(" + j + ")")
+    prev_child.parentNode.insertBefore(new_div, prev_child.nextSibling)
 }
