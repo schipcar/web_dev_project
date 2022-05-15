@@ -515,7 +515,7 @@ function AddAssignment(assignment, role) {
     new_link.className = "assignment_title"
     
     new_text = document.createElement("p")
-    new_text.appendChild(document.createTextNode("Due: " + assignment["due_date"] + "\n Points: " + toString(assignment["points"])))
+    new_text.appendChild(document.createTextNode("Due: " + assignment["due_date"] + "<br> Points: " + String(assignment["points"])))
 
     new_heading.appendChild(new_link)
     new_div.appendChild(new_heading)
