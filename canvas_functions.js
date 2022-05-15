@@ -384,7 +384,8 @@ function LoadAnnouncements() {
 
               new_div.appendChild(new_heading)
               new_div.appendChild(new_text)
-              document.getElementById("main_panel").appendChild(new_div)
+              prev_child = document.querySelector("#main_panel :nth-child(" + toString(i) + ")")
+              prev_child.insertAfter(new_div)
           }
       }
   }
