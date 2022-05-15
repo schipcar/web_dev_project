@@ -71,6 +71,10 @@ h2 {
     margin: 1%;
     padding: 10% 3% 10% 3%;
   }
+  
+  .announcement_form, .assignment_form {
+    width: 100%;
+  }
 
   #settings_user_panel {
       flex: 50%;
@@ -136,6 +140,10 @@ h2 {
     width: 90%;
     margin: 1%;
     padding: 10% 3% 10% 3%;
+  }
+  
+  .announcement_form, .assignment_form {
+    width: 100%;
   }
 
   #settings_user_panel {
@@ -252,10 +260,6 @@ h3, p, #main_panel, .announcement, .announcement_title, #assignments_panel, .ass
   background-color: orange;
   font-size: 110%;
   text-align: center;
-}
-
-.announcement_form, .assignment_form {
-  width: 100%;
 }
 
 button {
