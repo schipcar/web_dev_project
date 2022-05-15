@@ -247,7 +247,6 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
     courses_row_student=row
   });
-  user = 0004;
   db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = 0004)", function(err, row) {
     courses_row_teacher=row
   });
@@ -265,7 +264,6 @@ http.createServer(function(request, response){
       const jsonContent = JSON.stringify(grades_row);
       response.end(jsonContent);
       console.log(jsonContent); 
-
   }
 }).listen(8080);
 console.log("server initialized");
@@ -280,7 +278,6 @@ http.createServer(function(request, response){
       const jsonContent = JSON.stringify(courses_row_student);
       response.end(jsonContent);
       console.log(jsonContent); 
-
   }
 }).listen(8090);
 console.log("server initialized");
@@ -295,23 +292,35 @@ http.createServer(function(request, response){
       const jsonContent = JSON.stringify(courses_row_teacher);
       response.end(jsonContent);
       console.log(jsonContent); 
-
   }
 }).listen(8070);
 console.log("server initialized");
 
 
+function LoadCoursesStudent() {
+  let xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "http://localhost:8090/getcourses_student", true);
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+           let courses = JSON.parse(this.responseText);
+           for (let i=0; i<courses.length; i++) {
+             AddCourse(courses[i]['name'], "student")
+           }
+       }
+   }
+   xhttp.send();
+}
 
 function LoadCoursesTeacher() {
   let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8070/getcourses_teacher", true);
   xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
+      if (this.readyState == 4 && this.status == 200) {
            let courses = JSON.parse(this.responseText);
            for (let i=0; i<courses.length; i++) {
              AddCourse(courses[i]['name'], "teacher")
            }
-     }
+       }
    }
    xhttp.send();
 }
