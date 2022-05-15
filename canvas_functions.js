@@ -603,7 +603,7 @@ function LoadAssignment() {
           let assignment = JSON.parse(this.responseText)[0];
            
           heading = document.querySelector("#main_panel div:nth-child(1) h3:nth-child(1)")
-          text = document.querySelector("#main_panel div:nth-child(1) p:nth-child(1)")
+          text = document.querySelector("#main_panel div:nth-child(1) p:nth-child(2)")
           
           heading.appendChild(document.createTextNode(assignment["assignment_name"]))
           
