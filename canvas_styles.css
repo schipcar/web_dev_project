@@ -271,7 +271,7 @@ form {
 
 .announcement_form, .assignment_form {
   width: 100%;
-  margin-right: 50%; 
+  margin-right: 10px; 
 }
 
 label {
