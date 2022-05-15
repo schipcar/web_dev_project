@@ -247,7 +247,8 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
     courses_row_student=row
   });
-  db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = 0004)", function(err, row) {
+  user = 0004;
+  db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
     courses_row_teacher=row
   });
 });
@@ -293,7 +294,7 @@ http.createServer(function(request, response){
       response.end(jsonContent);
       console.log(jsonContent); 
   }
-}).listen(8070);
+}).listen(8095);
 console.log("server initialized");
 
 
@@ -313,7 +314,7 @@ function LoadCoursesStudent() {
 
 function LoadCoursesTeacher() {
   let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8070/getcourses_teacher", true);
+  xhttp.open("GET", "http://localhost:8095/getcourses_teacher", true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let courses = JSON.parse(this.responseText);
