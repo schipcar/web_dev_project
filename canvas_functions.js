@@ -303,12 +303,12 @@ console.log("server initialized");
 
 
 function LoadCoursesStudent() {
-  var xhttp = new XMLHttpRequest();
+  let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8090/getcourses_student", true);
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-           var courses = JSON.parse(this.responseText);
-           for (var i=0; i<courses.length; i++) {
+           let courses = JSON.parse(this.responseText);
+           for (let i=0; i<courses.length; i++) {
              AddCourse(courses[i]['name'], "student")
            }
      }
@@ -317,12 +317,12 @@ function LoadCoursesStudent() {
 }
 
 function LoadCoursesTeacher() {
-  var xhttp = new XMLHttpRequest();
+  let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8070/getcourses_teacher", true);
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-           var courses = JSON.parse(this.responseText);
-           for (var i=0; i<courses.length; i++) {
+           let courses = JSON.parse(this.responseText);
+           for (let i=0; i<courses.length; i++) {
              AddCourse(courses[i]['name'], "teacher")
            }
      }
