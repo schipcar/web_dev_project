@@ -62,6 +62,15 @@ h2 {
     flex-direction: column;
     padding: 1%;
   }
+  
+  .course {
+    border-radius: 10px;
+    background-color: orange;
+    height: 80%;
+    width: 30%;
+    margin: 1%;
+    padding: 10% 3% 10% 3%;
+  }
 
   #settings_user_panel {
       flex: 50%;
@@ -118,6 +127,15 @@ h2 {
     display: flex;
     flex-direction: column;
     padding: 1%;
+  }
+  
+  .course {
+    border-radius: 10px;
+    background-color: orange;
+    height: 80%;
+    width: 100%;
+    margin: 1%;
+    padding: 10% 3% 10% 3%;
   }
 
   #settings_user_panel {
@@ -228,15 +246,6 @@ h3, p, #main_panel, .announcement, .announcement_title, #assignments_panel, .ass
 
 .announcement_title, .course_title {
   color: black;
-}
-
-.course {
-  border-radius: 10px;
-  background-color: orange;
-  height: 80%;
-  width: 30%;
-  margin: 1%;
-  padding: 10% 3% 10% 3%;
 }
 
 .course_title {
