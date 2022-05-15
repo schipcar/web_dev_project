@@ -285,7 +285,6 @@ http.createServer(function(request, response){
 }).listen(8090);
 console.log("server initialized");
 
-
 http.createServer(function(request, response){
   var path = url.parse(request.url).pathname;
   if(path=="/getcourses_teacher"){
@@ -302,19 +301,6 @@ http.createServer(function(request, response){
 console.log("server initialized");
 
 
-function LoadCoursesStudent() {
-  let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8090/getcourses_student", true);
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-           let courses = JSON.parse(this.responseText);
-           for (let i=0; i<courses.length; i++) {
-             AddCourse(courses[i]['name'], "student")
-           }
-     }
-   }
-   xhttp.send();
-}
 
 function LoadCoursesTeacher() {
   let xhttp = new XMLHttpRequest();
