@@ -368,26 +368,26 @@ function LoadAnnouncements() {
   xhttp.open("GET", "http://localhost:8070/getannouncements", true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-           let announcements = JSON.parse(this.responseText);
-           for (let i=0; i<announcements.length; i++) {
-               document.getElementById("main_panel").innerHTML += 'test'
-               let announcement = announcements[i]
+          let announcements = JSON.parse(this.responseText);
+          document.getElementById("main_panel").innerHTML += String(anouncements.length)
+          for (let i=0; i<announcements.length; i++) {
+              let announcement = announcements[i]
              
-               new_div = document.createElement("div")
-               new_div.className = "announcement"
+              new_div = document.createElement("div")
+              new_div.className = "announcement"
 
-               new_heading = document.createElement("H4")
-               new_heading.className = "announcement_title"
-               new_heading.innerHTML += announcement["subject"]
+              new_heading = document.createElement("H4")
+              new_heading.className = "announcement_title"
+              new_heading.innerHTML += announcement["subject"]
          
-               new_test = document.createElement("p")
-               new_text.innerHTML += announcement["body"]
+              new_test = document.createElement("p")
+              new_text.innerHTML += announcement["body"]
 
-               new_div.appendChild(new_heading)
-               new_div.appendChild(new_text)
-               document.getElementById("main_panel").appendChild(new_div)
-           }
-       }
-   }
-   xhttp.send();
+              new_div.appendChild(new_heading)
+              new_div.appendChild(new_text)
+              document.getElementById("main_panel").appendChild(new_div)
+          }
+      }
+  }
+  xhttp.send();
 }
