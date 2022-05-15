@@ -236,6 +236,9 @@ var grades_row = 2;
 var courses_row_student = 2;
 var courses_row_teacher = 2;
 var announcements_row = 2;
+var all_assignments_row_student = 2;
+var all_assignments_row_teacher
+var course_assignments_row = 2;
 
 let db = new sqlite3.Database('./canvas.db', (err) => {
   if (err) {
@@ -255,6 +258,18 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   var course_name = "Web Development"; /* REMOVE LATER */
   db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
     announcements_row=row
+  });
+  user = 0001; /* REMOVE LATER */
+  db.all("SELECT * FROM assignments WHERE name IN (SELECT assignment_name FROM courses_assignments WHERE course_name IN (SELECT course_name FROM courses_students WHERE user_id = ?))", [user], function(err, row) {
+    all_assignments_row_student=row
+  });
+  user = 0004; /* REMOVE LATER */
+  db.all("SELECT * FROM assignments WHERE name IN (SELECT assignment_name FROM courses_assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)))", [user], function(err, row) {
+    all_assignments_row_teacher=row
+  });
+  course_name = "Web Development"; /* REMOVE LATER */
+  db.all("SELECT * FROM assignments WHERE name IN (SELECT assignment_name FROM courses_assignments WHERE course_name = ?)", [course_name], function(err, row) {
+    course_assignments_row=row
   });
 });
 
