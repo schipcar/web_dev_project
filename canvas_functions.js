@@ -489,13 +489,13 @@ function LoadAllAssignmentsStudent() {
            }
           
            if (todo_div.childElementCount==1) {
-               todo_div.remove()
+               todo_div.innerHTML += "All done!"
            }
            if (upcoming_div.childElementCount==1) {
-               upcoming_div.remove()
+               upcoming_div.innerHTML += "You have no upcoming assignments."
            }
            if (past_div.childElementCount==1) {
-               past_div.remove()
+               past_div.innerHTML += "You have no past assignments."
            }
        }
    }
