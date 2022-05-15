@@ -526,13 +526,14 @@ function AddAssignment(assignment, role) {
     let curr_date = new Date()
     let due_date = Date.parse(assignment["due_date"])
     
-    document.getElementById("assignments_panel").innerHTML += String(due_date)
-    
     if (due_date < curr_date) {
+        document.getElementById("assignments_panel").innerHTML += 'past'
         document.getElementById("past").appendChild(new_div)
     } else if ((due_date > curr_date) && (due_date < curr_date + 3 * 24 * 60 * 60 * 1000) && (role=="student")) {
-        document.getElementById("upcoming").appendChild(new_div)
-    } else if ((due_date > curr_date + 3 * 24 * 60 * 60 * 1000) && (role=='student')) {
+        document.getElementById("assignments_panel").innerHTML += 'todo'
         document.getElementById("todo").appendChild(new_div)
+    } else if ((due_date > curr_date + 3 * 24 * 60 * 60 * 1000) && (role=='student')) {
+        document.getElementById("assignments_panel").innerHTML += 'up'
+        document.getElementById("upcoming").appendChild(new_div)
     }
 }
