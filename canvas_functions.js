@@ -244,15 +244,15 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   db.all("SELECT * FROM grades", function(err, row) {
     grades_row=row
   });
-  var user = 0001;
+  var user = 0001; /* REMOVE LATER */
   db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
     courses_row_student=row
   });
-  user = 0004;
+  user = 0004; /* REMOVE LATER */
   db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
     courses_row_teacher=row
   });
-  var course_name = "Web Development";
+  var course_name = "Web Development"; /* REMOVE LATER */
   db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
     announcements_row=row
   });
