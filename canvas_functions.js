@@ -366,6 +366,7 @@ function AddCourse(course_name, role) {
 function LoadAnnouncements() {
   let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8070/getannouncements", true);
+  document.getElementById("main_panel").innerHTML += 'test'
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let announcements = JSON.parse(this.responseText);
