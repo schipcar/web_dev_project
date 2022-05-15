@@ -245,10 +245,6 @@ h3, p, #main_panel, .announcement, .announcement_title, #assignments_panel, .ass
   text-align: center;
 }
 
-.assignment_title {
-  font-weight: normal;
-}
-
 .announcement_form, .assignment_form {
   width: 100%;
 }
