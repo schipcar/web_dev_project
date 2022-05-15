@@ -450,13 +450,13 @@ function LoadAnnouncements() {
 }
 
 
-function LoadAllAssignmentsStudent() {
+function LoadAllAssignmentsStudent(main_div_id) {
   let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8060/getallassignments_student", true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
-           AddAssignmentsStudent(assignments)
+           AddAssignmentsStudent(assignments, main_div_id)
        }
    }
    xhttp.send();
@@ -498,10 +498,10 @@ function LoadCourseAssignmentsTeacher() {
    xhttp.send();
 }
 
-function AddAssignmentsStudent(assignments) {
-    AddDiv("todo", "To Do")
-    AddDiv("upcoming", "Upcoming Assignments")          
-    AddDiv("past", "Past Assignments")
+function AddAssignmentsStudent(assignments, main_div_id) {
+    AddDiv("todo", "To Do", main_div_id)
+    AddDiv("upcoming", "Upcoming Assignments", main_div_id)          
+    AddDiv("past", "Past Assignments", main_div_id)
           
     for (let i=0; i<assignments.length; i++) {
         AddAssignment(assignments[i], "student")
@@ -565,7 +565,7 @@ function AddAssignment(assignment, role) {
     }
 }
 
-function AddDiv(id, title) {
+function AddDiv(id, title, main_div_id) {
     new_div = document.createElement("div")
     new_div.className = "assignment_section"
     new_div.id = id
@@ -573,5 +573,5 @@ function AddDiv(id, title) {
     new_heading.className = "assignment_title"
     new_heading.appendChild(document.createTextNode(title)) 
     new_div.appendChild(new_heading)
-    document.getElementById("assignments_panel").appendChild(new_div)
+    document.getElementById(main_div_id).appendChild(new_div)
 }
