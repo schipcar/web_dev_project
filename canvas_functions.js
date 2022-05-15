@@ -233,7 +233,7 @@ var http = require('http');
     fs = require('fs');
     url = require('url');
 var grades_row = 2;
-var courses_row = 2;
+var courses_row_student = 2;
 var courses_row_teacher = 2;
 
 let db = new sqlite3.Database('./canvas.db', (err) => {
@@ -245,7 +245,7 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   });
   var user = 0001;
   db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
-    courses_row=row
+    courses_row_student=row
   });
   var user = 0004;
   db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
@@ -277,7 +277,7 @@ http.createServer(function(request, response){
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent = JSON.stringify(courses_row);
+      const jsonContent = JSON.stringify(courses_row_student);
       response.end(jsonContent);
       console.log(jsonContent); 
 
@@ -302,31 +302,47 @@ http.createServer(function(request, response){
 console.log("server initialized");
 
 
-function LoadCourses() {
+function LoadCoursesStudent() {
   var xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8090/getcourses", true);
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
            var courses = JSON.parse(this.responseText);
            for (var i=0; i<courses.length; i++) {
-             const course = courses[i];
-
-             new_div = document.createElement("div")
-             new_div.className = "course"
-
-             new_heading = document.createElement("H4")
-             new_heading.className = "course_title"
-
-             new_link = document.createElement("a")
-             new_link.href = "course_homepage_student.html"
-             new_link.innerHTML += course["name"]
-             new_link.className = "course_title"
-
-             new_heading.appendChild(new_link)
-             new_div.appendChild(new_heading)
-             document.getElementById("courses_panel").appendChild(new_div)
+             AddCourse(courses[i]['name'])
            }
      }
    }
    xhttp.send();
+}
+
+function LoadCoursesTeacher() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "http://localhost:8095/getcourses", true);
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+           var courses = JSON.parse(this.responseText);
+           for (var i=0; i<courses.length; i++) {
+             AddCourse(courses[i]['name'])
+           }
+     }
+   }
+   xhttp.send();
+}
+
+function AddCourse(course_name) {
+    new_div = document.createElement("div")
+    new_div.className = "course"
+
+    new_heading = document.createElement("H4")
+    new_heading.className = "course_title"
+
+    new_link = document.createElement("a")
+    new_link.href = "course_homepage_student.html"
+    new_link.innerHTML += course_name
+    new_link.className = "course_title"
+
+    new_heading.appendChild(new_link)
+    new_div.appendChild(new_heading)
+    document.getElementById("courses_panel").appendChild(new_div)
 }
