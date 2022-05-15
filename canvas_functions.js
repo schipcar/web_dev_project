@@ -369,7 +369,6 @@ function LoadAnnouncements() {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
           let announcements = JSON.parse(this.responseText);
-          document.getElementById("main_panel").innerHTML += 'test'
           for (let i=0; i<announcements.length; i++) {
               let announcement = announcements[i]
               
@@ -386,6 +385,7 @@ function LoadAnnouncements() {
               new_div.appendChild(new_heading)
               new_div.appendChild(new_text)
               document.getElementById("main_panel").appendChild(new_div)
+              document.getElementById("main_panel").innerHTML += 'test'
           }
       }
   }
