@@ -492,27 +492,32 @@ function LoadAllAssignmentsStudent() {
    xhttp.send();
 }
 
-function AddAssignment(assignment, role) {
+function AddAssignment(assignment, role) {    
     new_div = document.createElement("div")
     new_div.className = "assignment"
     
-    
-    
-    Date.parse(assignment["due_date"])
-    
-    
-    
-    
-
     new_heading = document.createElement("H4")
-    new_heading.className = "course_title"
+    new_heading.className = "assignment_title"
 
     new_link = document.createElement("a")
-    new_link.href = "course_homepage_" + role + ".html"
-    new_link.innerHTML += course_name
-    new_link.className = "course_title"
+    new_link.href = "assignment_" + role + ".html"
+    new_link.innerHTML += assignment["name"]
+    new_link.className = "assignment_title"
+    
+    new_text = document.createElement("p")
+    new_text.appendChild(document.createTextNode("Due: " + assignment["due_date"] + "\n Points: " + toString(assignment["points"]))
 
     new_heading.appendChild(new_link)
     new_div.appendChild(new_heading)
-    document.getElementById("courses_panel").appendChild(new_div)
+    new_div.appendChild(new_text)
+    
+    let curr_date = new Date()
+    let due_date = Date.parse(assignment["due_date"])
+    if (due_date < curr_date) {
+        document.getElementById("past").appendChild(new_div)
+    } else if ((due_date > curr_date) && (due_date < curr_date + 3 * 24 * 60 * 60 * 1000)) {
+        document.getElementById("past").appendChild(new_div)
+    } else if (due_date > curr_date + 3 * 24 * 60 * 60 * 1000) {
+        document.getElementById("past").appendChild(new_div)
+    }
 }
