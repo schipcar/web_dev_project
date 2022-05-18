@@ -21,7 +21,7 @@
 <div id="dinamic">
 </div>
 
-<form name="myform" action="http://localhost:3000/putdictionary" method="post">
+<form name="myform" action="http://localhost:8080/putdictionary" method="post">
   <fieldset>
     <label for="id">Id:</label>
     <input type="number" id="id" name="id" placeholder="id" />
@@ -49,15 +49,17 @@ Preferences.id = "tbl";
 
 function LoadAllGrades() {
   var xhttp = new XMLHttpRequest();
+  xhttp.overrideMimeType("application/json");
   xhttp.open("GET", "http://localhost:8080/getdictionary", true);
   xhttp.onreadystatechange = function() {
+    console.log("aqui")
     if (this.readyState == 4 && this.status == 200) {
            var dict_all = JSON.parse(this.responseText);
            console.log(dict_all)
            var list_array = new Array();
            for (var i=0; i<dict_all.length; i++) {
              const dict_t = dict_all[i];
-             console.log(dict_t)
+             //console.log(dict_t)
              const array1 = [dict_t.student, dict_t.name, dict_t.status, dict_t.punctuation, dict_t.possible];
              list_array.push(array1)}
              nrows = dict_all.length
@@ -98,7 +100,6 @@ createtable = function(id, list_array, nrows){
     Preferences = table;
     TableDiv.appendChild(table)   
 }
-
 
 
 </script>
