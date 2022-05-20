@@ -239,11 +239,12 @@ var announcements_row = 2;
 var all_assignments_row_student = 2;
 var all_assignments_row_teacher
 var course_assignments_row = 2;
+var all_courses;
 
 let db = new sqlite3.Database('./canvas.db', (err) => {
   if (err) {
     console.error(err.message);
-  } 
+  }
   db.all("SELECT * FROM grades", function(err, row) {
     grades_row=row
   });
@@ -275,6 +276,9 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   db.all("SELECT * FROM assignments WHERE assignment_name = ?", [assignment_name], function(err, row) {
     assignment_row=row
   });
+  db.all("SELECT * FROM courses", function(err, row) {
+      all_courses=row
+  })
 });
 
 
@@ -288,7 +292,7 @@ http.createServer(function(request, response){
       response.setHeader('Content-Type', 'application/json');
       const jsonContent = JSON.stringify(grades_row);
       response.end(jsonContent);
-      console.log(jsonContent); 
+      console.log(jsonContent);
   }
 }).listen(8080);
 console.log("server initialized");
@@ -302,7 +306,7 @@ http.createServer(function(request, response){
       response.setHeader('Content-Type', 'application/json');
       const jsonContent = JSON.stringify(courses_row_student);
       response.end(jsonContent);
-      console.log(jsonContent); 
+      console.log(jsonContent);
   }
 }).listen(8090);
 console.log("server initialized");
@@ -316,7 +320,7 @@ http.createServer(function(request, response){
       response.setHeader('Content-Type', 'application/json');
       const jsonContent = JSON.stringify(courses_row_teacher);
       response.end(jsonContent);
-      console.log(jsonContent); 
+      console.log(jsonContent);
   }
 }).listen(8095);
 console.log("server initialized");
@@ -330,7 +334,7 @@ http.createServer(function(request, response){
       response.setHeader('Content-Type', 'application/json');
       const jsonContent = JSON.stringify(announcements_row);
       response.end(jsonContent);
-      console.log(jsonContent); 
+      console.log(jsonContent);
   }
 }).listen(8070);
 console.log("server initialized");
@@ -344,7 +348,7 @@ http.createServer(function(request, response){
       response.setHeader('Content-Type', 'application/json');
       const jsonContent = JSON.stringify(all_assignments_row_student);
       response.end(jsonContent);
-      console.log(jsonContent); 
+      console.log(jsonContent);
   }
 }).listen(8060);
 console.log("server initialized");
@@ -358,7 +362,7 @@ http.createServer(function(request, response){
       response.setHeader('Content-Type', 'application/json');
       const jsonContent = JSON.stringify(all_assignments_row_teacher);
       response.end(jsonContent);
-      console.log(jsonContent); 
+      console.log(jsonContent);
   }
 }).listen(8063);
 console.log("server initialized");
@@ -372,7 +376,7 @@ http.createServer(function(request, response){
       response.setHeader('Content-Type', 'application/json');
       const jsonContent = JSON.stringify(course_assignments_row);
       response.end(jsonContent);
-      console.log(jsonContent); 
+      console.log(jsonContent);
   }
 }).listen(8067);
 console.log("server initialized");
@@ -386,9 +390,23 @@ http.createServer(function(request, response){
       response.setHeader('Content-Type', 'application/json');
       const jsonContent = JSON.stringify(assignment_row);
       response.end(jsonContent);
-      console.log(jsonContent); 
+      console.log(jsonContent);
   }
 }).listen(8050);
+console.log("server initialized");
+
+http.createServer(function(request, response){
+  var path = url.parse(request.url).pathname;
+  if(path=="/getallcourses"){
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      response.setHeader('Access-Control-Max-Age', 2592000);
+      response.setHeader('Content-Type', 'application/json');
+      const jsonContent = JSON.stringify(all_courses);
+      response.end(jsonContent);
+      console.log(jsonContent);
+  }
+}).listen(8040);
 console.log("server initialized");
 
 
@@ -446,14 +464,14 @@ function LoadAnnouncements() {
           let announcements = JSON.parse(this.responseText);
           for (let i=0; i<announcements.length; i++) {
               let announcement = announcements[i]
-              
+
               new_div = document.createElement("div")
               new_div.className = "announcement"
 
               new_heading = document.createElement("H4")
               new_heading.className = "announcement_title"
               new_heading.appendChild(document.createTextNode(announcement["subject"]))
-              
+
               new_text = document.createElement("p")
               new_text.appendChild(document.createTextNode(announcement["body"]))
 
@@ -518,13 +536,13 @@ function LoadCourseAssignmentsTeacher(main_div_id) {
 
 function AddAssignmentsStudent(assignments, main_div_id) {
     AddDiv("todo", "To Do", main_div_id, "1")
-    AddDiv("upcoming", "Upcoming Assignments", main_div_id, "2")          
+    AddDiv("upcoming", "Upcoming Assignments", main_div_id, "2")
     AddDiv("past", "Past Assignments", main_div_id, "3")
-          
+
     for (let i=0; i<assignments.length; i++) {
         AddAssignment(assignments[i], "student")
     }
-          
+
     if (document.getElementById("todo").childElementCount==1) {
         document.getElementById("todo").innerHTML += "All done!"
     }
@@ -538,20 +556,20 @@ function AddAssignmentsStudent(assignments, main_div_id) {
 
 function AddAssignmentsTeacher(assignments, main_div_id) {
      AddDiv("past", "To Do", main_div_id, "1")  /* for teachers, past assignments go in 'To Do' section*/
-     
+
      for (let i=0; i<assignments.length; i++) {
          AddAssignment(assignments[i], "teacher")
      }
-          
+
      if (document.getElementById("past").childElementCount==1) {
           document.getElementById("past").innerHTML += "All done!"
      }
 }
 
-function AddAssignment(assignment, role) {    
+function AddAssignment(assignment, role) {
     new_div = document.createElement("div")
     new_div.className = "assignment"
-    
+
     new_heading = document.createElement("H4")
     new_heading.className = "assignment_title"
 
@@ -559,7 +577,7 @@ function AddAssignment(assignment, role) {
     new_link.href = "assignment_" + role + ".html"
     new_link.innerHTML += assignment["assignment_name"]
     new_link.className = "assignment_title"
-    
+
     new_text = document.createElement("p")
     new_text.appendChild(document.createTextNode("Course: " + assignment["course_name"]))
     new_text.appendChild(document.createElement("br"))
@@ -570,10 +588,10 @@ function AddAssignment(assignment, role) {
     new_heading.appendChild(new_link)
     new_div.appendChild(new_heading)
     new_div.appendChild(new_text)
-    
+
     let curr_date = Date.parse(new Date())
     let due_date = Date.parse(assignment["due_date"])
-    
+
     if (due_date < curr_date) {
         document.getElementById("past").appendChild(new_div)
     } else if ((due_date > curr_date) && (due_date < curr_date + 3 * 24 * 60 * 60 * 1000) && (role=="student")) {
@@ -589,7 +607,7 @@ function AddDiv(id, title, main_div_id, j) {
     new_div.id = id
     new_heading = document.createElement("H4")
     new_heading.className = "assignment_title"
-    new_heading.appendChild(document.createTextNode(title)) 
+    new_heading.appendChild(document.createTextNode(title))
     new_div.appendChild(new_heading)
     prev_child = document.querySelector("#" + main_div_id + " :nth-child(" + j + ")")
     prev_child.parentNode.insertBefore(new_div, prev_child.nextSibling)
@@ -601,18 +619,59 @@ function LoadAssignment() {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
           let assignment = JSON.parse(this.responseText)[0];
-           
+
           heading = document.querySelector("#main_panel div:nth-child(1) h3:nth-child(1)")
           text = document.querySelector("#main_panel div:nth-child(1) p:nth-child(2)")
-          
+
           heading.appendChild(document.createTextNode(assignment["assignment_name"]))
-          
+
           text.appendChild(document.createTextNode("Description: " + assignment["description"]))
           text.appendChild(document.createElement("br"))
           text.appendChild(document.createElement("br"))
           text.appendChild(document.createTextNode("Due Date: " + assignment["due_date"]))
           text.appendChild(document.createElement("br"))
           text.appendChild(document.createTextNode("Points: " + assignment["points"]))
+       }
+   }
+   xhttp.send();
+}
+
+function AddCourseAdmin(course) {
+    let courseTable = document.getElementById("all_courses_list");
+    let ctBody = courseTable.children[1];
+    let newRow = document.createElement("tr");
+    ctBody.appendChild(newRow);
+
+    let idCell = document.createElement("td");
+        idCell.innerHTML = "00000";
+        newRow.appendChild(idCell);
+    let nameCell = document.createElement("td");
+        nameCell.innerHTML = course.name;
+        newRow.appendChild(nameCell);
+    let descCell = document.createElement("td");
+        descCell.innerHTML = course.description;
+        newRow.appendChild(descCell);
+    let studCell = document.createElement("td");
+        studCell.innerHTML = 0;
+        newRow.appendChild(studCell);
+    let capCell = document.createElement("td");
+        capCell.innerHTML = course.capacity;
+        newRow.appendChild(capCell);
+    let teachCell = document.createElement("td");
+        teachCell.innerHTML = course.teacher;
+        newRow.appendChild(teachCell);
+}
+
+function LoadCoursesAdmin() {
+  let xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "http://localhost:8040/getallcourses", true);
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+           //MODIFY TO WORK WITH WHAT I WANT TO DO (ALEX)
+           let courses = JSON.parse(this.responseText);
+           for (let i=0; i<courses.length; i++) {
+               AddCourseAdmin(courses[i]);
+           }
        }
    }
    xhttp.send();

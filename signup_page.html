@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+          <link rel=stylesheet href="canvas_styles.css" TYPE="text/css">
+          <script src="canvas_functions.js"></script>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Signup</title>
+    </head>
+    <body>
+        <div>
+            <center>
+                <h1>Sign Up for CAAnvas</h1>
+
+                <form>
+                    <label for="signup_name">Name:</label>
+                        <input type="text" id="signup_name" name="Name"/><br/>
+                    <label for="signup_email">Email:</label>
+                        <input type="text" id="signup_email" name="Email"/><br/>
+                    <label for="signup_id">ID Number:</label>
+                        <input type="number" id="signup_id" name="ID"/><br/>
+                    <label for="signup_pw">Password:</label>
+                        <input type="password" id="signup_pw" name="Password"/><br/>
+                    <label for="signup_confirm_pw">Confirm password:</label>
+                        <input type="password" id="signup_confirm_pw" name="Confirm Password"/><br/>
+                    <label for="signup_account_type">Account type:</label>
+                        <input list="account_type_datalist" id ="signup_account_type" name="Account Type"/><br/>
+                        <datalist id="account_type_datalist">
+                            <option value="Student"/>
+                            <option value="Teacher"/>
+                        </datalist>
+                    <label for="signup_security_q1">Security question 1:</label>
+                        <input list="security_qs_list" id ="signup_security_q1" name="Security Q1"/><br/>
+                    <label for="signup_answer_q1">Answer:</label>
+                        <input type="text" id="signup_answer_q1" name="Answer 1/"><br/>
+                    <label for="signup_security_q2">Security question 2:</label>
+                        <input list="security_qs_list" id ="signup_security_q2" name="Security Q2"/><br/>
+                    <label for="signup_answer_q2">Answer:</label>
+                        <input type="text" id="signup_answer_q2" name="Answer 2/"><br/>
+                    <label for="signup_security_q3">Security question 1:</label>
+                        <input list="security_qs_list" id ="signup_security_q3" name="Security Q3"/><br/>
+                    <label for="signup_answer_q2">Answer:</label>
+                        <input type="text" id="signup_answer_q2" name="Answer 2/"><br/>
+                            <datalist id="security_qs_list">
+                                <option value="What was the name of your first pet?"/>
+                                <option value="What was your favorite ice cream flavor as a child?"/>
+                                <option value="When did you lose your first baby tooth?"/>
+                                <option value="What was your favorite song in middle school?"/>
+                                <option value="Which parent is your favorite?"/>
+                                <option value="Why?"/>
+                            </datalist>
+                    <input type="submit" value="Sign Up">
+                </form>
+            </center>
+        </div>
+    </body>
+</html>
