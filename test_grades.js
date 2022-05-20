@@ -8,6 +8,7 @@ var http = require('http');
     pag = require('https');
     db = 0
 var row_sent = 2;
+var proof = 0;
 
 
 function renew() {
