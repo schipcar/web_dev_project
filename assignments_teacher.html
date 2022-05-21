@@ -8,10 +8,10 @@
   <title>Assignments</title>
 </head>
 
-<body onload="LoadCourseName_notitle(); LoadCourseAssignmentsTeacher('main_panel');">
+<body onload="LoadCourseName_notitle(); LoadCourseMenuLinks(); LoadCourseAssignmentsTeacher('main_panel');">
 
 <div id="header">
-  <h2 id="course_header_announcements"></h2>
+  <h2 id="course_header"></h2>
 </div>
 
 <div id="main">
@@ -29,7 +29,7 @@
    <div class="column" id="course_menu">
      <ul class="course_menu_items">
        <li class="course_menu_items"><a href="course_homepage_teacher.html" class="course_menu_items">Course Home</a></li>
-       <li class="course_menu_items"><a href="announcements_teacher.html" class="course_menu_items">Announcements</a></li>
+       <li class="course_menu_items"><a class="course_menu_items" id="announcements_link">Announcements</a></li>
        <li class="selected_course_menu_item">Assignments</li>
        <li class="course_menu_items"><a href="[insert link]" class="course_menu_items">Grades</a></li>
      </ul>
