@@ -248,7 +248,7 @@ var all_courses;
 var user;
 var course_name;
 
-function renew() {
+function renew(course_name) {
   db = new sqlite3.Database('./canvas.db', (err) => {
     if (err) {
       console.error(err.message);
@@ -264,7 +264,7 @@ function renew() {
     db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
       courses_row_teacher=row
     });
-    db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [req.query.course_name], function(err, row) {
+    db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
       announcements_row=row
     });
     user = 0001; /* REMOVE LATER */
@@ -287,7 +287,7 @@ function renew() {
     })
   });
 }
-renew()
+renew("")
 
 
 http.createServer(function(request, response){
@@ -335,13 +335,11 @@ console.log("server initialized");
 var app = express();
 app.use(myParser.urlencoded({ extended: true }));
 app.get("/getannouncements", function(req, response) {
-      course_name = req.query.course_name
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      console.log(course_name)
-      renew()
+      renew(req.query.course_name)
       const jsonContent = JSON.stringify(announcements_row);
       response.send(jsonContent);
       console.log(jsonContent);
