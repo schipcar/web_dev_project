@@ -8,7 +8,7 @@
   <title>Announcements</title>
 </head>
 
-<body onload="LoadCourseName_notitle(); LoadAnnouncements();">
+<body onload="LoadCourseName_notitle(); LoadCourseMenuLinks(); LoadAnnouncements();">
 
 <div id="header">
   <h2 id="course_header"></h2>
@@ -30,7 +30,7 @@
      <ul class="course_menu_items">
        <li class="course_menu_items"><a href="course_homepage_student.html" class="course_menu_items">Course Home</a></li>
        <li class="selected_course_menu_item">Announcements</li>
-       <li class="course_menu_items"><a href="assignments_student.html" class="course_menu_items">Assignments</a></li>
+       <li class="course_menu_items"><a class="course_menu_items" id="assignments_link">Assignments</a></li>
        <li class="course_menu_items"><a href="[insert link]" class="course_menu_items">Grades</a></li>
      </ul>
   </div>
