@@ -238,13 +238,14 @@ var http = require('http');
     pag = require('https');
     db = 0
 var grades_row = 2;
-var courses_row_student = 2;
+var courses_row_student;
 var courses_row_teacher;
 var announcements_row;
 var all_assignments_row_student;
 var all_assignments_row_teacher
 var course_assignments_row;
 var all_courses;
+var user;
 var course_name;
 
 var db = new sqlite3.Database('./canvas.db', (err) => {
