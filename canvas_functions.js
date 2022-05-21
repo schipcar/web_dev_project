@@ -765,5 +765,5 @@ function LoadCourseName_notitle() {
 function LoadCourseMenuLinks() {
   data = get_url_params()
   document.getElementById("announcements_link").href = "announcements_student.html?user=" + data.user + "&course_name=" + data.course_name
-  document.getElementById("assignments_link").href = "announcements_student.html?user=" + data.user + "&course_name=" + data.course_name
+  document.getElementById("assignments_link").href = "assignments_student.html?user=" + data.user + "&course_name=" + data.course_name
 }
