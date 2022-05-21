@@ -488,7 +488,7 @@ function LoadAnnouncements() {
           var tmp
           for (let i=1; i<params.length; i++) {
               tmp = params[i].split('=');
-              data[tmp[0]] = tmp[1];
+              data[tmp[0]] = decodeURI(tmp[1]);
           }
           document.getElementById("main_panel").innerHTML += data.course_name
       }
