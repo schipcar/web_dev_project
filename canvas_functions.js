@@ -469,6 +469,7 @@ function LoadAnnouncements() {
       data[tmp[0]] = decodeURI(tmp[1]);
   }
   course_name = data.course_name
+  document.getElementById("main_panel").inneHTML += "test" //localStorage.getItem("course_name")
   if (typeof window !== 'undefined') {
       localStorage.setItem("course_name", course_name)
       document.getElementById("main_panel").inneHTML += "test" //localStorage.getItem("course_name")
