@@ -256,7 +256,9 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
     courses_row_teacher=row
   });
-  var course_name = localStorage.getItem("course_name");
+  if (typeof window !== 'undefined') {
+    var course_name = localStorage.getItem("course_name");
+  }
   db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
     announcements_row=row
   });
@@ -268,7 +270,9 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?))", [user], function(err, row) {
     all_assignments_row_teacher=row
   });
-  course_name = localStorage.getItem("course_name");
+  if (typeof window !== 'undefined') {
+    course_name = localStorage.getItem("course_name");
+  }
   db.all("SELECT * FROM assignments WHERE course_name = ?", [course_name], function(err, row) {
     course_assignments_row=row
   });
@@ -449,8 +453,10 @@ function AddCourse(course_name, role) {
     new_link.href = "course_homepage_" + role + ".html"
     new_link.innerHTML += course_name
     new_link.className = "course_title"
-    new_link.onclick = localStorage.setItem("course_name", course_name)
-
+    if (typeof window !== 'undefined') {
+        new_link.onclick = localStorage.setItem("course_name", course_name)
+    }
+    
     new_heading.appendChild(new_link)
     new_div.appendChild(new_heading)
     document.getElementById("courses_panel").appendChild(new_div)
