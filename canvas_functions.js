@@ -246,7 +246,6 @@ var all_assignments_row_teacher
 var course_assignments_row;
 var all_courses;
 var all_users;
-var user;
 
 var db = new sqlite3.Database('./canvas.db', (err) => {
     if (err) {
@@ -255,27 +254,11 @@ var db = new sqlite3.Database('./canvas.db', (err) => {
     db.all("SELECT * FROM grades", function(err, row) {
       grades_row=row
     });
-    user = 0001; /* REMOVE LATER */
-    db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
-      courses_row_student=row
-    });
-    user = 0004; /* REMOVE LATER */
-    db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
-      courses_row_teacher=row
-    });
-    user = 0001; /* REMOVE LATER */
-    db.all("SELECT * FROM assignments WHERE course_name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
-      all_assignments_row_student=row
-    });
-    user = 0004; /* REMOVE LATER */
-    db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?))", [user], function(err, row) {
-      all_assignments_row_teacher=row
-    });
     db.all("SELECT * FROM courses", function(err, row) {
       all_courses=row
     });
     db.all("SELECT * FROM users", function(err, row) {
-          all_users=row
+      all_users=row
     });
 });
 
@@ -298,33 +281,37 @@ http.createServer(function(request, response){
 }).listen(8080);
 console.log("server initialized");
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/getcourses_student"){
+app.get("/getcourses_student", function(req, response){
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent = JSON.stringify(courses_row_student);
-      response.end(jsonContent);
-      console.log(jsonContent);
-  }
-}).listen(8090);
-console.log("server initialized");
+      db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [req.query.user], function(err, row) {
+        courses_row_student=row
+        const jsonContent = JSON.stringify(courses_row_student);
+        response.send(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8090, function() {
+  console.log("server initialized");
+})
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/getcourses_teacher"){
+app.get("/getcourses_teacher", function(req, response){
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent = JSON.stringify(courses_row_teacher);
-      response.end(jsonContent);
-      console.log(jsonContent);
-  }
-}).listen(8095);
-console.log("server initialized");
+      db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [req.query.user], function(err, row) {
+        courses_row_teacher=row
+        const jsonContent = JSON.stringify(courses_row_teacher);
+        response.send(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8095, function() {
+  console.log("server initialized");
+})
 
 app.get("/getannouncements", function(req, response) {
       response.setHeader('Access-Control-Allow-Origin', '*');
@@ -342,33 +329,37 @@ app.listen(8070, function() {
   console.log("server initialized");
 })
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/getallassignments_student"){
+app.get("/getallassignments_student", function(req, response){
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent = JSON.stringify(all_assignments_row_student);
-      response.end(jsonContent);
-      console.log(jsonContent);
-  }
-}).listen(8060);
-console.log("server initialized");
+      db.all("SELECT * FROM assignments WHERE course_name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [req.query.user], function(err, row) {
+        all_assignments_row_student=row
+        const jsonContent = JSON.stringify(all_assignments_row_student);
+        response.send(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8060, function() {
+  console.log("server initialized");
+})
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/getallassignments_teacher"){
+app.get("/getallassignments_teacher", function(req, response){
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent = JSON.stringify(all_assignments_row_teacher);
-      response.end(jsonContent);
-      console.log(jsonContent);
-  }
-}).listen(8063);
-console.log("server initialized");
+      db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?))", [req.query.user], function(err, row) {
+        all_assignments_row_teacher=row
+        const jsonContent = JSON.stringify(all_assignments_row_teacher);
+        response.send(jsonContent);
+        console.log(jsonContent);
+     });
+})
+app.listen(8063, function() {
+  console.log("server initialized");
+})
 
 app.get("/getcourseassignments", function(req, response) {
       response.setHeader('Access-Control-Allow-Origin', '*');
