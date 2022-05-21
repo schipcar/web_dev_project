@@ -721,6 +721,8 @@ function LoadAssignment() {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
           let assignment = JSON.parse(this.responseText)[0];
+          
+          document.title = assignment["assignment_name"]
 
           heading = document.querySelector("#main_panel div:nth-child(1) h3:nth-child(1)")
           text = document.querySelector("#main_panel div:nth-child(1) p:nth-child(2)")
