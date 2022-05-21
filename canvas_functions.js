@@ -336,6 +336,7 @@ app.get("/getannouncements", function(req, response) {
       response.setHeader('Content-Type', 'application/json');
       db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [req.query.course_name], function(err, row) {
         announcements_row=row
+        console.log(announcements_row)
       });
       const jsonContent = JSON.stringify(announcements_row);
       response.send(jsonContent);
