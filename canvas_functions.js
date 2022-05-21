@@ -423,7 +423,7 @@ function LoadCoursesStudent() {
            let courses = JSON.parse(this.responseText);
            for (let i=0; i<courses.length; i++) {
              course_name = courses[i]['name']
-             AddCourse(course_name, "student")
+             AddCourse("student")
            }
        }
    }
@@ -438,14 +438,14 @@ function LoadCoursesTeacher() {
            let courses = JSON.parse(this.responseText);
            for (let i=0; i<courses.length; i++) {
              course_name = courses[i]['name']
-             AddCourse(course_name, "teacher")
+             AddCourse("teacher")
            }
        }
    }
    xhttp.send();
 }
 
-function AddCourse(course_name, role) {
+function AddCourse(role) {
     new_div = document.createElement("div")
     new_div.className = "course"
 
@@ -456,14 +456,14 @@ function AddCourse(course_name, role) {
     new_link.href = "course_homepage_" + role + ".html"
     new_link.innerHTML += course_name
     new_link.className = "course_title"
-    new_link.onclick = function() {set_course_name(course_name);}
+    new_link.onclick = set_course_name
     
     new_heading.appendChild(new_link)
     new_div.appendChild(new_heading)
     document.getElementById("courses_panel").appendChild(new_div)
 }
 
-function set_course_name(course_name) {
+function set_course_name() {
     if (typeof window !== 'undefined') {
         localStorage.setItem("course_name", course_name)
     }
