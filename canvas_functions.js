@@ -238,7 +238,7 @@ var http = require('http');
     pag = require('https');
     db = 0
 var grades_row = 2;
-var courses_row_student;
+var courses_row_student = 2;
 var courses_row_teacher;
 var announcements_row;
 var all_assignments_row_student;
