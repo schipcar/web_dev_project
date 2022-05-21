@@ -476,14 +476,13 @@ function LoadAnnouncements() {
       data[tmp[0]] = decodeURI(tmp[1]);
   }
   course_name = data.course_name
-  console.log(course_name)
-  renew()
 
   var xhttp = new XMLHttpRequest();
   xhttp.overrideMimeType("application/json");
   xhttp.open("GET", "http://localhost:8070/getannouncements", true);
   xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {     
+      if (this.readyState == 4 && this.status == 200) {   
+          console.log(course_name)
           let announcements = JSON.parse(this.responseText);
           for (let i=0; i<announcements.length; i++) {
               let announcement = announcements[i]
