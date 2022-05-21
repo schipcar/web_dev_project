@@ -506,6 +506,9 @@ function LoadAnnouncements() {
               prev_child = document.querySelector("#main_panel :nth-child(" + String(i + 1) + ")")
               prev_child.parentNode.insertBefore(new_div, prev_child.nextSibling)
           }
+          if (document.getElementById("main_panel").childElementCount==1) {
+              document.getElementById("main_panel").innerHTML += "There are no announcements yet."
+          }
       }
   }
   xhttp.send();
