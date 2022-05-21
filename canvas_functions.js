@@ -382,7 +382,7 @@ app.get("/getcourseassignments", function(req, response) {
       db.all("SELECT * FROM assignments WHERE course_name = ?", [req.query.course_name], function(err, row) {
         course_assignments_row=row
         const jsonContent = JSON.stringify(course_assignments_row);
-        response.end(jsonContent);
+        response.send(jsonContent);
         console.log(jsonContent);
       });
 })
