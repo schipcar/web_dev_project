@@ -463,6 +463,7 @@ function AddCourse(course_name, role) {
 function set_course_name(course_name) {
     if (typeof window !== 'undefined') {
         localStorage.setItem("course_name", course_name)
+        document.getElementById("courses_panel").innerHTML += 'success'
     }
 }
 
