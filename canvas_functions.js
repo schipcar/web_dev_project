@@ -482,6 +482,7 @@ function LoadAnnouncements() {
   xhttp.open("GET", "http://localhost:8070/getannouncements", true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {   
+          renew()
           console.log(course_name)
           let announcements = JSON.parse(this.responseText);
           for (let i=0; i<announcements.length; i++) {
