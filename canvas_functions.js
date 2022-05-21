@@ -232,57 +232,59 @@ var sqlite3 = require('sqlite3').verbose();
 var http = require('http');
     fs = require('fs');
     url = require('url');
+    request = require('request');
+    myParser = require("body-parser");
+    express = require("express");
+    pag = require('https');
+    db = 0
 var grades_row = 2;
-var courses_row_student = 2;
-var courses_row_teacher = 2;
-var announcements_row = 2;
-var all_assignments_row_student = 2;
+var courses_row_student;
+var courses_row_teacher;
+var announcements_row;
+var all_assignments_row_student;
 var all_assignments_row_teacher
-var course_assignments_row = 2;
+var course_assignments_row;
 var all_courses;
 var all_users;
+var user;
 
-let db = new sqlite3.Database('./canvas.db', (err) => {
-  if (err) {
-    console.error(err.message);
-  }
-  db.all("SELECT * FROM grades", function(err, row) {
-    grades_row=row
-  });
-  var user = 0001; /* REMOVE LATER */
-  db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
-    courses_row_student=row
-  });
-  user = 0004; /* REMOVE LATER */
-  db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
-    courses_row_teacher=row
-  });
-  var course_name = "Web Development"; /* REMOVE LATER */
-  db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
-    announcements_row=row
-  });
-  user = 0001; /* REMOVE LATER */
-  db.all("SELECT * FROM assignments WHERE course_name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
-    all_assignments_row_student=row
-  });
-  user = 0004; /* REMOVE LATER */
-  db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?))", [user], function(err, row) {
-    all_assignments_row_teacher=row
-  });
-  course_name = "Web Development"; /* REMOVE LATER */
-  db.all("SELECT * FROM assignments WHERE course_name = ?", [course_name], function(err, row) {
-    course_assignments_row=row
-  });
-  var assignment_name = "Homework 1"; /* REMOVE LATER */
-  db.all("SELECT * FROM assignments WHERE assignment_name = ?", [assignment_name], function(err, row) {
-    assignment_row=row
-  });
-  db.all("SELECT * FROM courses", function(err, row) {
+var db = new sqlite3.Database('./canvas.db', (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    db.all("SELECT * FROM grades", function(err, row) {
+      grades_row=row
+    });
+    user = 0001; /* REMOVE LATER */
+    db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
+      courses_row_student=row
+    });
+    user = 0004; /* REMOVE LATER */
+    db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
+      courses_row_teacher=row
+    });
+    user = 0001; /* REMOVE LATER */
+    db.all("SELECT * FROM assignments WHERE course_name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
+      all_assignments_row_student=row
+    });
+    user = 0004; /* REMOVE LATER */
+    db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?))", [user], function(err, row) {
+      all_assignments_row_teacher=row
+    });
+    var course_name; /* REMOVE LATER */
+    db.all("SELECT * FROM assignments WHERE course_name = ?", [course_name], function(err, row) {
+      course_assignments_row=row
+    });
+    var assignment_name = "Homework 1"; /* REMOVE LATER */
+    db.all("SELECT * FROM assignments WHERE assignment_name = ?", [assignment_name], function(err, row) {
+      assignment_row=row
+    });
+    db.all("SELECT * FROM courses", function(err, row) {
       all_courses=row
-  });
-  db.all("SELECT * FROM users", function(err, row) {
-      all_users=row
-  })
+    });
+    db.all("SELECT * FROM users", function(err, row) {
+          all_users=row
+    });
 });
 
 
@@ -329,19 +331,23 @@ http.createServer(function(request, response){
 }).listen(8095);
 console.log("server initialized");
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/getannouncements"){
+var app = express();
+app.use(myParser.urlencoded({ extended: true }));
+app.get("/getannouncements", function(req, response) {
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent = JSON.stringify(announcements_row);
-      response.end(jsonContent);
-      console.log(jsonContent);
-  }
-}).listen(8070);
-console.log("server initialized");
+      db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [req.query.course_name], function(err, row) {
+        announcements_row=row
+        const jsonContent = JSON.stringify(announcements_row);
+        response.send(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8070, function() {
+  console.log("server initialized");
+})
 
 http.createServer(function(request, response){
   var path = url.parse(request.url).pathname;
@@ -464,7 +470,7 @@ function AddCourse(course_name, role) {
     new_heading.className = "course_title"
 
     new_link = document.createElement("a")
-    new_link.href = "course_homepage_" + role + ".html"
+    new_link.href = "course_homepage_" + role + ".html?user=" + user + "&course_name=" + course_name
     new_link.innerHTML += course_name
     new_link.className = "course_title"
 
@@ -475,8 +481,12 @@ function AddCourse(course_name, role) {
 
 
 function LoadAnnouncements() {
-  let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8070/getannouncements", true);
+  var url = document.location.href,
+  params = url.split('?')
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8070/getannouncements?" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
           let announcements = JSON.parse(this.responseText);
