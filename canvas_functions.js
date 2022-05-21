@@ -629,7 +629,7 @@ function AddAllAssignmentsTeacher(assignments, main_div_id) {
          new_heading.className = "assignment_title"
 
          new_link = document.createElement("a")
-         new_link.href = "assignment_teacher.html"
+         new_link.href = "assignment_teacher.html?user=" + data.user + "&course_name=" + data.course_name + "&assignment_name=" + assignment["assignment_name"]
          new_link.innerHTML += assignment["assignment_name"]
          new_link.className = "assignment_title"
 
@@ -663,6 +663,8 @@ function AddAllAssignmentsTeacher(assignments, main_div_id) {
 }
 
 function AddAssignment(assignment, role) {
+    data = get_url_params()
+    
     new_div = document.createElement("div")
     new_div.className = "assignment"
 
@@ -670,7 +672,7 @@ function AddAssignment(assignment, role) {
     new_heading.className = "assignment_title"
 
     new_link = document.createElement("a")
-    new_link.href = "assignment_" + role + ".html"
+    new_link.href = "assignment_" + role + ".html?user=" + data.user + "&course_name=" + data.course_name + "&assignment_name=" + assignment["assignment_name"]
     new_link.innerHTML += assignment["assignment_name"]
     new_link.className = "assignment_title"
 
@@ -710,8 +712,12 @@ function AddDiv(id, title, main_div_id, j) {
 }
 
 function LoadAssignment() {
-  let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8050/getassignment", true);
+  var url = document.location.href,
+  params = url.split('?')
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8050/getassignment?" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
           let assignment = JSON.parse(this.responseText)[0];
