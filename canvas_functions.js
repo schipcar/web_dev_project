@@ -452,7 +452,7 @@ function get_url_params() {
       tmp = params[i].split('=');
       data[tmp[0]] = decodeURI(tmp[1]);
   }
-  retrun data
+  return data
 }
 
 function LoadCoursesStudent() {
