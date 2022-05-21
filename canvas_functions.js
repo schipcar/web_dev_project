@@ -441,6 +441,7 @@ function LoadCourseName() {
       tmp = params[i].split('=');
       data[tmp[0]] = decodeURI(tmp[1]);
   }
+  document.title = data.course_name
   document.getElementById("course_header").appendChild(document.createTextNode(data.course_name))
 }
 
