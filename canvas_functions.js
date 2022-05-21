@@ -459,8 +459,8 @@ function LoadCoursesTeacher() {
 }
 
 function AddCourse(course_name, role) {
-    console.log(document.location.href)
     data = get_url_params()
+    console.log(data.user)
     
     new_div = document.createElement("div")
     new_div.className = "course"
@@ -469,7 +469,7 @@ function AddCourse(course_name, role) {
     new_heading.className = "course_title"
 
     new_link = document.createElement("a")
-    new_link.href = "course_homepage_" + role + ".html?user=" + String(data.user) + "&course_name=" + course_name
+    new_link.href = "course_homepage_" + role + ".html?user=" + data.user + "&course_name=" + course_name
     new_link.innerHTML += course_name
     new_link.className = "course_title"
 
