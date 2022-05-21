@@ -460,6 +460,7 @@ function AddCourse(course_name, role) {
 
 
 function LoadAnnouncements() {
+  document.getElementById("main_panel").inneHTML += "test" //localStorage.getItem("course_name")
   // Set course_name variable
   var url = document.location.href,
   params = url.split('?')
