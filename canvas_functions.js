@@ -271,10 +271,6 @@ var db = new sqlite3.Database('./canvas.db', (err) => {
     db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?))", [user], function(err, row) {
       all_assignments_row_teacher=row
     });
-    var course_name; /* REMOVE LATER */
-    db.all("SELECT * FROM assignments WHERE course_name = ?", [course_name], function(err, row) {
-      course_assignments_row=row
-    });
     var assignment_name = "Homework 1"; /* REMOVE LATER */
     db.all("SELECT * FROM assignments WHERE assignment_name = ?", [assignment_name], function(err, row) {
       assignment_row=row
@@ -288,6 +284,9 @@ var db = new sqlite3.Database('./canvas.db', (err) => {
 });
 
 
+
+var app = express();
+app.use(myParser.urlencoded({ extended: true }));
 
 http.createServer(function(request, response){
   var path = url.parse(request.url).pathname;
@@ -331,8 +330,6 @@ http.createServer(function(request, response){
 }).listen(8095);
 console.log("server initialized");
 
-var app = express();
-app.use(myParser.urlencoded({ extended: true }));
 app.get("/getannouncements", function(req, response) {
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
@@ -377,19 +374,21 @@ http.createServer(function(request, response){
 }).listen(8063);
 console.log("server initialized");
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/getcourseassignments"){
+app.get("/getcourseassignments", function(req, response) {
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent = JSON.stringify(course_assignments_row);
-      response.end(jsonContent);
-      console.log(jsonContent);
-  }
-}).listen(8067);
-console.log("server initialized");
+      db.all("SELECT * FROM assignments WHERE course_name = ?", [req.query.course_name], function(err, row) {
+        course_assignments_row=row
+        const jsonContent = JSON.stringify(course_assignments_row);
+        response.end(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8067, function() {
+  console.log("server initialized");
+})
 
 http.createServer(function(request, response){
   var path = url.parse(request.url).pathname;
