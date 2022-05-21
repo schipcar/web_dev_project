@@ -828,10 +828,10 @@ function get_url_params() {
   var data = {}
   for (let i=1; i<params.length; i++) {
       tmp = params[i].split('=');
-      console.log(JSON.stringify(tmp))
+      //console.log(JSON.stringify(tmp))
       data[tmp[0]] = decodeURI(tmp[1]);
   }
-  console.log(data.user)
+  //console.log(data.user)
   return data
 }
 
