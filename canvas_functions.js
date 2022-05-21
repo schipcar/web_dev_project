@@ -240,6 +240,7 @@ var all_assignments_row_student = 2;
 var all_assignments_row_teacher
 var course_assignments_row = 2;
 var all_courses;
+var all_users;
 
 let db = new sqlite3.Database('./canvas.db', (err) => {
   if (err) {
@@ -278,6 +279,9 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   });
   db.all("SELECT * FROM courses", function(err, row) {
       all_courses=row
+  });
+  db.all("SELECT * FROM users", function(err, row) {
+      all_users=row
   })
 });
 
@@ -407,6 +411,20 @@ http.createServer(function(request, response){
       console.log(jsonContent);
   }
 }).listen(8040);
+console.log("server initialized");
+
+http.createServer(function(request, response){
+  var path = url.parse(request.url).pathname;
+  if(path=="/getallusers"){
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      response.setHeader('Access-Control-Max-Age', 2592000);
+      response.setHeader('Content-Type', 'application/json');
+      const jsonContent = JSON.stringify(all_users);
+      response.end(jsonContent);
+      console.log(jsonContent);
+  }
+}).listen(8041);
 console.log("server initialized");
 
 
@@ -636,30 +654,44 @@ function LoadAssignment() {
    xhttp.send();
 }
 
-function AddCourseAdmin(course) {
+function addCourseAdminHelper(row, item) {
+    let cell = document.createElement("td");
+        cell.innerHTML = item;
+        row.appendChild(cell);
+}
+
+function addCourseAdmin(course) {
     let courseTable = document.getElementById("all_courses_list");
     let ctBody = courseTable.children[1];
     let newRow = document.createElement("tr");
     ctBody.appendChild(newRow);
 
-    let idCell = document.createElement("td");
-        idCell.innerHTML = "00000";
-        newRow.appendChild(idCell);
-    let nameCell = document.createElement("td");
-        nameCell.innerHTML = course.name;
-        newRow.appendChild(nameCell);
-    let descCell = document.createElement("td");
-        descCell.innerHTML = course.description;
-        newRow.appendChild(descCell);
-    let studCell = document.createElement("td");
-        studCell.innerHTML = 0;
-        newRow.appendChild(studCell);
-    let capCell = document.createElement("td");
-        capCell.innerHTML = course.capacity;
-        newRow.appendChild(capCell);
-    let teachCell = document.createElement("td");
-        teachCell.innerHTML = course.teacher;
-        newRow.appendChild(teachCell);
+    addCourseAdminHelper(newRow, "00000");
+    addCourseAdminHelper(newRow, course.name);
+    addCourseAdminHelper(newRow, course.description);
+    addCourseAdminHelper(newRow, 0);
+    addCourseAdminHelper(newRow, course.capacity);
+    addCourseAdminHelper(newRow, course.teacher);
+}
+
+function addUserAdminHelper(li, item) {
+    let span = document.createElement("span");
+        span.classList.add("user_span");
+        span.innerHTML = item;
+        li.appendChild(span);
+        li.appendChild(document.createElement("br"));
+}
+
+function addUserAdmin(user) {
+    let userList = document.getElementById("users_list");
+    let newLi = document.createElement("li");
+    newLi.classList.add("user_li");
+    userList.appendChild(newLi);
+
+    addUserAdminHelper(newLi, user.name);
+    addUserAdminHelper(newLi, user.email);
+    addUserAdminHelper(newLi, user.role);
+    addUserAdminHelper(newLi, user.status);
 }
 
 function LoadCoursesAdmin() {
@@ -667,10 +699,23 @@ function LoadCoursesAdmin() {
   xhttp.open("GET", "http://localhost:8040/getallcourses", true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-           //MODIFY TO WORK WITH WHAT I WANT TO DO (ALEX)
            let courses = JSON.parse(this.responseText);
            for (let i=0; i<courses.length; i++) {
-               AddCourseAdmin(courses[i]);
+               addCourseAdmin(courses[i]);
+           }
+       }
+   }
+   xhttp.send();
+}
+
+function LoadUsersAdmin() {
+  let xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "http://localhost:8041/getallusers", true);
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+           let users = JSON.parse(this.responseText);
+           for (let i=0; i<users.length; i++) {
+               addUserAdmin(users[i]);
            }
        }
    }
