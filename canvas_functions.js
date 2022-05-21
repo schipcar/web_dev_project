@@ -477,6 +477,7 @@ function LoadAnnouncements() {
   }
   course_name = data.course_name
   console.log(course_name)
+  renew()
 
   var xhttp = new XMLHttpRequest();
   xhttp.overrideMimeType("application/json");
