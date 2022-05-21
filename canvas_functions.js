@@ -456,7 +456,6 @@ function AddCourse(role) {
     new_link.href = "course_homepage_" + role + ".html"
     new_link.innerHTML += course_name
     new_link.className = "course_title"
-    window.localStorage.setItem("course_name", course_name)
     new_link.onclick = set_course_name
     
     new_heading.appendChild(new_link)
@@ -466,6 +465,7 @@ function AddCourse(role) {
 
 function set_course_name() {
     localStorage.setItem("course_name", course_name)
+    localStorage.setItem("course_name", "Web Development)
 }
 
 
