@@ -471,7 +471,7 @@ function LoadAnnouncements() {
   course_name = data.course_name
   if (typeof window !== 'undefined') {
       localStorage.setItem("course_name", course_name)
-      document.getElementById("main_panel").inneHTML += localStorage.getItem("course_name")
+      document.getElementById("main_panel").inneHTML += "test" //localStorage.getItem("course_name")
   }
   
   let xhttp = new XMLHttpRequest();
