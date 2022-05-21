@@ -433,6 +433,17 @@ http.createServer(function(request, response){
 console.log("server initialized");
 
 
+function LoadCourseName() {
+  var url = document.location.href,
+  params = url.split('?')
+  var data = {}
+  for (let i=1; i<params.length; i++) {
+      tmp = params[i].split('=');
+      data[tmp[0]] = decodeURI(tmp[1]);
+  }
+  document.getElementById("course_header").appendChild(document.createTextNode(data.course_name)
+}
+
 function LoadCoursesStudent() {
   let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8090/getcourses_student", true);
