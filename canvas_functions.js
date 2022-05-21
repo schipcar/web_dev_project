@@ -459,6 +459,7 @@ function LoadCoursesTeacher() {
 }
 
 function AddCourse(course_name, role) {
+    console.log(document.location.href)
     data = get_url_params()
     
     new_div = document.createElement("div")
