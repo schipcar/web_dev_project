@@ -456,6 +456,7 @@ function AddCourse(role) {
     new_link.href = "course_homepage_" + role + ".html"
     new_link.innerHTML += course_name
     new_link.className = "course_title"
+    window.localStorage.setItem("course_name", course_name)
     new_link.onclick = set_course_name
     
     new_heading.appendChild(new_link)
@@ -492,7 +493,7 @@ function LoadAnnouncements() {
               prev_child = document.querySelector("#main_panel :nth-child(" + String(i + 1) + ")")
               prev_child.parentNode.insertBefore(new_div, prev_child.nextSibling)
           }
-          document.getElementById("main_panel").innerHTML += JSON.parse(localStorage.getItem("course_name"))
+          document.getElementById("main_panel").innerHTML += localStorage.getItem("course_name")
       }
   }
   xhttp.send();
