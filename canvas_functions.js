@@ -258,7 +258,9 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
     courses_row_teacher=row
   });
-  course_name = window.localStorage.getItem("course_name")
+  if (typeof window !== 'undefined') {
+    course_name = window.localStorage.getItem("course_name")
+  }
   db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
     announcements_row=row
   });
