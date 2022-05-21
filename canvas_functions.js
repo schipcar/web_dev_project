@@ -465,7 +465,7 @@ function AddCourse(role) {
 
 function set_course_name() {
     localStorage.setItem("course_name", course_name)
-    localStorage.setItem("course_name", "Web Development)
+    localStorage.setItem("course_name", "Web Development")
 }
 
 
