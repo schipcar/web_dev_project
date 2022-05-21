@@ -672,7 +672,7 @@ function AddAssignment(assignment, role) {
     new_heading.className = "assignment_title"
 
     new_link = document.createElement("a")
-    new_link.href = "assignment_" + role + ".html?user=" + data.user + "&course_name=" + data.course_name + "&assignment_name=" + assignment["assignment_name"]
+    new_link.href = "assignment_" + role + ".html?user=" + user + "&course_name=" + data.course_name + "&assignment_name=" + assignment["assignment_name"]
     new_link.innerHTML += assignment["assignment_name"]
     new_link.className = "assignment_title"
 
