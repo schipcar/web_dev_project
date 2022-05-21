@@ -461,6 +461,16 @@ function LoadAnnouncements() {
   xhttp.open("GET", "http://localhost:8070/getannouncements", true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
+          // Set course_name variable
+          var url = document.location.href,
+          params = url.split('?')
+          var data = {}
+          for (let i=1; i<params.length; i++) {
+              tmp = params[i].split('=');
+              data[tmp[0]] = decodeURI(tmp[1]);
+          }
+          course_name = data.course_name
+          
           let announcements = JSON.parse(this.responseText);
           for (let i=0; i<announcements.length; i++) {
               let announcement = announcements[i]
@@ -480,15 +490,6 @@ function LoadAnnouncements() {
               prev_child = document.querySelector("#main_panel :nth-child(" + String(i + 1) + ")")
               prev_child.parentNode.insertBefore(new_div, prev_child.nextSibling)
           }
-          // Set course_name variable
-          var url = document.location.href,
-          params = url.split('?')
-          var data = {}
-          for (let i=1; i<params.length; i++) {
-              tmp = params[i].split('=');
-              data[tmp[0]] = decodeURI(tmp[1]);
-          }
-          course_name = data.course_name
       }
   }
   xhttp.send();
