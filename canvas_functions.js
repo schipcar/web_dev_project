@@ -249,9 +249,9 @@ var all_users;
 var user;
 
 // Hard-code user id for now -- REMOVE LATER
-if (document.location.href.includes('dashboard_student') {
+if (document.location.href.includes('dashboard_student')) {
     document.location.href += '?user=0001'
-} else if (document.location.href.includes('dashboard_student') {
+} else if (document.location.href.includes('dashboard_student')) {
     document.location.href += '?user=0004'
 }
 
