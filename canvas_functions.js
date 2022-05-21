@@ -460,7 +460,6 @@ function AddCourse(course_name, role) {
 
 
 function LoadAnnouncements() {
-  document.getElementById("main_panel").innerHTML += "test" //localStorage.getItem("course_name")
   // Set course_name variable
   var url = document.location.href,
   params = url.split('?')
@@ -470,11 +469,10 @@ function LoadAnnouncements() {
       data[tmp[0]] = decodeURI(tmp[1]);
   }
   course_name = data.course_name
-  document.getElementById("main_panel").innerHTML += "test" //localStorage.getItem("course_name")
   if (typeof window !== 'undefined') {
       localStorage.setItem("course_name", course_name)
-      document.getElementById("main_panel").innerHTML += "test" //localStorage.getItem("course_name")
   }
+  document.getElementById("main_panel").innerHTML += localStorage.getItem("course_name")
   
   let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8070/getannouncements", true);
