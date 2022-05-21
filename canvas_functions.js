@@ -258,7 +258,7 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
     courses_row_teacher=row
   });
-  document.getElementById("main_panel").innerHTML += course_name
+  course_name = localStorage.getItem("course_name")
   db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
     announcements_row=row
   });
@@ -467,6 +467,7 @@ function LoadAnnouncements() {
       data[tmp[0]] = decodeURI(tmp[1]);
   }
   course_name = data.course_name
+  localstorage.setItem("course_name", course_name)
   
   let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8070/getannouncements", true);
