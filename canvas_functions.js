@@ -476,6 +476,7 @@ function LoadAnnouncements() {
       data[tmp[0]] = decodeURI(tmp[1]);
   }
   course_name = data.course_name
+  console.log(course_name)
 
   var xhttp = new XMLHttpRequest();
   xhttp.overrideMimeType("application/json");
