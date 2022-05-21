@@ -492,7 +492,7 @@ function LoadAnnouncements() {
               prev_child = document.querySelector("#main_panel :nth-child(" + String(i + 1) + ")")
               prev_child.parentNode.insertBefore(new_div, prev_child.nextSibling)
           }
-          document.getElementById("main_panel").innerHTML += localStorage.getItem("course_name")
+          document.getElementById("main_panel").innerHTML += JSON.parse(localStorage.getItem("course_name"))
       }
   }
   xhttp.send();
