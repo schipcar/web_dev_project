@@ -762,8 +762,14 @@ function LoadCourseName_notitle() {
   document.getElementById("course_header").appendChild(document.createTextNode(data.course_name))
 }
 
-function LoadCourseMenuLinks() {
+function LoadCourseMenuLinksStudent() {
   data = get_url_params()
   document.getElementById("announcements_link").href = "announcements_student.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("assignments_link").href = "assignments_student.html?user=" + data.user + "&course_name=" + data.course_name
+}
+
+function LoadCourseMenuLinksTeacher() {
+  data = get_url_params()
+  document.getElementById("announcements_link").href = "announcements_teacher.html?user=" + data.user + "&course_name=" + data.course_name
+  document.getElementById("assignments_link").href = "assignments_teacher.html?user=" + data.user + "&course_name=" + data.course_name
 }
