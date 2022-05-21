@@ -238,15 +238,13 @@ var http = require('http');
     pag = require('https');
     db = 0
 var grades_row = 2;
-var courses_row_student = 2;
-var courses_row_teacher = 2;
-var announcements_row = 2;
-var all_assignments_row_student = 2;
+var courses_row_student;
+var courses_row_teacher;
+var announcements_row;
+var all_assignments_row_student;
 var all_assignments_row_teacher
-var course_assignments_row = 2;
+var course_assignments_row;
 var all_courses;
-var user;
-var course_name;
 
 var db = new sqlite3.Database('./canvas.db', (err) => {
     if (err) {
@@ -255,7 +253,7 @@ var db = new sqlite3.Database('./canvas.db', (err) => {
     db.all("SELECT * FROM grades", function(err, row) {
       grades_row=row
     });
-    user = 0001; /* REMOVE LATER */
+    var user = 0001; /* REMOVE LATER */
     db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
       courses_row_student=row
     });
