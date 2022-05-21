@@ -258,7 +258,6 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
     courses_row_teacher=row
   });
-  course_name = "Web Development"; /* REMOVE LATER */
   db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
     announcements_row=row
   });
@@ -270,7 +269,6 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?))", [user], function(err, row) {
     all_assignments_row_teacher=row
   });
-  course_name = "Web Development"; /* REMOVE LATER */
   db.all("SELECT * FROM assignments WHERE course_name = ?", [course_name], function(err, row) {
     course_assignments_row=row
   });
@@ -482,15 +480,15 @@ function LoadAnnouncements() {
               prev_child = document.querySelector("#main_panel :nth-child(" + String(i + 1) + ")")
               prev_child.parentNode.insertBefore(new_div, prev_child.nextSibling)
           }
+          // Set course_name variable
           var url = document.location.href,
           params = url.split('?')
           var data = {}
-          var tmp
           for (let i=1; i<params.length; i++) {
               tmp = params[i].split('=');
               data[tmp[0]] = decodeURI(tmp[1]);
           }
-          document.getElementById("main_panel").innerHTML += data.course_name
+          course_name = data.course_name
       }
   }
   xhttp.send();
