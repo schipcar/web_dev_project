@@ -336,11 +336,10 @@ app.get("/getannouncements", function(req, response) {
       response.setHeader('Content-Type', 'application/json');
       db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [req.query.course_name], function(err, row) {
         announcements_row=row
+        const jsonContent = JSON.stringify(announcements_row);
+        response.send(jsonContent);
+        console.log(jsonContent);
       });
-      const jsonContent = JSON.stringify(announcements_row);
-      console.log(jsonContent)
-      response.send(jsonContent);
-      console.log(jsonContent);
 })
 app.listen(8070, function() {
   console.log("server initialized");
