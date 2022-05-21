@@ -271,10 +271,6 @@ var db = new sqlite3.Database('./canvas.db', (err) => {
     db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?))", [user], function(err, row) {
       all_assignments_row_teacher=row
     });
-    var assignment_name = "Homework 1"; /* REMOVE LATER */
-    db.all("SELECT * FROM assignments WHERE assignment_name = ?", [assignment_name], function(err, row) {
-      assignment_row=row
-    });
     db.all("SELECT * FROM courses", function(err, row) {
       all_courses=row
     });
@@ -390,19 +386,21 @@ app.listen(8067, function() {
   console.log("server initialized");
 })
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/getassignment"){
+app.get("/getassignment", function(req, response){
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent = JSON.stringify(assignment_row);
-      response.end(jsonContent);
-      console.log(jsonContent);
-  }
-}).listen(8050);
-console.log("server initialized");
+      db.all("SELECT * FROM assignments WHERE assignment_name = ?", [req.query.assignment_name], function(err, row) {
+        assignment_row=row
+        const jsonContent = JSON.stringify(assignment_row);
+        response.send(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8050, function() {
+  console.log("server initialized");
+})
 
 http.createServer(function(request, response){
   var path = url.parse(request.url).pathname;
