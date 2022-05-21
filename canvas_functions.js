@@ -469,8 +469,10 @@ function LoadAnnouncements() {
       data[tmp[0]] = decodeURI(tmp[1]);
   }
   course_name = data.course_name
-  window.localstorage.setItem("course_name", course_name)
-  
+  if (typeof window !== 'undefined') {
+      localstorage.setItem("course_name", course_name)
+  }
+    
   let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8070/getannouncements", true);
   xhttp.onreadystatechange = function() {
