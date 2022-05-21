@@ -240,6 +240,7 @@ var all_assignments_row_student = 2;
 var all_assignments_row_teacher
 var course_assignments_row = 2;
 var all_courses;
+var course_name; = 2;
 
 let db = new sqlite3.Database('./canvas.db', (err) => {
   if (err) {
@@ -257,7 +258,7 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
     courses_row_teacher=row
   });
   if (typeof window !== 'undefined') {
-    var course_name = localStorage.getItem("course_name");
+    course_name = localStorage.getItem("course_name");
   }
   db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
     announcements_row=row
@@ -421,7 +422,8 @@ function LoadCoursesStudent() {
       if (this.readyState == 4 && this.status == 200) {
            let courses = JSON.parse(this.responseText);
            for (let i=0; i<courses.length; i++) {
-             AddCourse(courses[i]['name'], "student")
+             course_name = courses[i]['name']
+             AddCourse(course_name, "student")
            }
        }
    }
@@ -435,7 +437,8 @@ function LoadCoursesTeacher() {
       if (this.readyState == 4 && this.status == 200) {
            let courses = JSON.parse(this.responseText);
            for (let i=0; i<courses.length; i++) {
-             AddCourse(courses[i]['name'], "teacher")
+             course_name = courses[i]['name']
+             AddCourse(course_name, "teacher")
            }
        }
    }
