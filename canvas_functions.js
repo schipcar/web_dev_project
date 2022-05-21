@@ -433,28 +433,6 @@ http.createServer(function(request, response){
 console.log("server initialized");
 
 
-function LoadCourseName() { 
-  data = get_url_params()
-  document.title = data.course_name
-  document.getElementById("course_header").appendChild(document.createTextNode(data.course_name))
-}
-
-function LoadCourseName_notitle() { 
-  data = get_url_params()
-  document.getElementById("course_header").appendChild(document.createTextNode(data.course_name))
-}
-
-function get_url_params() {
-  var url = document.location.href,
-  params = url.split('?')[1].split('&')
-  var data = {}
-  for (let i=1; i<params.length; i++) {
-      tmp = params[i].split('=');
-      data[tmp[0]] = decodeURI(tmp[1]);
-  }
-  return data
-}
-
 function LoadCoursesStudent() {
   let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8090/getcourses_student", true);
@@ -484,6 +462,8 @@ function LoadCoursesTeacher() {
 }
 
 function AddCourse(course_name, role) {
+    data = get_url_params()
+    
     new_div = document.createElement("div")
     new_div.className = "course"
 
@@ -491,7 +471,7 @@ function AddCourse(course_name, role) {
     new_heading.className = "course_title"
 
     new_link = document.createElement("a")
-    new_link.href = "course_homepage_" + role + ".html?user=" + user + "&course_name=" + course_name
+    new_link.href = "course_homepage_" + role + ".html?user=" + data.user + "&course_name=" + course_name
     new_link.innerHTML += course_name
     new_link.className = "course_title"
 
@@ -759,4 +739,33 @@ function LoadUsersAdmin() {
        }
    }
    xhttp.send();
+}
+
+
+function get_url_params() {
+  var url = document.location.href,
+  params = url.split('?')[1].split('&')
+  var data = {}
+  for (let i=1; i<params.length; i++) {
+      tmp = params[i].split('=');
+      data[tmp[0]] = decodeURI(tmp[1]);
+  }
+  return data
+}
+
+function LoadCourseName() { 
+  data = get_url_params()
+  document.title = data.course_name
+  document.getElementById("course_header").appendChild(document.createTextNode(data.course_name))
+}
+
+function LoadCourseName_notitle() { 
+  data = get_url_params()
+  document.getElementById("course_header").appendChild(document.createTextNode(data.course_name))
+}
+
+function LoadCourseMenuLinks() {
+  data = get_url_params()
+  document.getElementById("announcements_link").href = "announcements_student.html?user=" + data.user + "&course_name=" + data.course_name
+  document.getElementById("assignments_link").href = "announcements_student.html?user=" + data.user + "&course_name=" + data.course_name
 }
