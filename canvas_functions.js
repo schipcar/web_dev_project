@@ -543,7 +543,7 @@ function LoadCourseAssignmentsStudent(main_div_id) {
     
   let xhttp = new XMLHttpRequest();
   xhttp.overrideMimeType("application/json");
-  xhttp.open("GET", "http://localhost:8067/getcourseassignments" + params[1], true);
+  xhttp.open("GET", "http://localhost:8067/getcourseassignments?" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
@@ -559,7 +559,7 @@ function LoadCourseAssignmentsTeacher(main_div_id) {
   
   let xhttp = new XMLHttpRequest();
   xhttp.overrideMimeType("application/json");
-  xhttp.open("GET", "http://localhost:8067/getcourseassignments" + params[1], true);
+  xhttp.open("GET", "http://localhost:8067/getcourseassignments?" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
