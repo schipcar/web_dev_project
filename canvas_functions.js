@@ -538,8 +538,12 @@ function LoadAllAssignmentsTeacher(main_div_id) {
 }
 
 function LoadCourseAssignmentsStudent(main_div_id) {
+  var url = document.location.href,
+  params = url.split('?')
+    
   let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8067/getcourseassignments", true);
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8067/getcourseassignments" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
@@ -550,8 +554,12 @@ function LoadCourseAssignmentsStudent(main_div_id) {
 }
 
 function LoadCourseAssignmentsTeacher(main_div_id) {
+  var url = document.location.href,
+  params = url.split('?')
+  
   let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8067/getcourseassignments", true);
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8067/getcourseassignments" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
