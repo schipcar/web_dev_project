@@ -262,7 +262,7 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
     course_name = localStorage.getItem("course_name")
   }
   console.log("test")
-  db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [localStorage.getItem("course_name")], function(err, row) {
+  db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
     announcements_row=row
   });
   user = 0001; /* REMOVE LATER */
