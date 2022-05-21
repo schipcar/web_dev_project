@@ -826,7 +826,7 @@ function get_url_params() {
   params = url.split('?')[1].split('&')
   console.log(JSON.stringify(params))
   var data = {}
-  for (let i=1; i<params.length; i++) {
+  for (let i=0; i<params.length; i++) {
       tmp = params[i].split('=');
       //console.log(JSON.stringify(tmp))
       data[tmp[0]] = decodeURI(tmp[1]);
