@@ -482,10 +482,14 @@ function LoadAnnouncements() {
               prev_child = document.querySelector("#main_panel :nth-child(" + String(i + 1) + ")")
               prev_child.parentNode.insertBefore(new_div, prev_child.nextSibling)
           }
+          var url = document.location.href,
+          params = url.split('?')
+          for (let i = 1, i < params.length; i++) {
+              tmp = params[i].split('=');
+              data[tmp[0]] = tmp[1];
+              document.getElementById("main_panel").innerHTML += data
+          }
       }
-      var url = document.location.href,
-      params = url.split('?')
-      document.getElementById("main_panel").innerHTML += params[0]
   }
   xhttp.send();
 }
