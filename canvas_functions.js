@@ -339,6 +339,7 @@ app.get("/getannouncements", function(req, response) {
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
+      console.log("test")
       renew()
       const jsonContent = JSON.stringify(announcements_row);
       response.send(jsonContent);
@@ -482,7 +483,6 @@ function LoadAnnouncements() {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {     
           let announcements = JSON.parse(this.responseText);
-          console.log("test")
           for (let i=0; i<announcements.length; i++) {
               let announcement = announcements[i]
 
