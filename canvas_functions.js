@@ -569,6 +569,22 @@ function LoadCourseAssignmentsTeacher(main_div_id) {
    xhttp.send();
 }
 
+function LoadAllCourseAssignmentsTeacher(main_div_id) {
+  var url = document.location.href,
+  params = url.split('?')
+  
+  let xhttp = new XMLHttpRequest();
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8067/getcourseassignments?" + params[1], true);
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+           let assignments = JSON.parse(this.responseText);
+           AddAllAssignmentsTeacher(assignments, main_div_id)
+       }
+   }
+   xhttp.send();
+}
+
 function AddAssignmentsStudent(assignments, main_div_id) {
     AddDiv("todo", "To Do", main_div_id, "1")
     AddDiv("upcoming", "Upcoming Assignments", main_div_id, "2")
@@ -599,6 +615,53 @@ function AddAssignmentsTeacher(assignments, main_div_id) {
      if (document.getElementById("past").childElementCount==1) {
           document.getElementById("past").innerHTML += "All done!"
      }
+}
+
+function AddAllAssignmentsTeacher(assignments, main_div_id) {
+     AddDiv("past", "To Do", main_div_id, "1")  /* for teachers, past assignments go in 'To Do' section*/
+     AddDiv("upcoming", "Upcoming Assignments", main_div_id, "2")
+    
+     for (let i=0; i<assignments.length; i++) {
+         assignment = assignments[i]
+         
+         new_div = document.createElement("div")
+         new_div.className = "assignment"
+
+         new_heading = document.createElement("H4")
+         new_heading.className = "assignment_title"
+
+         new_link = document.createElement("a")
+         new_link.href = "assignment_" + role + ".html"
+         new_link.innerHTML += assignment["assignment_name"]
+         new_link.className = "assignment_title"
+
+         new_text = document.createElement("p")
+         new_text.appendChild(document.createTextNode("Course: " + assignment["course_name"]))
+         new_text.appendChild(document.createElement("br"))
+         new_text.appendChild(document.createTextNode("Due: " + assignment["due_date"]))
+         new_text.appendChild(document.createElement("br"))
+         new_text.appendChild(document.createTextNode("Points: " + String(assignment["points"])))
+
+         new_heading.appendChild(new_link)
+         new_div.appendChild(new_heading)
+         new_div.appendChild(new_text)
+
+         let curr_date = Date.parse(new Date())
+         let due_date = Date.parse(assignment["due_date"])
+
+         if (due_date < curr_date) {
+             document.getElementById("past").appendChild(new_div)
+         } else { 
+             document.getElementById("upcoming").appendChild(new_div)
+         }
+     }
+
+     if (document.getElementById("past").childElementCount==1) {
+          document.getElementById("past").innerHTML += "All done!"
+     }
+     if (document.getElementById("upcoming").childElementCount==1) {
+        document.getElementById("upcoming").innerHTML += "You have no upcoming assignments."
+    }
 }
 
 function AddAssignment(assignment, role) {
