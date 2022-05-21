@@ -259,7 +259,7 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
     courses_row_teacher=row
   });
   if (typeof window !== 'undefined') {
-    course_name = window.localStorage.getItem("course_name")
+    course_name = localStorage.getItem("course_name")
   }
   db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
     announcements_row=row
@@ -478,7 +478,6 @@ function LoadAnnouncements() {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {     
           let announcements = JSON.parse(this.responseText);
-          document.getElementById("main_panel").innerHTML += localStorage.getItem("course_name")
           for (let i=0; i<announcements.length; i++) {
               let announcement = announcements[i]
 
