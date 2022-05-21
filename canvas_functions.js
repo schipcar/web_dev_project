@@ -232,7 +232,11 @@ var sqlite3 = require('sqlite3').verbose();
 var http = require('http');
     fs = require('fs');
     url = require('url');
-    db = 0;
+    request = require('request');
+    myParser = require("body-parser");
+    express = require("express");
+    pag = require('https');
+    db = 0
 var grades_row = 2;
 var courses_row_student = 2;
 var courses_row_teacher = 2;
@@ -328,21 +332,22 @@ http.createServer(function(request, response){
 }).listen(8095);
 console.log("server initialized");
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/getannouncements"){
+var app = express();
+app.use(myParser.urlencoded({ extended: true }));
+app.get("/getannouncements", function(req, response) {
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
       renew()
       const jsonContent = JSON.stringify(announcements_row);
-      response.end(jsonContent);
+      response.send(jsonContent);
       console.log(jsonContent);
-  }
-}).listen(8070);
-console.log("server initialized");
-
+})
+app.listen(8070, function() {
+  console.log("server initialized");
+})
+           
 http.createServer(function(request, response){
   var path = url.parse(request.url).pathname;
   if(path=="/getallassignments_student"){
