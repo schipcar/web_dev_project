@@ -240,7 +240,6 @@ var all_assignments_row_student = 2;
 var all_assignments_row_teacher
 var course_assignments_row = 2;
 var all_courses;
-var course_name = 2;
 
 let db = new sqlite3.Database('./canvas.db', (err) => {
   if (err) {
@@ -257,9 +256,7 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
     courses_row_teacher=row
   });
-  if (typeof window !== 'undefined') {
-    course_name = localStorage.getItem("course_name");
-  }
+  var course_name = "Web Development"; /* REMOVE LATER */
   db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
     announcements_row=row
   });
@@ -271,9 +268,7 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?))", [user], function(err, row) {
     all_assignments_row_teacher=row
   });
-  if (typeof window !== 'undefined') {
-    course_name = localStorage.getItem("course_name");
-  }
+  course_name = "Web Development"; /* REMOVE LATER */
   db.all("SELECT * FROM assignments WHERE course_name = ?", [course_name], function(err, row) {
     course_assignments_row=row
   });
@@ -422,8 +417,7 @@ function LoadCoursesStudent() {
       if (this.readyState == 4 && this.status == 200) {
            let courses = JSON.parse(this.responseText);
            for (let i=0; i<courses.length; i++) {
-             course_name = courses[i]['name']
-             AddCourse("student")
+             AddCourse(courses[i]['name'], "student")
            }
        }
    }
@@ -437,15 +431,14 @@ function LoadCoursesTeacher() {
       if (this.readyState == 4 && this.status == 200) {
            let courses = JSON.parse(this.responseText);
            for (let i=0; i<courses.length; i++) {
-             course_name = courses[i]['name']
-             AddCourse("teacher")
+             AddCourse(courses[i]['name'], "teacher")
            }
        }
    }
    xhttp.send();
 }
 
-function AddCourse(role) {
+function AddCourse(course_name, role) {
     new_div = document.createElement("div")
     new_div.className = "course"
 
@@ -453,19 +446,13 @@ function AddCourse(role) {
     new_heading.className = "course_title"
 
     new_link = document.createElement("a")
-    new_link.href = "course_homepage_" + role + ".html?name=test"
+    new_link.href = "course_homepage_" + role + ".html"
     new_link.innerHTML += course_name
     new_link.className = "course_title"
-    new_link.onclick = set_course_name
-    
+
     new_heading.appendChild(new_link)
     new_div.appendChild(new_heading)
     document.getElementById("courses_panel").appendChild(new_div)
-}
-
-function set_course_name() {
-    localStorage.setItem("course_name", course_name)
-    localStorage.setItem("course_name", "Web Development")
 }
 
 
@@ -493,7 +480,6 @@ function LoadAnnouncements() {
               prev_child = document.querySelector("#main_panel :nth-child(" + String(i + 1) + ")")
               prev_child.parentNode.insertBefore(new_div, prev_child.nextSibling)
           }
-          document.getElementById("main_panel").innerHTML += localStorage.getItem("course_name")
       }
   }
   xhttp.send();
