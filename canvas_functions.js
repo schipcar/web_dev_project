@@ -423,8 +423,12 @@ console.log("server initialized");
 
 
 function LoadCoursesStudent() {
-  let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8090/getcourses_student", true);
+  var url = document.location.href,
+  params = url.split('?')
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8090/getcourses_student?" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let courses = JSON.parse(this.responseText);
@@ -437,8 +441,12 @@ function LoadCoursesStudent() {
 }
 
 function LoadCoursesTeacher() {
-  let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8095/getcourses_teacher", true);
+  var url = document.location.href,
+  params = url.split('?')
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8095/getcourses_teacher?" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let courses = JSON.parse(this.responseText);
@@ -505,8 +513,12 @@ function LoadAnnouncements() {
 
 
 function LoadAllAssignmentsStudent(main_div_id) {
-  let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8060/getallassignments_student", true);
+  var url = document.location.href,
+  params = url.split('?')
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8060/getallassignments_student?" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
@@ -517,8 +529,12 @@ function LoadAllAssignmentsStudent(main_div_id) {
 }
 
 function LoadAllAssignmentsTeacher(main_div_id) {
-  let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8063/getallassignments_teacher", true);
+  var url = document.location.href,
+  params = url.split('?')
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8063/getallassignments_teacher?" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
