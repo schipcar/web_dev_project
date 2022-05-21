@@ -631,7 +631,7 @@ function AddAllAssignmentsTeacher(assignments, main_div_id) {
          new_heading.className = "assignment_title"
 
          new_link = document.createElement("a")
-         new_link.href = "assignment_" + role + ".html"
+         new_link.href = "assignment_teacher.html"
          new_link.innerHTML += assignment["assignment_name"]
          new_link.className = "assignment_title"
 
