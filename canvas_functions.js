@@ -460,7 +460,6 @@ function LoadCoursesTeacher() {
 
 function AddCourse(course_name, role) {
     data = get_url_params()
-    console.log(data.user)
     
     new_div = document.createElement("div")
     new_div.className = "course"
@@ -825,11 +824,14 @@ function LoadUsersAdmin() {
 function get_url_params() {
   var url = document.location.href,
   params = url.split('?')[1].split('&')
+  console.log(JSON.stringify(params))
   var data = {}
   for (let i=1; i<params.length; i++) {
       tmp = params[i].split('=');
+      console.log(JSON.stringify(tmp))
       data[tmp[0]] = decodeURI(tmp[1]);
   }
+  console.log(data.user)
   return data
 }
 
