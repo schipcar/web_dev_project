@@ -824,14 +824,11 @@ function LoadUsersAdmin() {
 function get_url_params() {
   var url = document.location.href,
   params = url.split('?')[1].split('&')
-  console.log(JSON.stringify(params))
   var data = {}
   for (let i=0; i<params.length; i++) {
       tmp = params[i].split('=');
-      //console.log(JSON.stringify(tmp))
       data[tmp[0]] = decodeURI(tmp[1]);
   }
-  //console.log(data.user)
   return data
 }
 
