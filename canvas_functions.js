@@ -453,7 +453,7 @@ function AddCourse(role) {
     new_heading.className = "course_title"
 
     new_link = document.createElement("a")
-    new_link.href = "course_homepage_" + role + ".html"
+    new_link.href = "course_homepage_" + role + ".html?name=test"
     new_link.innerHTML += course_name
     new_link.className = "course_title"
     new_link.onclick = set_course_name
