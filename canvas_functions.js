@@ -339,7 +339,7 @@ app.get("/getannouncements", function(req, response) {
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      console.log("test")
+      console.log(course_name)
       renew()
       const jsonContent = JSON.stringify(announcements_row);
       response.send(jsonContent);
