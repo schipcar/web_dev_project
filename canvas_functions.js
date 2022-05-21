@@ -240,6 +240,8 @@ var all_assignments_row_student = 2;
 var all_assignments_row_teacher
 var course_assignments_row = 2;
 var all_courses;
+var user;
+var course_name;
 
 let db = new sqlite3.Database('./canvas.db', (err) => {
   if (err) {
@@ -248,7 +250,7 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   db.all("SELECT * FROM grades", function(err, row) {
     grades_row=row
   });
-  var user = 0001; /* REMOVE LATER */
+  user = 0001; /* REMOVE LATER */
   db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
     courses_row_student=row
   });
@@ -256,7 +258,7 @@ let db = new sqlite3.Database('./canvas.db', (err) => {
   db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
     courses_row_teacher=row
   });
-  var course_name = "Web Development"; /* REMOVE LATER */
+  course_name = "Web Development"; /* REMOVE LATER */
   db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
     announcements_row=row
   });
@@ -446,7 +448,7 @@ function AddCourse(course_name, role) {
     new_heading.className = "course_title"
 
     new_link = document.createElement("a")
-    new_link.href = "course_homepage_" + role + ".html"
+    new_link.href = "course_homepage_" + role + ".html?user=" + user + "?course_name=" + course_name
     new_link.innerHTML += course_name
     new_link.className = "course_title"
 
@@ -481,6 +483,9 @@ function LoadAnnouncements() {
               prev_child.parentNode.insertBefore(new_div, prev_child.nextSibling)
           }
       }
+      var url = document.location.href,
+      params = url.split('?')
+      document.getElementById("main_panel").innerHTML += params[0]
   }
   xhttp.send();
 }
