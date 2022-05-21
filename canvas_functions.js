@@ -248,8 +248,7 @@ var all_courses;
 var user;
 var course_name;
 
-function renew(course_name) {
-  db = new sqlite3.Database('./canvas.db', (err) => {
+var db = new sqlite3.Database('./canvas.db', (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -263,9 +262,6 @@ function renew(course_name) {
     user = 0004; /* REMOVE LATER */
     db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
       courses_row_teacher=row
-    });
-    db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
-      announcements_row=row
     });
     user = 0001; /* REMOVE LATER */
     db.all("SELECT * FROM assignments WHERE course_name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
@@ -285,9 +281,8 @@ function renew(course_name) {
     db.all("SELECT * FROM courses", function(err, row) {
       all_courses=row
     })
-  });
-}
-renew("")
+});
+
 
 
 http.createServer(function(request, response){
@@ -339,7 +334,9 @@ app.get("/getannouncements", function(req, response) {
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      renew(req.query.course_name)
+      db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [req.query.course_name], function(err, row) {
+        announcements_row=row
+      });
       const jsonContent = JSON.stringify(announcements_row);
       response.send(jsonContent);
       console.log(jsonContent);
