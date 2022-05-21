@@ -464,9 +464,7 @@ function AddCourse(role) {
 }
 
 function set_course_name() {
-    if (typeof window !== 'undefined') {
-        localStorage.setItem("course_name", course_name)
-    }
+    localStorage.setItem("course_name", course_name)
 }
 
 
