@@ -433,7 +433,18 @@ http.createServer(function(request, response){
 console.log("server initialized");
 
 
-function LoadCourseName() {    
+function LoadCourseName() { 
+  data = get_url_params()
+  document.title = data.course_name
+  document.getElementById("course_header").appendChild(document.createTextNode(data.course_name))
+}
+
+function LoadCourseName_notitle() { 
+  data = get_url_params()
+  document.getElementById("course_header").appendChild(document.createTextNode(data.course_name))
+}
+
+function get_url_params() {
   var url = document.location.href,
   params = url.split('?')[1].split('&')
   var data = {}
@@ -441,8 +452,7 @@ function LoadCourseName() {
       tmp = params[i].split('=');
       data[tmp[0]] = decodeURI(tmp[1]);
   }
-  document.title = data.course_name
-  document.getElementById("course_header").appendChild(document.createTextNode(data.course_name))
+  retrun data
 }
 
 function LoadCoursesStudent() {
