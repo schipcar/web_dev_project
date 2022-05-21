@@ -232,6 +232,7 @@ var sqlite3 = require('sqlite3').verbose();
 var http = require('http');
     fs = require('fs');
     url = require('url');
+    db = 0;
 var grades_row = 2;
 var courses_row_student = 2;
 var courses_row_teacher = 2;
@@ -243,45 +244,46 @@ var all_courses;
 var user;
 var course_name;
 
-let db = new sqlite3.Database('./canvas.db', (err) => {
-  if (err) {
-    console.error(err.message);
-  }
-  db.all("SELECT * FROM grades", function(err, row) {
-    grades_row=row
-  });
-  user = 0001; /* REMOVE LATER */
-  db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
-    courses_row_student=row
-  });
-  user = 0004; /* REMOVE LATER */
-  db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
-    courses_row_teacher=row
-  });
-  db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
-    announcements_row=row
-    console.log("test")
-  });
-  user = 0001; /* REMOVE LATER */
-  db.all("SELECT * FROM assignments WHERE course_name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
-    all_assignments_row_student=row
-  });
-  user = 0004; /* REMOVE LATER */
-  db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?))", [user], function(err, row) {
-    all_assignments_row_teacher=row
-  });
-  db.all("SELECT * FROM assignments WHERE course_name = ?", [course_name], function(err, row) {
-    course_assignments_row=row
-  });
-  var assignment_name = "Homework 1"; /* REMOVE LATER */
-  db.all("SELECT * FROM assignments WHERE assignment_name = ?", [assignment_name], function(err, row) {
-    assignment_row=row
-  });
-  db.all("SELECT * FROM courses", function(err, row) {
+function renew() {
+  db = new sqlite3.Database('./canvas.db', (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    db.all("SELECT * FROM grades", function(err, row) {
+      grades_row=row
+    });
+    user = 0001; /* REMOVE LATER */
+    db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
+      courses_row_student=row
+    });
+    user = 0004; /* REMOVE LATER */
+    db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
+      courses_row_teacher=row
+    });
+    db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
+      announcements_row=row
+    });
+    user = 0001; /* REMOVE LATER */
+    db.all("SELECT * FROM assignments WHERE course_name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
+      all_assignments_row_student=row
+    });
+    user = 0004; /* REMOVE LATER */
+    db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?))", [user], function(err, row) {
+      all_assignments_row_teacher=row
+    });
+    db.all("SELECT * FROM assignments WHERE course_name = ?", [course_name], function(err, row) {
+      course_assignments_row=row
+    });
+    var assignment_name = "Homework 1"; /* REMOVE LATER */
+    db.all("SELECT * FROM assignments WHERE assignment_name = ?", [assignment_name], function(err, row) {
+      assignment_row=row
+    });
+    db.all("SELECT * FROM courses", function(err, row) {
       all_courses=row
-  })
-});
-
+    })
+  });
+}
+renew()
 
 
 http.createServer(function(request, response){
@@ -333,6 +335,7 @@ http.createServer(function(request, response){
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
+      renew()
       const jsonContent = JSON.stringify(announcements_row);
       response.end(jsonContent);
       console.log(jsonContent);
