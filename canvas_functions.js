@@ -246,7 +246,6 @@ var all_assignments_row_teacher
 var course_assignments_row;
 var all_courses;
 var user;
-var course_name;
 
 var db = new sqlite3.Database('./canvas.db', (err) => {
     if (err) {
@@ -255,7 +254,7 @@ var db = new sqlite3.Database('./canvas.db', (err) => {
     db.all("SELECT * FROM grades", function(err, row) {
       grades_row=row
     });
-    var user = 0001; /* REMOVE LATER */
+    user = 0001; /* REMOVE LATER */
     db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
       courses_row_student=row
     });
@@ -271,6 +270,7 @@ var db = new sqlite3.Database('./canvas.db', (err) => {
     db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?))", [user], function(err, row) {
       all_assignments_row_teacher=row
     });
+    var course_name; /* REMOVE LATER */
     db.all("SELECT * FROM assignments WHERE course_name = ?", [course_name], function(err, row) {
       course_assignments_row=row
     });
