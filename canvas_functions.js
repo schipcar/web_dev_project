@@ -453,7 +453,7 @@ function AddCourse(course_name, role) {
     new_link.href = "course_homepage_" + role + ".html"
     new_link.innerHTML += course_name
     new_link.className = "course_title"
-    new_link.onclick = function() {set_course_name(course_name)}
+    new_link.onclick = function() {set_course_name(course_name);}
     
     new_heading.appendChild(new_link)
     new_div.appendChild(new_heading)
@@ -463,7 +463,6 @@ function AddCourse(course_name, role) {
 function set_course_name(course_name) {
     if (typeof window !== 'undefined') {
         localStorage.setItem("course_name", course_name)
-        document.getElementById("courses_panel").innerHTML += 'success'
     }
 }
 
