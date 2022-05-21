@@ -482,6 +482,7 @@ function LoadAnnouncements() {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {     
           let announcements = JSON.parse(this.responseText);
+          console.log("test")
           for (let i=0; i<announcements.length; i++) {
               let announcement = announcements[i]
 
