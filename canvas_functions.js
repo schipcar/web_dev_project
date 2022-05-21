@@ -435,7 +435,7 @@ console.log("server initialized");
 
 function LoadCourseName() {    
   var url = document.location.href,
-  params = url.split('?')[1].split('&'),
+  params = url.split('?')[1].split('&')
   var data = {}
   for (let i=1; i<params.length; i++) {
       tmp = params[i].split('=');
