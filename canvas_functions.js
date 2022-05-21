@@ -240,7 +240,7 @@ var all_assignments_row_student = 2;
 var all_assignments_row_teacher
 var course_assignments_row = 2;
 var all_courses;
-var course_name; = 2;
+var course_name = 2;
 
 let db = new sqlite3.Database('./canvas.db', (err) => {
   if (err) {
