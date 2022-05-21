@@ -463,7 +463,8 @@ function LoadAnnouncements() {
       data[tmp[0]] = decodeURI(tmp[1]);
   }
   course_name = data.course_name
-  db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
+    
+  var stmt = db.all("SELECT * FROM announcements WHERE subject IN (SELECT announcement_subject FROM courses_announcements WHERE course_name = ?)", [course_name], function(err, row) {
     announcements_row=row
   });
   console.log(course_name)
@@ -472,6 +473,8 @@ function LoadAnnouncements() {
   xhttp.open("GET", "http://localhost:8070/getannouncements", true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {     
+          stmt.run()
+          stmt.finalize()
           let announcements = JSON.parse(this.responseText);
           for (let i=0; i<announcements.length; i++) {
               let announcement = announcements[i]
