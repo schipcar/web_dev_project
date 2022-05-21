@@ -484,7 +484,7 @@ function LoadAnnouncements() {
           }
           var url = document.location.href,
           params = url.split('?')
-          for (let i = 1, i < params.length; i++) {
+          for (let i=1; i<params.length; i++) {
               tmp = params[i].split('=');
               data[tmp[0]] = tmp[1];
               document.getElementById("main_panel").innerHTML += data
