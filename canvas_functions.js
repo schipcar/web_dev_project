@@ -335,6 +335,7 @@ console.log("server initialized");
 var app = express();
 app.use(myParser.urlencoded({ extended: true }));
 app.get("/getannouncements", function(req, response) {
+      course_name = req.query.course_name
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
@@ -456,7 +457,7 @@ function AddCourse(course_name, role) {
     new_heading.className = "course_title"
 
     new_link = document.createElement("a")
-    new_link.href = "course_homepage_" + role + ".html?user=" + user + "?course_name=" + course_name
+    new_link.href = "course_homepage_" + role + ".html?user=" + user + "&course_name=" + course_name
     new_link.innerHTML += course_name
     new_link.className = "course_title"
 
@@ -467,23 +468,14 @@ function AddCourse(course_name, role) {
 
 
 function LoadAnnouncements() {
-  // Set course_name variable
   var url = document.location.href,
   params = url.split('?')
-  var data = {}
-  for (let i=1; i<params.length; i++) {
-      tmp = params[i].split('=');
-      data[tmp[0]] = decodeURI(tmp[1]);
-  }
-  course_name = data.course_name
 
   var xhttp = new XMLHttpRequest();
   xhttp.overrideMimeType("application/json");
-  xhttp.open("GET", "http://localhost:8070/getannouncements", true);
+  xhttp.open("GET", "http://localhost:8070/getannouncements?" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {   
-          renew()
-          console.log(course_name)
           let announcements = JSON.parse(this.responseText);
           for (let i=0; i<announcements.length; i++) {
               let announcement = announcements[i]
