@@ -472,13 +472,13 @@ function LoadAnnouncements() {
   if (typeof window !== 'undefined') {
       localStorage.setItem("course_name", course_name)
   }
-  document.getElementById("main_panel").innerHTML += localStorage.getItem("course_name")
   
   let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8070/getannouncements", true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {     
           let announcements = JSON.parse(this.responseText);
+          document.getElementById("main_panel").innerHTML += localStorage.getItem("course_name")
           for (let i=0; i<announcements.length; i++) {
               let announcement = announcements[i]
 
