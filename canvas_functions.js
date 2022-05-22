@@ -283,7 +283,7 @@ var db = new sqlite3.Database('./canvas.db', (err) => {
       all_courses=row
     });
     db.all("SELECT * FROM users", function(err, row) {
-          all_users=row
+      all_users=row
     });
 });
 
@@ -426,11 +426,26 @@ http.createServer(function(request, response){
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent = JSON.stringify(all_users);
+      const jsonContent1 = JSON.stringify(all_users);
       response.end(jsonContent);
       console.log(jsonContent);
   }
 }).listen(8041);
+console.log("server initialized");
+
+http.createServer(function(request, response){
+  var path = url.parse(request.url).pathname;
+  if(path=="/addcourseforuser/:userid/:coursename"){
+      alert(userid + "; " + coursename);
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST');
+      response.setHeader('Access-Control-Max-Age', 2592000);
+      db.run('INSERT INTO courses_students(course_name, user_id) VALUES(?, ?)', [coursename, userid]);
+      //response.setHeader('Content-Type', 'application/json');
+      //response.end(jsonContent);
+      console.log("Done");
+  }
+}).listen(8042);
 console.log("server initialized");
 
 
@@ -684,26 +699,6 @@ function addCourseAdmin(course) {
     addCourseAdminHelper(newRow, course.teacher);
 }
 
-function addUserAdminHelper(li, item) {
-    let span = document.createElement("span");
-        span.classList.add("user_span");
-        span.innerHTML = item;
-        li.appendChild(span);
-        li.appendChild(document.createElement("br"));
-}
-
-function addUserAdmin(user) {
-    let userList = document.getElementById("users_list");
-    let newLi = document.createElement("li");
-    newLi.classList.add("user_li");
-    userList.appendChild(newLi);
-
-    addUserAdminHelper(newLi, user.name);
-    addUserAdminHelper(newLi, user.email);
-    addUserAdminHelper(newLi, user.role);
-    addUserAdminHelper(newLi, user.status);
-}
-
 function LoadCoursesAdmin() {
   let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8040/getallcourses", true);
@@ -718,6 +713,74 @@ function LoadCoursesAdmin() {
    xhttp.send();
 }
 
+function addSpecificClass(user, course) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8042/addcourseforuser/" + user.id + "/" + course.name, true);
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+         }
+     }
+     xhttp.send();
+}
+
+function addClassForUser(user, ul) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "http://localhost:8040/getallcourses", true);
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+            ul.style.display = "block";
+            let courses = JSON.parse(this.responseText);
+            for (let i=0; i<courses.length; i++) {
+                let newCourse = document.createElement("li");
+                newCourse.innerHTML = courses[i].name;
+                ul.appendChild(newCourse);
+
+                let addClassButton = document.createElement("button");
+                addClassButton.innerHTML = "Add";
+                addClassButton.addEventListener("click", function() {addSpecificClass(user, courses[i]);});
+                newCourse.appendChild(addClassButton);
+            }
+         }
+     }
+     xhttp.send();
+}
+
+function addUserToListAdminHelper(li, item) {
+    let span = document.createElement("span");
+        span.classList.add("user_span");
+        span.innerHTML = item;
+        li.appendChild(span);
+        li.appendChild(document.createElement("br"));
+}
+
+function addUserToListAdmin(user) {
+    let userList = document.getElementById("users_list");
+    let newLi = document.createElement("li");
+    newLi.classList.add("user_li");
+    userList.appendChild(newLi);
+
+    addUserToListAdminHelper(newLi, user.name);
+    addUserToListAdminHelper(newLi, user.email);
+    addUserToListAdminHelper(newLi, user.role);
+    let ul = document.createElement("ul");
+        ul.classList.add("class_list");
+        ul.innerHTML = "Classes:";
+        newLi.appendChild(ul);
+    let addClassUl = document.createElement("ul");
+        addClassUl.classList.add("add_class_ul");
+        addClassUl.style.display = "none";
+        newLi.appendChild(addClassUl);
+    let addClassesButton = document.createElement("button");
+        addClassesButton.classList.add("inline_button");
+        addClassesButton.innerHTML = "Add Class";
+        addClassesButton.addEventListener("click", function() {addClassForUser(user, addClassUl);});
+        ul.appendChild(addClassesButton);
+    newLi.appendChild(document.createElement("br"));
+    addUserToListAdminHelper(newLi, user.status);
+}
+
 function LoadUsersAdmin() {
   let xhttp = new XMLHttpRequest();
   xhttp.open("GET", "http://localhost:8041/getallusers", true);
@@ -725,7 +788,7 @@ function LoadUsersAdmin() {
       if (this.readyState == 4 && this.status == 200) {
            let users = JSON.parse(this.responseText);
            for (let i=0; i<users.length; i++) {
-               addUserAdmin(users[i]);
+               addUserToListAdmin(users[i]);
            }
        }
    }

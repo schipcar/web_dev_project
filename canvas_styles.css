@@ -62,7 +62,7 @@ h2 {
     flex-direction: column;
     padding: 1%;
   }
-  
+
   .course {
     border-radius: 10px;
     background-color: orange;
@@ -128,7 +128,7 @@ h2 {
     flex-direction: column;
     padding: 1%;
   }
-  
+
   .course {
     border-radius: 10px;
     background-color: orange;
@@ -270,7 +270,7 @@ form {
 }
 
 .announcement_form, .assignment_form {
-  width: 98%; 
+  width: 98%;
 }
 
 label {
@@ -278,7 +278,7 @@ label {
     margin-left: 5px;
 }
 
-input, textarea {
+input, textarea, select {
     margin: 3px;
     background-color: gainsboro;
 }
