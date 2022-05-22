@@ -246,7 +246,6 @@ var all_assignments_row_teacher
 var course_assignments_row;
 var all_courses;
 var all_users;
-var user;
 
 var db = new sqlite3.Database('./canvas.db', (err) => {
     if (err) {
@@ -254,30 +253,6 @@ var db = new sqlite3.Database('./canvas.db', (err) => {
     }
     db.all("SELECT * FROM grades", function(err, row) {
       grades_row=row
-    });
-    user = 0001; /* REMOVE LATER */
-    db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
-      courses_row_student=row
-    });
-    user = 0004; /* REMOVE LATER */
-    db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [user], function(err, row) {
-      courses_row_teacher=row
-    });
-    user = 0001; /* REMOVE LATER */
-    db.all("SELECT * FROM assignments WHERE course_name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [user], function(err, row) {
-      all_assignments_row_student=row
-    });
-    user = 0004; /* REMOVE LATER */
-    db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?))", [user], function(err, row) {
-      all_assignments_row_teacher=row
-    });
-    var course_name; /* REMOVE LATER */
-    db.all("SELECT * FROM assignments WHERE course_name = ?", [course_name], function(err, row) {
-      course_assignments_row=row
-    });
-    var assignment_name = "Homework 1"; /* REMOVE LATER */
-    db.all("SELECT * FROM assignments WHERE assignment_name = ?", [assignment_name], function(err, row) {
-      assignment_row=row
     });
     db.all("SELECT * FROM courses", function(err, row) {
       all_courses=row
@@ -288,6 +263,9 @@ var db = new sqlite3.Database('./canvas.db', (err) => {
 });
 
 
+
+var app = express();
+app.use(myParser.urlencoded({ extended: true }));
 
 http.createServer(function(request, response){
   var path = url.parse(request.url).pathname;
@@ -303,36 +281,38 @@ http.createServer(function(request, response){
 }).listen(8080);
 console.log("server initialized");
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/getcourses_student"){
+app.get("/getcourses_student", function(req, response){
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent = JSON.stringify(courses_row_student);
-      response.end(jsonContent);
-      console.log(jsonContent);
-  }
-}).listen(8090);
-console.log("server initialized");
+      db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [req.query.user], function(err, row) {
+        courses_row_student=row
+        const jsonContent = JSON.stringify(courses_row_student);
+        response.send(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8090, function() {
+  console.log("server initialized");
+})
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/getcourses_teacher"){
+app.get("/getcourses_teacher", function(req, response){
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent = JSON.stringify(courses_row_teacher);
-      response.end(jsonContent);
-      console.log(jsonContent);
-  }
-}).listen(8095);
-console.log("server initialized");
+      db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [req.query.user], function(err, row) {
+        courses_row_teacher=row
+        const jsonContent = JSON.stringify(courses_row_teacher);
+        response.send(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8095, function() {
+  console.log("server initialized");
+})
 
-var app = express();
-app.use(myParser.urlencoded({ extended: true }));
 app.get("/getannouncements", function(req, response) {
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
@@ -349,61 +329,69 @@ app.listen(8070, function() {
   console.log("server initialized");
 })
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/getallassignments_student"){
+app.get("/getallassignments_student", function(req, response){
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent = JSON.stringify(all_assignments_row_student);
-      response.end(jsonContent);
-      console.log(jsonContent);
-  }
-}).listen(8060);
-console.log("server initialized");
+      db.all("SELECT * FROM assignments WHERE course_name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [req.query.user], function(err, row) {
+        all_assignments_row_student=row
+        const jsonContent = JSON.stringify(all_assignments_row_student);
+        response.send(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8060, function() {
+  console.log("server initialized");
+})
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/getallassignments_teacher"){
+app.get("/getallassignments_teacher", function(req, response){
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent = JSON.stringify(all_assignments_row_teacher);
-      response.end(jsonContent);
-      console.log(jsonContent);
-  }
-}).listen(8063);
-console.log("server initialized");
+      db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?))", [req.query.user], function(err, row) {
+        all_assignments_row_teacher=row
+        const jsonContent = JSON.stringify(all_assignments_row_teacher);
+        response.send(jsonContent);
+        console.log(jsonContent);
+     });
+})
+app.listen(8063, function() {
+  console.log("server initialized");
+})
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/getcourseassignments"){
+app.get("/getcourseassignments", function(req, response) {
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent = JSON.stringify(course_assignments_row);
-      response.end(jsonContent);
-      console.log(jsonContent);
-  }
-}).listen(8067);
-console.log("server initialized");
+      db.all("SELECT * FROM assignments WHERE course_name = ?", [req.query.course_name], function(err, row) {
+        course_assignments_row=row
+        const jsonContent = JSON.stringify(course_assignments_row);
+        response.send(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8067, function() {
+  console.log("server initialized");
+})
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/getassignment"){
+app.get("/getassignment", function(req, response){
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent = JSON.stringify(assignment_row);
-      response.end(jsonContent);
-      console.log(jsonContent);
-  }
-}).listen(8050);
-console.log("server initialized");
+      db.all("SELECT * FROM assignments WHERE assignment_name = ?", [req.query.assignment_name], function(err, row) {
+        assignment_row=row
+        const jsonContent = JSON.stringify(assignment_row);
+        response.send(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8050, function() {
+  console.log("server initialized");
+})
 
 http.createServer(function(request, response){
   var path = url.parse(request.url).pathname;
@@ -450,8 +438,12 @@ console.log("server initialized");
 
 
 function LoadCoursesStudent() {
-  let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8090/getcourses_student", true);
+  var url = document.location.href,
+  params = url.split('?')
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8090/getcourses_student?" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let courses = JSON.parse(this.responseText);
@@ -464,8 +456,12 @@ function LoadCoursesStudent() {
 }
 
 function LoadCoursesTeacher() {
-  let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8095/getcourses_teacher", true);
+  var url = document.location.href,
+  params = url.split('?')
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8095/getcourses_teacher?" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let courses = JSON.parse(this.responseText);
@@ -478,6 +474,8 @@ function LoadCoursesTeacher() {
 }
 
 function AddCourse(course_name, role) {
+    data = get_url_params()
+    
     new_div = document.createElement("div")
     new_div.className = "course"
 
@@ -485,7 +483,7 @@ function AddCourse(course_name, role) {
     new_heading.className = "course_title"
 
     new_link = document.createElement("a")
-    new_link.href = "course_homepage_" + role + ".html?user=" + user + "&course_name=" + course_name
+    new_link.href = "course_homepage_" + role + ".html?user=" + data.user + "&course_name=" + course_name
     new_link.innerHTML += course_name
     new_link.className = "course_title"
 
@@ -523,6 +521,9 @@ function LoadAnnouncements() {
               prev_child = document.querySelector("#main_panel :nth-child(" + String(i + 1) + ")")
               prev_child.parentNode.insertBefore(new_div, prev_child.nextSibling)
           }
+          if (document.getElementById("main_panel").childElementCount==1) {
+              document.getElementById("main_panel").innerHTML += "There are no announcements yet."
+          }
       }
   }
   xhttp.send();
@@ -530,8 +531,12 @@ function LoadAnnouncements() {
 
 
 function LoadAllAssignmentsStudent(main_div_id) {
-  let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8060/getallassignments_student", true);
+  var url = document.location.href,
+  params = url.split('?')
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8060/getallassignments_student?" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
@@ -542,8 +547,12 @@ function LoadAllAssignmentsStudent(main_div_id) {
 }
 
 function LoadAllAssignmentsTeacher(main_div_id) {
-  let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8063/getallassignments_teacher", true);
+  var url = document.location.href,
+  params = url.split('?')
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8063/getallassignments_teacher?" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
@@ -554,8 +563,12 @@ function LoadAllAssignmentsTeacher(main_div_id) {
 }
 
 function LoadCourseAssignmentsStudent(main_div_id) {
+  var url = document.location.href,
+  params = url.split('?')
+    
   let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8067/getcourseassignments", true);
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8067/getcourseassignments?" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
@@ -566,12 +579,32 @@ function LoadCourseAssignmentsStudent(main_div_id) {
 }
 
 function LoadCourseAssignmentsTeacher(main_div_id) {
+  var url = document.location.href,
+  params = url.split('?')
+  
   let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8067/getcourseassignments", true);
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8067/getcourseassignments?" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
            AddAssignmentsTeacher(assignments, main_div_id)
+       }
+   }
+   xhttp.send();
+}
+
+function LoadAllCourseAssignmentsTeacher(main_div_id) {
+  var url = document.location.href,
+  params = url.split('?')
+  
+  let xhttp = new XMLHttpRequest();
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8067/getcourseassignments?" + params[1], true);
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+           let assignments = JSON.parse(this.responseText);
+           AddAllAssignmentsTeacher(assignments, main_div_id)
        }
    }
    xhttp.send();
@@ -609,7 +642,56 @@ function AddAssignmentsTeacher(assignments, main_div_id) {
      }
 }
 
+function AddAllAssignmentsTeacher(assignments, main_div_id) {
+     AddDiv("past", "To Do", main_div_id, "1")  /* for teachers, past assignments go in 'To Do' section*/
+     AddDiv("upcoming", "Upcoming Assignments", main_div_id, "2")
+    
+     for (let i=0; i<assignments.length; i++) {
+         assignment = assignments[i]
+         
+         new_div = document.createElement("div")
+         new_div.className = "assignment"
+
+         new_heading = document.createElement("H4")
+         new_heading.className = "assignment_title"
+
+         new_link = document.createElement("a")
+         new_link.href = "assignment_teacher.html?user=" + data.user + "&course_name=" + assignment["course_name"] + "&assignment_name=" + assignment["assignment_name"]
+         new_link.innerHTML += assignment["assignment_name"]
+         new_link.className = "assignment_title"
+
+         new_text = document.createElement("p")
+         new_text.appendChild(document.createTextNode("Course: " + assignment["course_name"]))
+         new_text.appendChild(document.createElement("br"))
+         new_text.appendChild(document.createTextNode("Due: " + assignment["due_date"]))
+         new_text.appendChild(document.createElement("br"))
+         new_text.appendChild(document.createTextNode("Points: " + String(assignment["points"])))
+
+         new_heading.appendChild(new_link)
+         new_div.appendChild(new_heading)
+         new_div.appendChild(new_text)
+
+         let curr_date = Date.parse(new Date())
+         let due_date = Date.parse(assignment["due_date"])
+
+         if (due_date < curr_date) {
+             document.getElementById("past").appendChild(new_div)
+         } else { 
+             document.getElementById("upcoming").appendChild(new_div)
+         }
+     }
+
+     if (document.getElementById("past").childElementCount==1) {
+          document.getElementById("past").innerHTML += "All done!"
+     }
+     if (document.getElementById("upcoming").childElementCount==1) {
+        document.getElementById("upcoming").innerHTML += "You have no upcoming assignments."
+    }
+}
+
 function AddAssignment(assignment, role) {
+    data = get_url_params()
+    
     new_div = document.createElement("div")
     new_div.className = "assignment"
 
@@ -617,7 +699,7 @@ function AddAssignment(assignment, role) {
     new_heading.className = "assignment_title"
 
     new_link = document.createElement("a")
-    new_link.href = "assignment_" + role + ".html"
+    new_link.href = "assignment_" + role + ".html?user=" + data.user + "&course_name=" + assignment["course_name"] + "&assignment_name=" + assignment["assignment_name"]
     new_link.innerHTML += assignment["assignment_name"]
     new_link.className = "assignment_title"
 
@@ -657,11 +739,17 @@ function AddDiv(id, title, main_div_id, j) {
 }
 
 function LoadAssignment() {
-  let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8050/getassignment", true);
+  var url = document.location.href,
+  params = url.split('?')
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8050/getassignment?" + params[1], true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
           let assignment = JSON.parse(this.responseText)[0];
+          
+          document.title = assignment["assignment_name"]
 
           heading = document.querySelector("#main_panel div:nth-child(1) h3:nth-child(1)")
           text = document.querySelector("#main_panel div:nth-child(1) p:nth-child(2)")
@@ -793,4 +881,41 @@ function LoadUsersAdmin() {
        }
    }
    xhttp.send();
+}
+
+
+function get_url_params() {
+  var url = document.location.href,
+  params = url.split('?')[1].split('&')
+  var data = {}
+  for (let i=0; i<params.length; i++) {
+      tmp = params[i].split('=');
+      data[tmp[0]] = decodeURI(tmp[1]);
+  }
+  return data
+}
+
+function LoadCourseName() { 
+  data = get_url_params()
+  document.title = data.course_name
+  document.getElementById("course_header").appendChild(document.createTextNode(data.course_name))
+}
+
+function LoadCourseName_notitle() { 
+  data = get_url_params()
+  document.getElementById("course_header").appendChild(document.createTextNode(data.course_name))
+}
+
+function LoadCourseMenuLinksStudent() {
+  data = get_url_params()
+  document.getElementById("course_homepage_link").href = "course_homepage_student.html?user=" + data.user + "&course_name=" + data.course_name
+  document.getElementById("announcements_link").href = "announcements_student.html?user=" + data.user + "&course_name=" + data.course_name
+  document.getElementById("assignments_link").href = "assignments_student.html?user=" + data.user + "&course_name=" + data.course_name
+}
+
+function LoadCourseMenuLinksTeacher() {
+  data = get_url_params()
+  document.getElementById("course_homepage_link").href = "course_homepage_teacher.html?user=" + data.user + "&course_name=" + data.course_name
+  document.getElementById("announcements_link").href = "announcements_teacher.html?user=" + data.user + "&course_name=" + data.course_name
+  document.getElementById("assignments_link").href = "assignments_teacher.html?user=" + data.user + "&course_name=" + data.course_name
 }

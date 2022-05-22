@@ -17,6 +17,7 @@ INSERT INTO users VALUES ("Rafi", "rafi@uchicago.edu", 0004, "teacher", "active"
 INSERT INTO courses VALUES ("Web Development", "Rafi", "This is the course description for Web Development", 50);
 INSERT INTO courses VALUES ("Machine Learning", "Chenhao", "This is the course description for Machine Learning", 30);
 INSERT INTO courses VALUES ("Algorithms", "Gerry", "This is the course description for Algorithms", 40);
+INSERT INTO courses VALUES ("Web Development 2", "Rafi", "This is the course description for Web Development 2", 10);
 
 INSERT INTO courses_students VALUES ("Web Development", 0001);
 INSERT INTO courses_students VALUES ("Web Development", 0002);
@@ -28,7 +29,8 @@ INSERT INTO courses_students VALUES ("Algorithms", 0001);
 INSERT INTO assignments VALUES ("Homework 1", "Web Development", "04/20/2022", 100, "This is the description for HW1");
 INSERT INTO assignments VALUES ("Homework 2", "Web Development", "05/17/2022", 100, "This is the description for HW2");
 INSERT INTO assignments VALUES ("Homework 3", "Web Development", "05/20/2022", 100, "This is the description for HW3");
-INSERT INTO assignments VALUES ("Homework 4", "Web Development", "05/31/2022", 100, "This is the description for HW3");
+INSERT INTO assignments VALUES ("Homework 4", "Web Development", "05/31/2022", 100, "This is the description for HW4");
+INSERT INTO assignments VALUES ("Project 1", "Machine Learning", "06/01/2022", 100, "This is the description for Project 1");
 
 INSERT INTO announcements VALUES ("HW deadline pushed back", "HW3 will now be due on Friday. Good luck!");
 INSERT INTO announcements VALUES ("Pop quiz", "There will be a pop quiz in class tomorrow. Good luck!");

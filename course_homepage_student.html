@@ -5,13 +5,13 @@
   <link rel=stylesheet href="canvas_styles.css" TYPE="text/css">
   <script src="canvas_functions.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>[Insert course name]</title>
+  <title></title>
 </head>
 
-<body onload="LoadAnnouncements(); LoadCourseAssignmentsStudent('assignments_panel')">
+<body onload="LoadCourseName(); LoadCourseMenuLinksStudent(); LoadAnnouncements(); LoadCourseAssignmentsStudent('assignments_panel')">
 
 <div id="header">
-  <h2 id="course_header">[Insert course name]</h2>
+  <h2 id="course_header"></h2>
 </div>
 
 <div id="main">
@@ -28,9 +28,9 @@
 
    <div class="column" id="course_menu">
      <ul class="course_menu_items">
-       <li class="selected_course_menu_item">Course Home</li>
-       <li class="course_menu_items"><a href="announcements_student.html" class="course_menu_items">Announcements</a></li>
-       <li class="course_menu_items"><a href="assignments_student.html" class="course_menu_items">Assignments</a></li>
+       <li class="selected_course_menu_item"><a class="course_menu_items" id="course_homepage_link">Course Home</a></li>
+       <li class="course_menu_items"><a class="course_menu_items" id="announcements_link">Announcements</a></li>
+       <li class="course_menu_items"><a class="course_menu_items" id="assignments_link">Assignments</a></li>
        <li class="course_menu_items"><a href="[insert link]" class="course_menu_items">Grades</a></li>
      </ul>
   </div>
