@@ -421,12 +421,12 @@ app.listen(8041, function () {
     console.log("server initialized");
 })
 
-app.get("/addcourseforuser", function(req, response){
+app.post("/addcourseforuser", function(req, response){
       //response.setHeader('Access-Control-Allow-Origin', '*');
-      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST');
-      response.setHeader('Access-Control-Max-Age', 2592000);
-      response.setHeader('Content-Type', 'application/json');
-      db.run('INSERT INTO courses_students(course_name, user_id) VALUES(?, ?)', [req.query.course, req.query.userid]);
+      //response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST');
+      //response.setHeader('Access-Control-Max-Age', 2592000);
+      //response.setHeader('Content-Type', 'application/json');
+      db.run('INSERT INTO courses_students(course_name, user) VALUES(?, ?)', [req.query.course, req.query.userid]);
 })
 app.listen(8042, function() {
   console.log("server initialized");
@@ -814,13 +814,8 @@ function LoadCoursesAdmin() {
 
 function addSpecificClass(user, course) {
     let xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://localhost:8042/addcourseforuser?userid=" + user.id + "&course=" + course.name, true);
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-
-         }
-     }
-     xhttp.send();
+    xhttp.open("POST", "http://localhost:8042/addcourseforuser?userid=" + user.user + "&course=" + course.name, true);
+    xhttp.send();
 }
 
 function addClassForUser(user, ul) {
