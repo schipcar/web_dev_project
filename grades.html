@@ -16,52 +16,85 @@
 
 
 <div id="demo">
-<button type="button" onclick="LoadAllGrades()">Load Grades</button>
+<button type="button" onclick="Grades()">Load Grades</button>
 </div>
 <div id="dinamic">
 </div>
 
 <form name="myform" action="http://localhost:8080/putdictionary" method="post">
   <fieldset>
-    <label for="id">Id:</label>
-    <input type="number" id="id" name="id" placeholder="id" />
-    <label for="student">Student:</label>
-    <input type="text" id="student" name="student" placeholder="student" />
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" placeholder="Enter your full name" />
-    <label for="status">Status:</label>
-    <input type="text" id="status" name="status" placeholder="status" />
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email" placeholder="email" />
     <label for="punctuation">Punctuation:</label>
     <input type="number" id="punctuation" name="punctuation" placeholder="punctuation" />
     <label for="possible">Possible:</label>
     <input type="number" id="possible" name="possible" placeholder="possible" />
+    <label for="course_name">Course:</label>
+    <input type="text" id="course_name" name="course_name" placeholder="course_name" />    
     <input type="submit" value="Send message" />
 
 </fieldset>
 </form>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
 var counter = 0;
 var Preferences = 0;
 var nrows = 0;
-var proof = 0;
 Preferences.id = "tbl";
+var Mode_User = "Student"
+var Student = "claudio@hotmail.com"
 
+function Grades(){
+  if (Mode_User = "Student") {
+    LoadGrades_p1()
+    LoadGrades_p2()
+  } else { LoadAllGrades() }};
+
+function LoadGrades_p1() {
+  $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/gradestudent",
+        crossDomain: true,
+        data: {student:Student},
+        success: function (data) {
+            // SOMETHING
+        },
+        error: function (err) {
+            // SOMETHING
+        }
+    });
+  };
+
+
+function LoadGrades_p2() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8080/gradestudent2", true);
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+           var dict_all = JSON.parse(this.responseText);
+           var list_array = new Array();
+           for (var i=0; i<dict_all.length; i++) {
+             const dict_t = dict_all[i];
+             const array1 = [dict_t.email, dict_t.punctuation, dict_t.possible, dict_t.course_name];
+             list_array.push(array1)}
+             nrows = dict_all.length
+          createtable("tbl", list_array, nrows);}
+   }
+   xhttp.send();
+}
 
 function LoadAllGrades() {
   var xhttp = new XMLHttpRequest();
   xhttp.overrideMimeType("application/json");
   xhttp.open("GET", "http://localhost:8080/getdictionary", true);
   xhttp.onreadystatechange = function() {
-    console.log("aqui")
     if (this.readyState == 4 && this.status == 200) {
            var dict_all = JSON.parse(this.responseText);
-           console.log(dict_all)
            var list_array = new Array();
            for (var i=0; i<dict_all.length; i++) {
              const dict_t = dict_all[i];
-             //console.log(dict_t)
-             const array1 = [dict_t.student, dict_t.name, dict_t.status, dict_t.punctuation, dict_t.possible];
+             const array1 = [dict_t.email, dict_t.punctuation, dict_t.possible, dict_t.course_name];
              list_array.push(array1)}
              nrows = dict_all.length
           createtable("tbl", list_array, nrows);}
@@ -71,8 +104,8 @@ function LoadAllGrades() {
 
 createtable = function(id, list_array, nrows){
     var TableDiv = document.getElementById("dinamic");  
-    var ncells = 5;
-    var names = ["Student", "Name", "Status", "Punctuation", "Possible"];
+    var ncells = 4;
+    var names = ["Email", "Punctuation", "Possible", "Course"];
     
     var table = document.createElement('TABLE');
     table.border='1';
@@ -82,7 +115,7 @@ createtable = function(id, list_array, nrows){
     var header = table.createTHead();
     var row = header.insertRow(0);
     
-    for (var p=0; p<5; p++){
+    for (var p=0; p<4; p++){
            var cell = row.insertCell(p);
            cell.innerHTML = names[p];
     }
@@ -98,7 +131,14 @@ createtable = function(id, list_array, nrows){
            tr.appendChild(td);
        }
     }
-    Preferences = table;
+    if (Preferences == 0) {
+      Preferences = table;
+      TableDiv.appendChild(table) 
+    } else {
+      TableDiv.removeChild(TableDiv.lastChild)
+      Preferences = table;
+    }
+    
     TableDiv.appendChild(table)   
 }
 
