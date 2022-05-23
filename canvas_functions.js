@@ -422,31 +422,11 @@ app.listen(8041, function () {
 })
 
 app.post("/addcourseforuser", function(req, response){
-      //response.setHeader('Access-Control-Allow-Origin', '*');
-      //response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST');
-      //response.setHeader('Access-Control-Max-Age', 2592000);
-      //response.setHeader('Content-Type', 'application/json');
       db.run('INSERT INTO courses_students(course_name, user) VALUES(?, ?)', [req.query.course, req.query.userid]);
 })
 app.listen(8042, function() {
   console.log("server initialized");
 })
-
-/*http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/addcourseforuser"){
-      console.log(request.query);
-      response.setHeader('Access-Control-Allow-Origin', '*');
-      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST');
-      response.setHeader('Access-Control-Max-Age', 2592000);
-      db.run('INSERT INTO courses_students(course_name, user_id) VALUES(?, ?)', [request.query.course, request.query.userid]);
-      //response.setHeader('Content-Type', 'application/json');
-      //response.end(jsonContent);
-      console.log("Done");
-  }
-}).listen(8042);
-console.log("server initialized");*/
-
 
 function LoadCoursesStudent() {
   var url = document.location.href,
@@ -812,9 +792,9 @@ function LoadCoursesAdmin() {
    xhttp.send();
 }
 
-function addSpecificClass(user, course) {
+function addSpecificClass(username, coursename) {
     let xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://localhost:8042/addcourseforuser?userid=" + user.user + "&course=" + course.name, true);
+    xhttp.open("POST", "http://localhost:8042/addcourseforuser?userid=" + username + "&course=" + coursename, true);
     xhttp.send();
 }
 
@@ -832,13 +812,31 @@ function addClassForUser(user, ul) {
                 ul.appendChild(newCourse);
 
                 let addClassButton = document.createElement("button");
+                addClassButton.classList.add("add_specific_class_button");
                 addClassButton.innerHTML = "Add";
-                addClassButton.addEventListener("click", function() {addSpecificClass(user, courses[i]);});
+                addClassButton.addEventListener("click", function() {addSpecificClass(user.user, courses[i].name);});
                 newCourse.appendChild(addClassButton);
             }
          }
      }
      xhttp.send();
+}
+
+function addUsersClasses(ul, username) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "http://localhost:8090/getcourses_student?user=" + username, true);
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let courses = JSON.parse(this.responseText);
+            for (i = 0; i < courses.length; i++) {
+                let newCourseLi = document.createElement("li");
+                newCourseLi.classList.add("class_li");
+                newCourseLi.innerHTML = courses[i].name;
+                ul.prepend(newCourseLi);
+            }
+        }
+    }
+    xhttp.send();
 }
 
 function addUserToListAdminHelper(li, item) {
@@ -858,10 +856,14 @@ function addUserToListAdmin(user) {
     addUserToListAdminHelper(newLi, user.name);
     addUserToListAdminHelper(newLi, user.email);
     addUserToListAdminHelper(newLi, user.role);
+    let span = document.createElement("span");
+        span.classList.add("user_span");
+        span.innerHTML = "Classes:";
+        newLi.appendChild(span);
     let ul = document.createElement("ul");
         ul.classList.add("class_list");
-        ul.innerHTML = "Classes:";
         newLi.appendChild(ul);
+    addUsersClasses(ul, user.user);
     let addClassUl = document.createElement("ul");
         addClassUl.classList.add("add_class_ul");
         addClassUl.style.display = "none";

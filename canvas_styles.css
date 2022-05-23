@@ -321,6 +321,7 @@ input, textarea, select {
     font-size: 110%;
     background-color: lightgray;
     padding-left: 5px;
+    display: inline;
 }
 
 .class_li {
@@ -336,5 +337,20 @@ input, textarea, select {
     font-size: 80%;
     width: 10%;
     padding: 2px;
-    margin: 2px;
+    margin: 8px;
+}
+
+.add_class_ul {
+    background-color: lightgray;
+    border: 2px black;
+    border-style: solid none;
+}
+
+.add_class_ul>* {
+    background-color: lightgray;
+    padding: 5px;
+}
+
+.add_specific_class_button {
+    margin: 5px;
 }
