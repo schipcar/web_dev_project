@@ -1,30 +1,30 @@
 /* Make tables */
-CREATE TABLE grades (id INTEGER PRIMARY KEY, student TEXT, name TEXT, status TEXT, punctuation INTEGER, possible INTEGER);
-CREATE TABLE users (name TEXT, email TEXT, id INTEGER, role TEXT check(role='student' or role='teacher' or role='admin'), status TEXT check(status='active' or status='inactive'), password TEXT, sec_q1 TEXT, sec_q2 TEXT, sec_q3 TEXT);
-CREATE TABLE courses (name TEXT, teacher TEXT, description TEXT, capacity INTEGER);
-CREATE TABLE courses_students (course_name TEXT, user_id INTEGER);
-CREATE TABLE assignments (assignment_name TEXT, course_name TEXT, due_date TEXT, points INTEGER, description TEXT);
+CREATE TABLE grades (email PRIMARY KEY TEXT, name TEXT, punctuation INTEGER, possible INTEGER, course_name TEXT);
+CREATE TABLE users (name TEXT, email TEXT, user PRIMARY KEY TEXT, role TEXT check(role='student' or role='teacher' or role='admin'), status TEXT check(status='active' or status='inactive'), password TEXT, sec_q1 TEXT, sec_q2 TEXT, sec_q3 TEXT, sec_a1 TEXT, sec_a2 TEXT, sec_a3 TEXT);
+CREATE TABLE courses (name PRIMARY KEY TEXT, teacher TEXT, description TEXT, enrolled INTEGER, capacity INTEGER);
+CREATE TABLE courses_students (course_name TEXT, user TEXT);
+CREATE TABLE assignments (assignment_name TEXT, course_name TEXT, due_date TEXT, points INTEGER, description TEXT, PRIMARY KEY (assignment_name, course_name));
 CREATE TABLE courses_announcements (course_name TEXT, announcement_subject TEXT);
-CREATE TABLE announcements (subject TEXT, body TEXT);
+CREATE TABLE announcements (subject TEXT, body TEXT, PRIMARY KEY (subject, body));
 
 
 /* Populate the tables with dummy data for testing */
-INSERT INTO users VALUES ("Ana Sofia", "anasof@uchicago.edu", 0001, "student", "active", "mynameisanasof", "", "", "");
-INSERT INTO users VALUES ("Alex", "alex@uchicago.edu", 0002, "student", "active", "mynameisalex", "", "", "");
-INSERT INTO users VALUES ("Carly", "carly@uchicago.edu", 0003, "student", "active", "mynameiscarly", "", "", "");
-INSERT INTO users VALUES ("Rafi", "rafi@uchicago.edu", 0004, "teacher", "active", "mynameisrafi", "", "", "");
+INSERT INTO users VALUES ("Ana Sofia", "anasof@uchicago.edu", "anasof", "student", "active", "mynameisanasof", "", "", "", "", "", "");
+INSERT INTO users VALUES ("Alex", "alex@uchicago.edu", "alex", "student", "active", "mynameisalex", "", "", "", "", "", "");
+INSERT INTO users VALUES ("Carly", "carly@uchicago.edu", "carly", "student", "active", "mynameiscarly", "", "", "", "", "", "");
+INSERT INTO users VALUES ("Rafi", "rafi@uchicago.edu", "rafi", "teacher", "active", "mynameisrafi", "", "", "", "", "", "");
 
-INSERT INTO courses VALUES ("Web Development", "Rafi", "This is the course description for Web Development", 50);
-INSERT INTO courses VALUES ("Machine Learning", "Chenhao", "This is the course description for Machine Learning", 30);
-INSERT INTO courses VALUES ("Algorithms", "Gerry", "This is the course description for Algorithms", 40);
-INSERT INTO courses VALUES ("Web Development 2", "Rafi", "This is the course description for Web Development 2", 10);
+INSERT INTO courses VALUES ("Web Development", "Rafi", "This is the course description for Web Development", 40, 50);
+INSERT INTO courses VALUES ("Machine Learning", "Chenhao", "This is the course description for Machine Learning", 30, 30);
+INSERT INTO courses VALUES ("Algorithms", "Gerry", "This is the course description for Algorithms", 35, 40);
+INSERT INTO courses VALUES ("Web Development 2", "Rafi", "This is the course description for Web Development 2", 8, 10);
 
-INSERT INTO courses_students VALUES ("Web Development", 0001);
-INSERT INTO courses_students VALUES ("Web Development", 0002);
-INSERT INTO courses_students VALUES ("Web Development", 0003);
-INSERT INTO courses_students VALUES ("Machine Learning", 0001);
-INSERT INTO courses_Students VALUES ("Machine Learning", 0002);
-INSERT INTO courses_students VALUES ("Algorithms", 0001);
+INSERT INTO courses_students VALUES ("Web Development", "anasof");
+INSERT INTO courses_students VALUES ("Web Development", "alex");
+INSERT INTO courses_students VALUES ("Web Development", "carly");
+INSERT INTO courses_students VALUES ("Machine Learning", "anasof");
+INSERT INTO courses_Students VALUES ("Machine Learning", "alex");
+INSERT INTO courses_students VALUES ("Algorithms", "anasof");
 
 INSERT INTO assignments VALUES ("Homework 1", "Web Development", "04/20/2022", 100, "This is the description for HW1");
 INSERT INTO assignments VALUES ("Homework 2", "Web Development", "05/17/2022", 100, "This is the description for HW2");
