@@ -813,47 +813,34 @@ function LoadCoursesAdmin() {
    xhttp.send();
 }
 
-function rejectUser(username) {
-    let xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://localhost:8045/rejectuser?username=" + username, true);
-    xhttp.send();
-}
-
-function activateUser(username) {
-    let xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://localhost:8044/activateuser?username=" + username, true);
-    xhttp.send();
-}
-
-function deactivateUser(username) {
-    let xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://localhost:8043/deactivateuser?username=" + username, true);
-    xhttp.send();
-}
-
-function addSpecificClass(username, coursename) {
+function addSpecificClass(username, coursename, oldCoursesUl) {
     let xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://localhost:8042/addcourseforuser?username=" + username + "&coursename=" + coursename, true);
     xhttp.send();
+
+    let newCourseLi = document.createElement("li");
+    newCourseLi.classList.add("class_li");
+    newCourseLi.innerHTML = coursename;
+    oldCoursesUl.prepend(newCourseLi);
 }
 
-function addClassForUser(user, ul) {
+function addClassForUser(user, newCoursesUl, oldCoursesUl) {
     let xhttp = new XMLHttpRequest();
     xhttp.open("GET", "http://localhost:8040/getallcourses", true);
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
 
-            ul.style.display = "block";
+            newCoursesUl.style.display = "block";
             let courses = JSON.parse(this.responseText);
             for (let i=0; i<courses.length; i++) {
                 let newCourse = document.createElement("li");
                 newCourse.innerHTML = courses[i].name;
-                ul.appendChild(newCourse);
+                newCoursesUl.appendChild(newCourse);
 
                 let addClassButton = document.createElement("button");
                 addClassButton.classList.add("add_specific_class_button");
                 addClassButton.innerHTML = "Add";
-                addClassButton.addEventListener("click", function() {addSpecificClass(user.user, courses[i].name);});
+                addClassButton.addEventListener("click", function() {addSpecificClass(user.user, courses[i].name, oldCoursesUl);});
                 newCourse.appendChild(addClassButton);
             }
          }
@@ -884,6 +871,59 @@ function addUserToListAdminHelper(li, item, br = true) {
         span.innerHTML = item;
         li.appendChild(span);
     if (br) {li.appendChild(document.createElement("br"));}
+    return span;
+}
+
+function deactivateUser(user, li, activeSpan, deactivateButton) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8043/deactivateuser?username=" + user.user, true);
+    xhttp.send();
+
+    activeSpan.remove();
+    deactivateButton.remove();
+    loadInactiveSpan(li, user);
+}
+
+function loadActiveSpan(li, user) {
+    let activeSpan = addUserToListAdminHelper(li, "Active |", false);
+    let deactivateButton = document.createElement("button");
+        deactivateButton.classList.add("inline_button");
+        deactivateButton.innerHTML = "Deactivate";
+        deactivateButton.addEventListener("click", function() {deactivateUser(user, li, activeSpan, deactivateButton)})
+        li.appendChild(deactivateButton);
+}
+
+function activateUser(user, li, inactiveSpan, approveButton, rejectButton) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8044/activateuser?username=" + user.user, true);
+    xhttp.send();
+
+    inactiveSpan.remove();
+    approveButton.remove();
+    rejectButton.remove();
+    loadActiveSpan(li, user);
+}
+
+function rejectUser(user, li) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8045/rejectuser?username=" + user.user, true);
+    xhttp.send();
+
+    li.remove();
+}
+
+function loadInactiveSpan(li, user) {
+    let inactiveSpan = addUserToListAdminHelper(li, "Inactive |", false);
+    let approveButton = document.createElement("button");
+        approveButton.classList.add("inline_button");
+        approveButton.innerHTML = "Approve";
+        li.appendChild(approveButton);
+    let rejectButton = document.createElement("button");
+        rejectButton.classList.add("inline_button");
+        rejectButton.innerHTML = "Reject";
+        approveButton.addEventListener("click", function() {activateUser(user, li, inactiveSpan, approveButton, rejectButton)})
+        rejectButton.addEventListener("click", function() {rejectUser(user, li)})
+        li.appendChild(rejectButton);
 }
 
 function addUserToListAdmin(user) {
@@ -904,10 +944,10 @@ function addUserToListAdmin(user) {
         addUserToListAdminHelper(newLi, "Admin");
     }
     addUserToListAdminHelper(newLi, "Classes:", false);
-    let ul = document.createElement("ul");
-        ul.classList.add("class_list");
-        newLi.appendChild(ul);
-    addUsersClasses(ul, user.user);
+    let currCoursesUl = document.createElement("ul");
+        currCoursesUl.classList.add("class_list");
+        newLi.appendChild(currCoursesUl);
+    addUsersClasses(currCoursesUl, user.user);
     let addClassUl = document.createElement("ul");
         addClassUl.classList.add("add_class_ul");
         addClassUl.style.display = "none";
@@ -915,29 +955,14 @@ function addUserToListAdmin(user) {
     let addClassesButton = document.createElement("button");
         addClassesButton.classList.add("inline_button");
         addClassesButton.innerHTML = "Add Class";
-        addClassesButton.addEventListener("click", function() {addClassForUser(user, addClassUl);});
-        ul.appendChild(addClassesButton);
+        addClassesButton.addEventListener("click", function() {addClassForUser(user, addClassUl, currCoursesUl);});
+        currCoursesUl.appendChild(addClassesButton);
     newLi.appendChild(document.createElement("br"));
     if (user.status == "active") {
-        addUserToListAdminHelper(newLi, "Active |", false);
-        let deactivateButton = document.createElement("button");
-            deactivateButton.classList.add("inline_button");
-            deactivateButton.innerHTML = "Deactivate";
-            deactivateButton.addEventListener("click", function() {deactivateUser(user.user)})
-            newLi.appendChild(deactivateButton);
+        loadActiveSpan(newLi, user);
     }
     else {
-        addUserToListAdminHelper(newLi, "Inactive |", false);
-        let approveButton = document.createElement("button");
-            approveButton.classList.add("inline_button");
-            approveButton.innerHTML = "Approve";
-            approveButton.addEventListener("click", function() {activateUser(user.user)})
-            newLi.appendChild(approveButton);
-        let rejectButton = document.createElement("button");
-            rejectButton.classList.add("inline_button");
-            rejectButton.innerHTML = "Reject";
-            rejectButton.addEventListener("click", function() {rejectUser(user.user)})
-            newLi.appendChild(rejectButton);
+        loadInactiveSpan(newLi, user);
     }
 }
 
