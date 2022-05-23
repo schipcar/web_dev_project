@@ -210,7 +210,7 @@ function toggleUserDisplay(activityState) {
     let usersList = document.getElementById("users_list");
     for (i = 0; i < usersList.children.length; i++) {
         let user = usersList.children[i];
-        if (user.children[7].innerHTML == activityState + " |") {
+        if (user.children[10].innerHTML == activityState + " |") {
             if (checkbox.checked) {
                 let searchVal = document.getElementById("name_email_search").value.toLowerCase();
                 let name = user.children[0].innerHTML.toLowerCase();
@@ -422,9 +422,30 @@ app.listen(8041, function () {
 })
 
 app.post("/addcourseforuser", function(req, response){
-      db.run('INSERT INTO courses_students(course_name, user) VALUES(?, ?)', [req.query.course, req.query.userid]);
+    db.run('INSERT INTO courses_students(course_name, user) VALUES(?, ?)', [req.query.coursename, req.query.username]);
 })
 app.listen(8042, function() {
+  console.log("server initialized");
+})
+
+app.post("/deactivateuser", function(req, response){
+    db.run('UPDATE users SET status = "inactive" WHERE user = ?', [req.query.username]);
+})
+app.listen(8043, function() {
+  console.log("server initialized");
+})
+
+app.post("/activateuser", function(req, response){
+    db.run('UPDATE users SET status = "active" WHERE user = ?', [req.query.username]);
+})
+app.listen(8044, function() {
+  console.log("server initialized");
+})
+
+app.post("/rejectuser", function(req, response){
+    db.run('DELETE FROM users WHERE user = ?', [req.query.username]);
+})
+app.listen(8045, function() {
   console.log("server initialized");
 })
 
@@ -792,9 +813,27 @@ function LoadCoursesAdmin() {
    xhttp.send();
 }
 
+function rejectUser(username) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8045/rejectuser?username=" + username, true);
+    xhttp.send();
+}
+
+function activateUser(username) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8044/activateuser?username=" + username, true);
+    xhttp.send();
+}
+
+function deactivateUser(username) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8043/deactivateuser?username=" + username, true);
+    xhttp.send();
+}
+
 function addSpecificClass(username, coursename) {
     let xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://localhost:8042/addcourseforuser?userid=" + username + "&course=" + coursename, true);
+    xhttp.open("POST", "http://localhost:8042/addcourseforuser?username=" + username + "&coursename=" + coursename, true);
     xhttp.send();
 }
 
@@ -839,12 +878,12 @@ function addUsersClasses(ul, username) {
     xhttp.send();
 }
 
-function addUserToListAdminHelper(li, item) {
+function addUserToListAdminHelper(li, item, br = true) {
     let span = document.createElement("span");
         span.classList.add("user_span");
         span.innerHTML = item;
         li.appendChild(span);
-        li.appendChild(document.createElement("br"));
+    if (br) {li.appendChild(document.createElement("br"));}
 }
 
 function addUserToListAdmin(user) {
@@ -855,11 +894,16 @@ function addUserToListAdmin(user) {
 
     addUserToListAdminHelper(newLi, user.name);
     addUserToListAdminHelper(newLi, user.email);
-    addUserToListAdminHelper(newLi, user.role);
-    let span = document.createElement("span");
-        span.classList.add("user_span");
-        span.innerHTML = "Classes:";
-        newLi.appendChild(span);
+    if (user.role == "student") {
+        addUserToListAdminHelper(newLi, "Student");
+    }
+    else if (user.role == "teacher") {
+        addUserToListAdminHelper(newLi, "Teacher");
+    }
+    else {
+        addUserToListAdminHelper(newLi, "Admin");
+    }
+    addUserToListAdminHelper(newLi, "Classes:", false);
     let ul = document.createElement("ul");
         ul.classList.add("class_list");
         newLi.appendChild(ul);
@@ -874,7 +918,27 @@ function addUserToListAdmin(user) {
         addClassesButton.addEventListener("click", function() {addClassForUser(user, addClassUl);});
         ul.appendChild(addClassesButton);
     newLi.appendChild(document.createElement("br"));
-    addUserToListAdminHelper(newLi, user.status);
+    if (user.status == "active") {
+        addUserToListAdminHelper(newLi, "Active |", false);
+        let deactivateButton = document.createElement("button");
+            deactivateButton.classList.add("inline_button");
+            deactivateButton.innerHTML = "Deactivate";
+            deactivateButton.addEventListener("click", function() {deactivateUser(user.user)})
+            newLi.appendChild(deactivateButton);
+    }
+    else {
+        addUserToListAdminHelper(newLi, "Inactive |", false);
+        let approveButton = document.createElement("button");
+            approveButton.classList.add("inline_button");
+            approveButton.innerHTML = "Approve";
+            approveButton.addEventListener("click", function() {activateUser(user.user)})
+            newLi.appendChild(approveButton);
+        let rejectButton = document.createElement("button");
+            rejectButton.classList.add("inline_button");
+            rejectButton.innerHTML = "Reject";
+            rejectButton.addEventListener("click", function() {rejectUser(user.user)})
+            newLi.appendChild(rejectButton);
+    }
 }
 
 function LoadUsersAdmin() {
