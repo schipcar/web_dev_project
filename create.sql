@@ -1,7 +1,7 @@
 /* Make tables */
-CREATE TABLE grades (email PRIMARY KEY TEXT, name TEXT, punctuation INTEGER, possible INTEGER, course_name TEXT);
-CREATE TABLE users (name TEXT, email TEXT, user PRIMARY KEY TEXT, role TEXT check(role='student' or role='teacher' or role='admin'), status TEXT check(status='active' or status='inactive'), password TEXT, sec_q1 TEXT, sec_q2 TEXT, sec_q3 TEXT, sec_a1 TEXT, sec_a2 TEXT, sec_a3 TEXT);
-CREATE TABLE courses (name PRIMARY KEY TEXT, teacher TEXT, description TEXT, enrolled INTEGER, capacity INTEGER);
+CREATE TABLE grades (email TEXT, name TEXT, punctuation INTEGER, possible INTEGER, course_name TEXT, PRIMARY KEY (email));
+CREATE TABLE users (name TEXT, email TEXT, user TEXT, role TEXT check(role='student' or role='teacher' or role='admin'), status TEXT check(status='active' or status='inactive'), password TEXT, sec_q1 TEXT, sec_q2 TEXT, sec_q3 TEXT, sec_a1 TEXT, sec_a2 TEXT, sec_a3 TEXT, PRIMARY KEY (user));
+CREATE TABLE courses (name TEXT, teacher TEXT, description TEXT, enrolled INTEGER, capacity INTEGER, PRIMARY KEY (name));
 CREATE TABLE courses_students (course_name TEXT, user TEXT);
 CREATE TABLE assignments (assignment_name TEXT, course_name TEXT, due_date TEXT, points INTEGER, description TEXT, PRIMARY KEY (assignment_name, course_name));
 CREATE TABLE courses_announcements (course_name TEXT, announcement_subject TEXT);
