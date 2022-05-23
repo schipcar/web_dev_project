@@ -917,11 +917,28 @@ function LoadCourseName_notitle() {
   document.getElementById("course_header").appendChild(document.createTextNode(data.course_name))
 }
 
+function LoadMainMenuLinksStudent() {
+  data = get_url_params()
+  document.getElementById("myaccount_link").href = ".html?user=" + data.user // NEED TO ADD LINK LATER
+  document.getElementById("dashboard_link").href = "dashboard_student.html?user=" + data.user
+  document.getElementById("courses_link").href = "dashboard_student.html?user=" + data.user
+  document.getElementById("logout_link").href = "login_page.html?user=" + data.user
+}
+
+function LoadMainMenuLinksTeacher() {
+  data = get_url_params()
+  document.getElementById("myaccount_link").href = ".html?user=" + data.user // NEED TO ADD LINK LATER
+  document.getElementById("dashboard_link").href = "dashboard_teacher.html?user=" + data.user
+  document.getElementById("courses_link").href = "dashboard_teacher.html?user=" + data.user
+  document.getElementById("logout_link").href = "login_page.html?user=" + data.user
+}
+
 function LoadCourseMenuLinksStudent() {
   data = get_url_params()
   document.getElementById("course_homepage_link").href = "course_homepage_student.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("announcements_link").href = "announcements_student.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("assignments_link").href = "assignments_student.html?user=" + data.user + "&course_name=" + data.course_name
+  document.getElementById("grades_link").href = "grades.html?user=" + data.user + "&course_name=" + data.course_name
 }
 
 function LoadCourseMenuLinksTeacher() {
@@ -929,4 +946,5 @@ function LoadCourseMenuLinksTeacher() {
   document.getElementById("course_homepage_link").href = "course_homepage_teacher.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("announcements_link").href = "announcements_teacher.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("assignments_link").href = "assignments_teacher.html?user=" + data.user + "&course_name=" + data.course_name
+  document.getElementById("grades_link").href = "grades.html?user=" + data.user + "&course_name=" + data.course_name
 }
