@@ -254,12 +254,6 @@ var db = new sqlite3.Database('./canvas.db', (err) => {
     db.all("SELECT * FROM grades", function(err, row) {
       grades_row=row
     });
-    db.all("SELECT * FROM courses", function(err, row) {
-      all_courses=row
-    });
-    db.all("SELECT * FROM users", function(err, row) {
-      all_users=row
-    });
 });
 
 
@@ -393,48 +387,65 @@ app.listen(8050, function() {
   console.log("server initialized");
 })
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/getallcourses"){
+app.get("/getallcourses", function(req, response) {
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent = JSON.stringify(all_courses);
-      response.end(jsonContent);
-      console.log(jsonContent);
-  }
-}).listen(8040);
-console.log("server initialized");
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/getallusers"){
+      db.all("SELECT * FROM courses", function(err, row) {
+        all_courses=row;
+        const jsonContent = JSON.stringify(all_courses);
+        response.end(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8040, function () {
+    console.log("server initialized");
+})
+
+app.get("/getallusers", function(req, response) {
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      const jsonContent1 = JSON.stringify(all_users);
-      response.end(jsonContent);
-      console.log(jsonContent);
-  }
-}).listen(8041);
-console.log("server initialized");
 
-http.createServer(function(request, response){
-  var path = url.parse(request.url).pathname;
-  if(path=="/addcourseforuser/:userid/:coursename"){
-      alert(userid + "; " + coursename);
+      db.all("SELECT * FROM users", function(err, row) {
+        all_users=row;
+        const jsonContent = JSON.stringify(all_users);
+        response.end(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8041, function () {
+    console.log("server initialized");
+})
+
+app.get("/addcourseforuser", function(req, response){
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST');
       response.setHeader('Access-Control-Max-Age', 2592000);
-      db.run('INSERT INTO courses_students(course_name, user_id) VALUES(?, ?)', [coursename, userid]);
+      response.setHeader('Content-Type', 'application/json');
+      db.run('INSERT INTO courses_students(course_name, user_id) VALUES(?, ?)', [req.query.course, req.query.userid]);
+})
+app.listen(8042, function() {
+  console.log("server initialized");
+})
+
+/*http.createServer(function(request, response){
+  var path = url.parse(request.url).pathname;
+  if(path=="/addcourseforuser"){
+      console.log(request.query);
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST');
+      response.setHeader('Access-Control-Max-Age', 2592000);
+      db.run('INSERT INTO courses_students(course_name, user_id) VALUES(?, ?)', [request.query.course, request.query.userid]);
       //response.setHeader('Content-Type', 'application/json');
       //response.end(jsonContent);
       console.log("Done");
   }
 }).listen(8042);
-console.log("server initialized");
+console.log("server initialized");*/
 
 
 function LoadCoursesStudent() {
@@ -475,7 +486,7 @@ function LoadCoursesTeacher() {
 
 function AddCourse(course_name, role) {
     data = get_url_params()
-    
+
     new_div = document.createElement("div")
     new_div.className = "course"
 
@@ -565,7 +576,7 @@ function LoadAllAssignmentsTeacher(main_div_id) {
 function LoadCourseAssignmentsStudent(main_div_id) {
   var url = document.location.href,
   params = url.split('?')
-    
+
   let xhttp = new XMLHttpRequest();
   xhttp.overrideMimeType("application/json");
   xhttp.open("GET", "http://localhost:8067/getcourseassignments?" + params[1], true);
@@ -581,7 +592,7 @@ function LoadCourseAssignmentsStudent(main_div_id) {
 function LoadCourseAssignmentsTeacher(main_div_id) {
   var url = document.location.href,
   params = url.split('?')
-  
+
   let xhttp = new XMLHttpRequest();
   xhttp.overrideMimeType("application/json");
   xhttp.open("GET", "http://localhost:8067/getcourseassignments?" + params[1], true);
@@ -597,7 +608,7 @@ function LoadCourseAssignmentsTeacher(main_div_id) {
 function LoadAllCourseAssignmentsTeacher(main_div_id) {
   var url = document.location.href,
   params = url.split('?')
-  
+
   let xhttp = new XMLHttpRequest();
   xhttp.overrideMimeType("application/json");
   xhttp.open("GET", "http://localhost:8067/getcourseassignments?" + params[1], true);
@@ -645,10 +656,10 @@ function AddAssignmentsTeacher(assignments, main_div_id) {
 function AddAllAssignmentsTeacher(assignments, main_div_id) {
      AddDiv("past", "To Do", main_div_id, "1")  /* for teachers, past assignments go in 'To Do' section*/
      AddDiv("upcoming", "Upcoming Assignments", main_div_id, "2")
-    
+
      for (let i=0; i<assignments.length; i++) {
          assignment = assignments[i]
-         
+
          new_div = document.createElement("div")
          new_div.className = "assignment"
 
@@ -676,7 +687,7 @@ function AddAllAssignmentsTeacher(assignments, main_div_id) {
 
          if (due_date < curr_date) {
              document.getElementById("past").appendChild(new_div)
-         } else { 
+         } else {
              document.getElementById("upcoming").appendChild(new_div)
          }
      }
@@ -691,7 +702,7 @@ function AddAllAssignmentsTeacher(assignments, main_div_id) {
 
 function AddAssignment(assignment, role) {
     data = get_url_params()
-    
+
     new_div = document.createElement("div")
     new_div.className = "assignment"
 
@@ -748,7 +759,7 @@ function LoadAssignment() {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
           let assignment = JSON.parse(this.responseText)[0];
-          
+
           document.title = assignment["assignment_name"]
 
           heading = document.querySelector("#main_panel div:nth-child(1) h3:nth-child(1)")
@@ -803,7 +814,7 @@ function LoadCoursesAdmin() {
 
 function addSpecificClass(user, course) {
     let xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://localhost:8042/addcourseforuser/" + user.id + "/" + course.name, true);
+    xhttp.open("POST", "http://localhost:8042/addcourseforuser?userid=" + user.id + "&course=" + course.name, true);
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
 
@@ -874,10 +885,10 @@ function LoadUsersAdmin() {
   xhttp.open("GET", "http://localhost:8041/getallusers", true);
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-           let users = JSON.parse(this.responseText);
-           for (let i=0; i<users.length; i++) {
-               addUserToListAdmin(users[i]);
-           }
+          let users = JSON.parse(this.responseText);
+          for (let i=0; i<users.length; i++) {
+              addUserToListAdmin(users[i]);
+          }
        }
    }
    xhttp.send();
@@ -895,13 +906,13 @@ function get_url_params() {
   return data
 }
 
-function LoadCourseName() { 
+function LoadCourseName() {
   data = get_url_params()
   document.title = data.course_name
   document.getElementById("course_header").appendChild(document.createTextNode(data.course_name))
 }
 
-function LoadCourseName_notitle() { 
+function LoadCourseName_notitle() {
   data = get_url_params()
   document.getElementById("course_header").appendChild(document.createTextNode(data.course_name))
 }
