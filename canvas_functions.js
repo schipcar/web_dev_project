@@ -280,7 +280,7 @@ app.get("/getcourses_student", function(req, response){
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [req.query.user], function(err, row) {
+      db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user = ?)", [req.query.user], function(err, row) {
         courses_row_student=row
         const jsonContent = JSON.stringify(courses_row_student);
         response.send(jsonContent);
@@ -296,7 +296,7 @@ app.get("/getcourses_teacher", function(req, response){
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [req.query.user], function(err, row) {
+      db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE user = ?)", [req.query.user], function(err, row) {
         courses_row_teacher=row
         const jsonContent = JSON.stringify(courses_row_teacher);
         response.send(jsonContent);
@@ -328,7 +328,7 @@ app.get("/getallassignments_student", function(req, response){
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      db.all("SELECT * FROM assignments WHERE course_name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [req.query.user], function(err, row) {
+      db.all("SELECT * FROM assignments WHERE course_name IN (SELECT course_name FROM courses_students WHERE user = ?)", [req.query.user], function(err, row) {
         all_assignments_row_student=row
         const jsonContent = JSON.stringify(all_assignments_row_student);
         response.send(jsonContent);
