@@ -423,7 +423,7 @@ app.listen(8041, function () {
 
 app.get("/addcourseforuser", function(req, response){
       //response.setHeader('Access-Control-Allow-Origin', '*');
-      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
       db.run('INSERT INTO courses_students(course_name, user_id) VALUES(?, ?)', [req.query.course, req.query.userid]);
