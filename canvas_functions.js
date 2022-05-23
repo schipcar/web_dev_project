@@ -280,7 +280,7 @@ app.get("/getcourses_student", function(req, response){
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [req.query.user], function(err, row) {
+      db.all("SELECT * FROM courses WHERE name IN (SELECT course_name FROM courses_students WHERE user = ?)", [req.query.user], function(err, row) {
         courses_row_student=row
         const jsonContent = JSON.stringify(courses_row_student);
         response.send(jsonContent);
@@ -296,7 +296,7 @@ app.get("/getcourses_teacher", function(req, response){
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?)", [req.query.user], function(err, row) {
+      db.all("SELECT * FROM courses WHERE teacher = (SELECT name FROM users WHERE user = ?)", [req.query.user], function(err, row) {
         courses_row_teacher=row
         const jsonContent = JSON.stringify(courses_row_teacher);
         response.send(jsonContent);
@@ -328,7 +328,7 @@ app.get("/getallassignments_student", function(req, response){
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      db.all("SELECT * FROM assignments WHERE course_name IN (SELECT course_name FROM courses_students WHERE user_id = ?)", [req.query.user], function(err, row) {
+      db.all("SELECT * FROM assignments WHERE course_name IN (SELECT course_name FROM courses_students WHERE user = ?)", [req.query.user], function(err, row) {
         all_assignments_row_student=row
         const jsonContent = JSON.stringify(all_assignments_row_student);
         response.send(jsonContent);
@@ -344,7 +344,7 @@ app.get("/getallassignments_teacher", function(req, response){
       response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
       response.setHeader('Access-Control-Max-Age', 2592000);
       response.setHeader('Content-Type', 'application/json');
-      db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE id = ?))", [req.query.user], function(err, row) {
+      db.all("SELECT * FROM assignments WHERE course_name IN (SELECT name FROM courses WHERE teacher = (SELECT name FROM users WHERE user = ?))", [req.query.user], function(err, row) {
         all_assignments_row_teacher=row
         const jsonContent = JSON.stringify(all_assignments_row_teacher);
         response.send(jsonContent);
@@ -917,11 +917,28 @@ function LoadCourseName_notitle() {
   document.getElementById("course_header").appendChild(document.createTextNode(data.course_name))
 }
 
+function LoadMainMenuLinksStudent() {
+  data = get_url_params()
+  document.getElementById("myaccount_link").href = ".html?user=" + data.user // NEED TO ADD LINK LATER
+  document.getElementById("dashboard_link").href = "dashboard_student.html?user=" + data.user
+  document.getElementById("courses_link").href = "dashboard_student.html?user=" + data.user
+  document.getElementById("logout_link").href = "login_page.html?user=" + data.user
+}
+
+function LoadMainMenuLinksTeacher() {
+  data = get_url_params()
+  document.getElementById("myaccount_link").href = ".html?user=" + data.user // NEED TO ADD LINK LATER
+  document.getElementById("dashboard_link").href = "dashboard_teacher.html?user=" + data.user
+  document.getElementById("courses_link").href = "dashboard_teacher.html?user=" + data.user
+  document.getElementById("logout_link").href = "login_page.html?user=" + data.user
+}
+
 function LoadCourseMenuLinksStudent() {
   data = get_url_params()
   document.getElementById("course_homepage_link").href = "course_homepage_student.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("announcements_link").href = "announcements_student.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("assignments_link").href = "assignments_student.html?user=" + data.user + "&course_name=" + data.course_name
+  document.getElementById("grades_link").href = "grades.html?user=" + data.user + "&course_name=" + data.course_name
 }
 
 function LoadCourseMenuLinksTeacher() {
@@ -929,4 +946,5 @@ function LoadCourseMenuLinksTeacher() {
   document.getElementById("course_homepage_link").href = "course_homepage_teacher.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("announcements_link").href = "announcements_teacher.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("assignments_link").href = "assignments_teacher.html?user=" + data.user + "&course_name=" + data.course_name
+  document.getElementById("grades_link").href = "grades.html?user=" + data.user + "&course_name=" + data.course_name
 }

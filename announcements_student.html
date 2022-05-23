@@ -8,7 +8,7 @@
   <title>Announcements</title>
 </head>
 
-<body onload="LoadCourseName_notitle(); LoadCourseMenuLinksStudent(); LoadAnnouncements();">
+<body onload="LoadCourseName_notitle(); LoadMainMenuLinksStudent(); LoadCourseMenuLinksStudent(); LoadAnnouncements();">
 
 <div id="header">
   <h2 id="course_header"></h2>
@@ -18,11 +18,10 @@
 
    <div class="column" id="main_menu">
      <ul class="main_menu_items">
-       <li class="main_menu_items"><a href="[insert link]" class="main_menu_items">My Account</a></li>
-       <li class="main_menu_items"><a href="dashboard_student.html" class="main_menu_items">Dashboard</a></li>
-       <li class="selected_menu_item"><a href="dashboard_student.html" class="main_menu_items">Courses</a></li>
-       <li class="main_menu_items"><a href="[insert link]" class="main_menu_items">Settings</a></li>
-       <li class="main_menu_items"><a href="[insert link]" class="main_menu_items">Logout</a></li>
+       <li class="main_menu_items"><a class="main_menu_items" id="myaccount_link">My Account</a></li>
+       <li class="main_menu_items"><a class="main_menu_items" id="dashboard_link">Dashboard</a></li>
+       <li class="selected_menu_item"><a class="main_menu_items" id="courses_link">Courses</a></li>
+       <li class="main_menu_items"><a class="main_menu_items" id="logout_link">Logout</a></li>
      </ul>
    </div>
 
@@ -31,7 +30,7 @@
        <li class="course_menu_items"><a class="course_menu_items" id="course_homepage_link">Course Home</a></li>
        <li class="selected_course_menu_item"><a class="course_menu_items" id="announcements_link">Announcements</a></li>
        <li class="course_menu_items"><a class="course_menu_items" id="assignments_link">Assignments</a></li>
-       <li class="course_menu_items"><a href="[insert link]" class="course_menu_items">Grades</a></li>
+       <li class="course_menu_items"><a class="course_menu_items" id="grades_link">Grades</a></li>
      </ul>
   </div>
 
