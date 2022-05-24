@@ -19,12 +19,12 @@ INSERT INTO courses VALUES ("Machine Learning", "Chenhao", "This is the course d
 INSERT INTO courses VALUES ("Algorithms", "Gerry", "This is the course description for Algorithms", 35, 40);
 INSERT INTO courses VALUES ("Web Development 2", "Rafi", "This is the course description for Web Development 2", 8, 10);
 
-INSERT INTO courses_students VALUES ("Web Development", "anasof");
-INSERT INTO courses_students VALUES ("Web Development", "alex");
-INSERT INTO courses_students VALUES ("Web Development", "carly");
-INSERT INTO courses_students VALUES ("Machine Learning", "anasof");
-INSERT INTO courses_Students VALUES ("Machine Learning", "alex");
-INSERT INTO courses_students VALUES ("Algorithms", "anasof");
+INSERT INTO courses_students VALUES ("Web Development", "12345678");
+INSERT INTO courses_students VALUES ("Web Development", "12131981");
+INSERT INTO courses_students VALUES ("Web Development", "34567890");
+INSERT INTO courses_students VALUES ("Machine Learning", "12345678");
+INSERT INTO courses_Students VALUES ("Machine Learning", "12131981");
+INSERT INTO courses_students VALUES ("Algorithms", "12345678");
 
 INSERT INTO assignments VALUES ("Homework 1", "Web Development", "04/20/2022", 100, "This is the description for HW1");
 INSERT INTO assignments VALUES ("Homework 2", "Web Development", "05/17/2022", 100, "This is the description for HW2");
