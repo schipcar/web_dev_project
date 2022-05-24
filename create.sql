@@ -1,6 +1,6 @@
 /* Make tables */
 CREATE TABLE grades (email TEXT, name TEXT, punctuation INTEGER, possible INTEGER, course_name TEXT, PRIMARY KEY (email));
-CREATE TABLE users (name TEXT, email TEXT, user TEXT, role TEXT check(role='student' or role='teacher' or role='admin'), status TEXT check(status='active' or status='inactive'), password TEXT, sec_q1 TEXT, sec_q2 TEXT, sec_q3 TEXT, sec_a1 TEXT, sec_a2 TEXT, sec_a3 TEXT, PRIMARY KEY (user));
+CREATE TABLE users (name TEXT, email TEXT, user INTEGER, role TEXT check(role='student' or role='teacher' or role='admin'), status TEXT check(status='active' or status='inactive'), password TEXT, sec_q1 TEXT, sec_q2 TEXT, sec_q3 TEXT, sec_a1 TEXT, sec_a2 TEXT, sec_a3 TEXT, PRIMARY KEY (user));
 CREATE TABLE courses (name TEXT, teacher TEXT, description TEXT, enrolled INTEGER, capacity INTEGER, PRIMARY KEY (name));
 CREATE TABLE courses_students (course_name TEXT, user TEXT);
 CREATE TABLE assignments (assignment_name TEXT, course_name TEXT, due_date TEXT, points INTEGER, description TEXT, PRIMARY KEY (assignment_name, course_name));
@@ -9,10 +9,10 @@ CREATE TABLE announcements (subject TEXT, body TEXT, PRIMARY KEY (subject, body)
 
 
 /* Populate the tables with dummy data for testing */
-INSERT INTO users VALUES ("Ana Sofia", "anasof@uchicago.edu", "anasof", "student", "active", "mynameisanasof", "", "", "", "", "", "");
-INSERT INTO users VALUES ("Alex", "alex@uchicago.edu", "alex", "student", "active", "mynameisalex", "", "", "", "", "", "");
-INSERT INTO users VALUES ("Carly", "carly@uchicago.edu", "carly", "student", "active", "mynameiscarly", "", "", "", "", "", "");
-INSERT INTO users VALUES ("Rafi", "rafi@uchicago.edu", "rafi", "teacher", "active", "mynameisrafi", "", "", "", "", "", "");
+INSERT INTO users VALUES ("Ana Sofia", "anasof@uchicago.edu", "12345678", "student", "active", "mynameisanasof", "", "", "", "", "", "");
+INSERT INTO users VALUES ("Alex", "alex@uchicago.edu", "12131981", "student", "active", "mynameisalex", "", "", "", "", "", "");
+INSERT INTO users VALUES ("Carly", "carly@uchicago.edu", "34567890", "student", "active", "mynameiscarly", "", "", "", "", "", "");
+INSERT INTO users VALUES ("Rafi", "rafi@uchicago.edu", "00112233", "teacher", "active", "mynameisrafi", "", "", "", "", "", "");
 
 INSERT INTO courses VALUES ("Web Development", "Rafi", "This is the course description for Web Development", 40, 50);
 INSERT INTO courses VALUES ("Machine Learning", "Chenhao", "This is the course description for Machine Learning", 30, 30);

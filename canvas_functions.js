@@ -412,6 +412,18 @@ app.listen(8046, function() {
   console.log("server initialized");
 })
 
+app.post("/signup", function(req, response) {
+    password = req.query.password;
+    password = hash_pw(password);
+})
+app.listen(8047, function() {
+  console.log("server initialized");
+})
+
+/*function hash_pw(pw) {
+    let
+}*/
+
 function LoadCoursesStudent() {
   var url = document.location.href,
   params = url.split('?')
