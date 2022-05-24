@@ -201,6 +201,7 @@ var all_assignments_row_teacher
 var course_assignments_row;
 var all_courses;
 var all_users;
+var all_teachers;
 
 var db = new sqlite3.Database('./canvas.db', (err) => {
     if (err) {
@@ -413,11 +414,34 @@ app.listen(8046, function() {
 })
 
 app.post("/signup", function(req, response) {
+    name = req.query.name;
+    email = req.query.email;
+    id = req.query.id;
     password = req.query.password;
     password = hash_pw(password);
+    pw_confirm = req.query.password_confirm;
+    pw_confirm = hash_pw(pw_confirm);
+    account_type = req.query.account_type;
 })
 app.listen(8047, function() {
   console.log("server initialized");
+})
+
+app.get("/getallteachers", function(req, response) {
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      response.setHeader('Access-Control-Max-Age', 2592000);
+      response.setHeader('Content-Type', 'application/json');
+
+      db.all("SELECT * FROM users WHERE role = 'teacher'", function(err, row) {
+        all_teachers=row;
+        const jsonContent = JSON.stringify(all_teachers);
+        response.end(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8048, function () {
+    console.log("server initialized");
 })
 
 /*function hash_pw(pw) {
@@ -794,6 +818,21 @@ function revealForm() {
     addCourseButton.style.display = "none";
     form.style.display = "block";
     formButton.style.display = "inline";
+
+    let teach_datalist = document.getElementById("teachers_datalist");
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "http://localhost:8048/getallteachers", true);
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+             let teachers = JSON.parse(this.responseText);
+             for (let i=0; i<teachers.length; i++) {
+                 let newOption = document.createElement("option");
+                    newOption.value = teachers[i].name;
+                    teach_datalist.appendChild(newOption);
+             }
+         }
+     }
+     xhttp.send();
 }
 
 function addCourse() {

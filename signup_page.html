@@ -14,24 +14,23 @@
 
                 <form action="http://localhost:8047/signup">
                     <label for="signup_name">Name:</label>
-                        <input type="text" id="signup_name" name="Name"/><br/>
+                        <input type="text" id="signup_name" name="name"/><br/>
                     <label for="signup_email">Email:</label>
-                        <input type="text" id="signup_email" name="Email"/><br/>
+                        <input type="text" id="signup_email" name="email"/><br/>
                     <label for="signup_id">ID Number:</label>
-                        <input type="number" id="signup_id" name="ID"/><br/>
+                        <input type="number" id="signup_id" name="id"/><br/>
                     <label for="signup_pw">Password:</label>
-                        <input type="password" id="signup_pw" name="Password"/><br/>
+                        <input type="password" id="signup_pw" name="password"/><br/>
                     <label for="signup_confirm_pw">Confirm password:</label>
-                        <input type="password" id="signup_confirm_pw" name="Confirm Password"/><br/>
+                        <input type="password" id="signup_confirm_pw" name="password_confirm"/><br/>
                     <label for="signup_account_type">Account type:</label>
-                        <input list="account_type_datalist" id ="signup_account_type" name="Account Type"/><br/>
-                        <datalist id="account_type_datalist">
-                            <option value="Student"/>
-                            <option value="Teacher"/>
-                        </datalist>
+                        <select id="signup_account_type" name="account_type">
+                            <option value="Student">Student</option>
+                            <option value="Teacher">Teacher</option>
+                        </select><br/>
                     <label for="signup_security_q1">Security question 1:</label>
                         <!-- <input list="security_qs_list" id ="signup_security_q1" name="Security Q1"/><br/> -->
-                        <select id="signup_security_q1" name="Security Q1">
+                        <select id="signup_security_q1" name="sec_q1">
                             <option value="Pet">What was the name of your first pet?</option>
                             <option value="Ice cream">What was your favorite ice cream flavor as a child?</option>
                             <option value="Tooth">When did you lose your first baby tooth?</option>
@@ -40,10 +39,10 @@
                             <option value="Why">Why?</option>
                         </select><br/>
                     <label for="signup_answer_q1">Answer:</label>
-                        <input type="text" id="signup_answer_q1" name="Answer 1/"><br/>
+                        <input type="text" id="signup_answer_q1" name="sec_a1/"><br/>
                     <label for="signup_security_q2">Security question 2:</label>
                         <!-- <input list="security_qs_list" id ="signup_security_q2" name="Security Q2"/><br/> -->
-                        <select id="signup_security_q2" name="Security Q2">
+                        <select id="signup_security_q2" name="sec_q2">
                             <option value="Pet">What was the name of your first pet?</option>
                             <option value="Ice cream">What was your favorite ice cream flavor as a child?</option>
                             <option value="Tooth">When did you lose your first baby tooth?</option>
@@ -52,10 +51,10 @@
                             <option value="Why">Why?</option>
                         </select><br/>
                     <label for="signup_answer_q2">Answer:</label>
-                        <input type="text" id="signup_answer_q2" name="Answer 2/"><br/>
+                        <input type="text" id="signup_answer_q2" name="sec_a2/"><br/>
                     <label for="signup_security_q3">Security question 1:</label>
                         <!-- <input list="security_qs_list" id ="signup_security_q3" name="Security Q3"/><br/> -->
-                        <select id="signup_security_q3" name="Security Q3">
+                        <select id="signup_security_q3" name="sec_q3">
                             <option value="Pet">What was the name of your first pet?</option>
                             <option value="Ice cream">What was your favorite ice cream flavor as a child?</option>
                             <option value="Tooth">When did you lose your first baby tooth?</option>
@@ -63,8 +62,8 @@
                             <option value="Parent">Which parent is your favorite?</option>
                             <option value="Why">Why?</option>
                         </select><br/>
-                    <label for="signup_answer_q2">Answer:</label>
-                        <input type="text" id="signup_answer_q2" name="Answer 2/"><br/>
+                    <label for="signup_answer_q3">Answer:</label>
+                        <input type="text" id="signup_answer_q3" name="sec_a3/"><br/>
                         <!--
                             <datalist id="security_qs_list">
                                 <option value="What was the name of your first pet?"/>
