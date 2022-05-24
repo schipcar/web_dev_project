@@ -121,51 +121,6 @@ function add_submission_form() {
 
 }
 
-function revealForm() {
-    let addCourseButton = document.getElementById("add_course_button");
-    let form = document.getElementById("add_course_form");
-    let formButton = document.getElementById("submit_course");
-    addCourseButton.style.display = "none";
-    form.style.display = "block";
-    formButton.style.display = "inline";
-}
-
-function addCourse() {
-    let idInp = document.getElementById("course_id_input");
-        let id = idInp.value;
-        idInp.value = "";
-    let nameInp = document.getElementById("course_name_input");
-        let name = nameInp.value;
-        nameInp.value = "";
-    let descInp = document.getElementById("course_desc_input");
-        let desc = descInp.value;
-        descInp.value = "";
-    let capacityInp = document.getElementById("course_capacity_input");
-        let capacity = capacityInp.value;
-        capacityInp.value = "";
-    let teacherInp = document.getElementById("course_teacher_input");
-        let teacher = teacherInp.value;
-        teacherInp.value = "";
-    let tableValues = [id, name, desc, 0, capacity, teacher];
-
-    let courseTable = document.getElementById("all_courses_list");
-    let ctBody = courseTable.children[1];
-    let newRow = document.createElement("tr");
-    ctBody.appendChild(newRow);
-    for (i = 0; i < 6; i++) {
-        let newCell = document.createElement("td");
-        newCell.innerHTML = tableValues[i];
-        newRow.appendChild(newCell);
-    }
-
-    let addCourseButton = document.getElementById("add_course_button");
-    let form = document.getElementById("add_course_form");
-    let formButton = document.getElementById("submit_course");
-    addCourseButton.style.display = "inline";
-    form.style.display = "none";
-    formButton.style.display = "none";
-}
-
 function searchUsers() {
     let searchVal = document.getElementById("name_email_search").value.toLowerCase();
     let usersList = document.getElementById("users_list");
@@ -423,6 +378,7 @@ app.listen(8041, function () {
 
 app.post("/addcourseforuser", function(req, response){
     db.run('INSERT INTO courses_students(course_name, user) VALUES(?, ?)', [req.query.coursename, req.query.username]);
+    db.run('UPDATE courses SET enrolled = enrolled + 1 WHERE name = ?', [req.query.coursename]);
 })
 app.listen(8042, function() {
   console.log("server initialized");
@@ -446,6 +402,13 @@ app.post("/rejectuser", function(req, response){
     db.run('DELETE FROM users WHERE user = ?', [req.query.username]);
 })
 app.listen(8045, function() {
+  console.log("server initialized");
+})
+
+app.post("/addcourse", function(req, response){
+    db.run('INSERT INTO courses VALUES(?, ?, ?, ?, ?)', [req.query.name, req.query.teacher, req.query.desc, 0, req.query.capacity]);
+})
+app.listen(8046, function() {
   console.log("server initialized");
 })
 
@@ -791,7 +754,6 @@ function addCourseAdmin(course) {
     let newRow = document.createElement("tr");
     ctBody.appendChild(newRow);
 
-    addCourseAdminHelper(newRow, "00000");
     addCourseAdminHelper(newRow, course.name);
     addCourseAdminHelper(newRow, course.description);
     addCourseAdminHelper(newRow, course.enrolled);
@@ -811,6 +773,53 @@ function LoadCoursesAdmin() {
        }
    }
    xhttp.send();
+}
+
+function revealForm() {
+    let addCourseButton = document.getElementById("add_course_button");
+    let form = document.getElementById("add_course_form");
+    let formButton = document.getElementById("submit_course");
+    addCourseButton.style.display = "none";
+    form.style.display = "block";
+    formButton.style.display = "inline";
+}
+
+function addCourse() {
+    let nameInp = document.getElementById("course_name_input");
+        let name = nameInp.value;
+        nameInp.value = "";
+    let descInp = document.getElementById("course_desc_input");
+        let desc = descInp.value;
+        descInp.value = "";
+    let capacityInp = document.getElementById("course_capacity_input");
+        let capacity = capacityInp.value;
+        capacityInp.value = "";
+    let teacherInp = document.getElementById("course_teacher_input");
+        let teacher = teacherInp.value;
+        teacherInp.value = "";
+
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8046/addcourse?name=" + name + "&teacher=" + teacher + "&desc=" + desc + "&capacity=" + capacity, true);
+    xhttp.send();
+
+    let courseTable = document.getElementById("all_courses_list");
+    let ctBody = courseTable.children[1];
+    let newRow = document.createElement("tr");
+    ctBody.appendChild(newRow);
+
+    let tableValues = [name, desc, 0, capacity, teacher];
+    for (i = 0; i < tableValues.length; i++) {
+        let newCell = document.createElement("td");
+        newCell.innerHTML = tableValues[i];
+        newRow.appendChild(newCell);
+    }
+
+    let addCourseButton = document.getElementById("add_course_button");
+    let form = document.getElementById("add_course_form");
+    let formButton = document.getElementById("submit_course");
+    addCourseButton.style.display = "inline";
+    form.style.display = "none";
+    formButton.style.display = "none";
 }
 
 function addSpecificClass(username, coursename, oldCoursesUl) {
