@@ -181,7 +181,124 @@ function toggleUserDisplay(activityState) {
     }
 }
 
+function validateEmail() {
+    let form = document.getElementById("signup_form");
+    let email = document.getElementById("signup_email").value;
+    let email_br = document.getElementById("email_br");
 
+    if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+        if (document.getElementById("email_warning") == null) {
+            let newp = document.createElement("p");
+            newp.innerHTML = "Invalid email";
+            newp.id = "email_warning";
+            form.insertBefore(newp, email_br);
+            email_br.style.display = "none";
+        }
+    }
+    else {
+        let oldp = document.getElementById("email_warning");
+        if (oldp != null) {
+            oldp.remove();
+            email_br.style.display = "block";
+        }
+    }
+}
+
+function validateID() {
+    let form = document.getElementById("signup_form");
+    let id = document.getElementById("signup_id").value;
+    let id_br = document.getElementById("id_br");
+
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "http://localhost:8049/getallids", true);
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let ids = JSON.parse(this.responseText);
+            let duplicate = false;
+            for (i = 0; i < ids.length; i++) {
+                if (id == ids[i].user) {
+                    duplicate = true;
+                }
+            }
+            if (duplicate) {
+                if (document.getElementById("id_warning") == null) {
+                    let newp = document.createElement("p");
+                    newp.innerHTML = "This ID is already associated with an account";
+                    newp.id = "id_warning";
+                    form.insertBefore(newp, id_br);
+                    id_br.style.display = "none";
+                }
+            }
+            else {
+                let oldp = document.getElementById("id_warning");
+                if (oldp != null) {
+                    oldp.remove();
+                    id_br.style.display = "block";
+                }
+            }
+         }
+     }
+     xhttp.send();
+}
+
+function validatePassword() {
+    let form = document.getElementById("signup_form");
+    let password = document.getElementById("signup_pw").value;
+    let pw_br = document.getElementById("pw_br");
+
+    let hasNumber = false;
+    let hasSymbol = false;
+    for (i = 0; i < password.length; i++) {
+        let asciival = password.charCodeAt(i);
+        if (asciival >= 48 && asciival <= 57) {
+            hasNumber = true;
+        }
+        else if ((asciival >= 33 && asciival <= 47) || (asciival >= 58 && asciival <= 64)
+                  || (asciival >= 91 && asciival <= 96) || (asciival >= 123 && asciival <= 126)) {
+            hasSymbol = true;
+        }
+    }
+    if (password.length < 5 || !hasNumber || !hasSymbol) {
+        if (document.getElementById("pw_warning") == null) {
+            let newp = document.createElement("p");
+            newp.innerHTML = "Password must be at least 5 characters long and contain at least 1 number and 1 symbol";
+            newp.id = "pw_warning";
+            form.insertBefore(newp, pw_br);
+            pw_br.style.display = "none";
+        }
+    }
+    else {
+        let oldp = document.getElementById("pw_warning");
+        if (oldp != null) {
+            oldp.remove();
+            pw_br.style.display = "block";
+        }
+    }
+}
+
+function confirmPassword() {
+    let form = document.getElementById("signup_form");
+    let pw = document.getElementById("signup_pw").value;
+    let conf_pw = document.getElementById("signup_confirm_pw").value;
+    let conf_pw_br = document.getElementById("conf_pw_br");
+
+    if (pw != conf_pw) {
+        if (document.getElementById("conf_pw_warning") == null) {
+            let newp = document.createElement("p");
+            newp.innerHTML = "Passwords do not match";
+            newp.id = "conf_pw_warning";
+            form.insertBefore(newp, conf_pw_br);
+            conf_pw_br.style.display = "none";
+        }
+    }
+    else {
+        let oldp = document.getElementById("conf_pw_warning");
+        if (oldp != null) {
+            oldp.remove();
+            conf_pw_br.style.display = "block";
+        }
+    }
+}
 
 var sqlite3 = require('sqlite3').verbose();
 var http = require('http');
@@ -202,6 +319,7 @@ var course_assignments_row;
 var all_courses;
 var all_users;
 var all_teachers;
+var all_ids;
 
 var db = new sqlite3.Database('./canvas.db', (err) => {
     if (err) {
@@ -379,7 +497,9 @@ app.listen(8041, function () {
 
 app.post("/addcourseforuser", function(req, response){
     db.run('INSERT INTO courses_students(course_name, user) VALUES(?, ?)', [req.query.coursename, req.query.username]);
-    db.run('UPDATE courses SET enrolled = enrolled + 1 WHERE name = ?', [req.query.coursename]);
+    if (req.query.role == 'student') {
+        db.run('UPDATE courses SET enrolled = enrolled + 1 WHERE name = ?', [req.query.coursename]);
+    }
 })
 app.listen(8042, function() {
   console.log("server initialized");
@@ -414,14 +534,44 @@ app.listen(8046, function() {
 })
 
 app.post("/signup", function(req, response) {
-    name = req.query.name;
-    email = req.query.email;
-    id = req.query.id;
-    password = req.query.password;
-    password = hash_pw(password);
-    pw_confirm = req.query.password_confirm;
-    pw_confirm = hash_pw(pw_confirm);
-    account_type = req.query.account_type;
+    /*let name = req.query.name;
+
+    let email = req.query.email;
+    if (!email.value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+        //reject - email not valid
+    }
+
+    let id = req.query.id;
+
+    let password = req.query.password;
+    let hasNumber = false;
+    let hasSymbol = false;
+    for (i = 0; i < password.length; i++) {
+        let asciival = password.charCodeAt(i)
+        if (asciival >= 48 && asciival <= 57) {
+            hasNumber = true;
+        }
+        else if ((asciival >= 33 && asciival <= 47) || (asciival >= 58 && asciival <= 64)
+                  || (asciival >= 91 && asciival <= 96) || (asciival >= 123 && asciival <= 126)) {
+            hasSymbol = true;
+        }
+    }
+    if (password.length < 5) {
+        //reject - password too short
+    }
+    else if (!hasNumber) {
+        //reject - password needs number
+    }
+    else if (!hasSymbol) {
+        //reject - password needs symbol
+    }
+
+    let pw_confirm = req.query.password_confirm;
+    if (password != pw_confirm) {
+        //reject - passwords not equal
+    }
+
+    let account_type = req.query.account_type;*/
 })
 app.listen(8047, function() {
   console.log("server initialized");
@@ -444,9 +594,22 @@ app.listen(8048, function () {
     console.log("server initialized");
 })
 
-/*function hash_pw(pw) {
-    let
-}*/
+app.get("/getallids", function(req, response) {
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      response.setHeader('Access-Control-Max-Age', 2592000);
+      response.setHeader('Content-Type', 'application/json');
+
+      db.all("SELECT user FROM users", function(err, row) {
+        all_ids=row;
+        const jsonContent = JSON.stringify(all_ids);
+        response.end(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8049, function () {
+    console.log("server initialized");
+})
 
 function LoadCoursesStudent() {
   var url = document.location.href,
@@ -873,9 +1036,9 @@ function addCourse() {
     formButton.style.display = "none";
 }
 
-function addSpecificClass(username, coursename, oldCoursesUl) {
+function addSpecificClass(user, coursename, oldCoursesUl) {
     let xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://localhost:8042/addcourseforuser?username=" + username + "&coursename=" + coursename, true);
+    xhttp.open("POST", "http://localhost:8042/addcourseforuser?username=" + user.user + "&coursename=" + coursename + "&role=" + user.role, true);
     xhttp.send();
 
     let newCourseLi = document.createElement("li");
@@ -900,7 +1063,7 @@ function addClassForUser(user, newCoursesUl, oldCoursesUl) {
                 let addClassButton = document.createElement("button");
                 addClassButton.classList.add("add_specific_class_button");
                 addClassButton.innerHTML = "Add";
-                addClassButton.addEventListener("click", function() {addSpecificClass(user.user, courses[i].name, oldCoursesUl);});
+                addClassButton.addEventListener("click", function() {addSpecificClass(user, courses[i].name, oldCoursesUl);});
                 newCourse.appendChild(addClassButton);
             }
          }

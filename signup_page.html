@@ -12,22 +12,22 @@
             <center>
                 <h1>Sign Up for CAAnvas</h1>
 
-                <form action="http://localhost:8047/signup">
+                <form id="signup_form" action="http://localhost:8047/signup">
                     <label for="signup_name">Name:</label>
                         <input type="text" id="signup_name" name="name"/><br/>
                     <label for="signup_email">Email:</label>
-                        <input type="text" id="signup_email" name="email"/><br/>
+                        <input type="text" id="signup_email" name="email" onkeyup="validateEmail()"/><br id="email_br"/>
                     <label for="signup_id">ID Number:</label>
-                        <input type="number" id="signup_id" name="id"/><br/>
+                        <input type="number" id="signup_id" name="id" onkeyup="validateID()"/><br id="id_br"/>
                     <label for="signup_pw">Password:</label>
-                        <input type="password" id="signup_pw" name="password"/><br/>
+                        <input type="password" id="signup_pw" name="password" onkeyup="validatePassword()"/><br id="pw_br"/>
                     <label for="signup_confirm_pw">Confirm password:</label>
-                        <input type="password" id="signup_confirm_pw" name="password_confirm"/><br/>
+                        <input type="password" id="signup_confirm_pw" name="password_confirm" onkeyup="confirmPassword()"/><br id="conf_pw_br"/>
                     <label for="signup_account_type">Account type:</label>
                         <select id="signup_account_type" name="account_type">
                             <option value="Student">Student</option>
                             <option value="Teacher">Teacher</option>
-                        </select><br/>
+                        </select><br/><br/><br/>
                     <label for="signup_security_q1">Security question 1:</label>
                         <!-- <input list="security_qs_list" id ="signup_security_q1" name="Security Q1"/><br/> -->
                         <select id="signup_security_q1" name="sec_q1">

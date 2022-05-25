@@ -278,6 +278,13 @@ label {
     margin-left: 5px;
 }
 
+p {
+    background-color: gray;
+    font-size: 11px;
+    font-style: italic;
+    margin: 0px;
+}
+
 input, textarea, select {
     margin: 3px;
     background-color: gainsboro;
