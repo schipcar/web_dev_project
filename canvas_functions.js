@@ -52,7 +52,6 @@ function add_announcement_onclick() {
     text_box = document.getElementById("body")
     
     let xhttp = new XMLHttpRequest();
-    document.getElementById('main_panel').innerHTML += subject_box.value
     xhttp.open("POST", "http://localhost:8010/putannouncement?course_name=" + data.course_name + "&subject=" + subject_box.value + "&body=" + text_box.value, true);
     xhttp.send();
 }
