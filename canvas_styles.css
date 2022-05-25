@@ -278,7 +278,7 @@ label {
     margin-left: 5px;
 }
 
-p {
+.signup_warning {
     background-color: gray;
     font-size: 11px;
     font-style: italic;

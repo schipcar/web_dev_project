@@ -181,6 +181,70 @@ function toggleUserDisplay(activityState) {
     }
 }
 
+function validateForm() {
+    let form = document.getElementById("signup_form");
+    let submit = document.getElementById("signup_submit")
+
+    let sec_q1 = document.getElementById("signup_security_q1").value;
+    let sec_q2 = document.getElementById("signup_security_q2").value;
+    let sec_q3 = document.getElementById("signup_security_q3").value;
+
+    allFilled = true;
+    for (i = 0; i < form.children.length; i++) {
+        el = form.children[i];
+        if (el.tagName.toLowerCase() == "input") {
+            if (el.value == "") {
+                allFilled = false;
+                break;
+            }
+        }
+    }
+
+    if (allFilled == false) {
+        if (document.getElementById("unfilled_warning") == null) {
+            let newp = document.createElement("p");
+            newp.classList.add("signup_warning");
+            newp.innerHTML = "All fields must be filled";
+            newp.id = "unfilled_warning";
+            form.insertBefore(newp, submit);
+        }
+    }
+    else {
+        let oldp = document.getElementById("unfilled_warning");
+        if (oldp != null) {
+            oldp.remove();
+        }
+    }
+
+    let sameqs = sec_q1 == sec_q2 || sec_q1 == sec_q3 || sec_q2 == sec_q3;
+    if (sameqs) {
+        if (document.getElementById("same_qs_warning") == null) {
+            let newp = document.createElement("p");
+            newp.classList.add("signup_warning");
+            newp.innerHTML = "Security questions must be unique";
+            newp.id = "same_qs_warning";
+            form.insertBefore(newp, submit);
+        }
+    }
+    else {
+        let oldp = document.getElementById("same_qs_warning");
+        if (oldp != null) {
+            oldp.remove();
+        }
+    }
+
+    let allElseValid = document.getElementById("email_warning") == null
+                        && document.getElementById("id_warning") == null
+                        && document.getElementById("pw_warning") == null
+                        && document.getElementById("conf_pw_warning") == null;
+    if (allFilled && !sameqs && allElseValid) {
+        submit.style.display = "block";
+    }
+    else {
+        submit.style.display = "none";
+    }
+}
+
 function validateEmail() {
     let form = document.getElementById("signup_form");
     let email = document.getElementById("signup_email").value;
@@ -189,6 +253,7 @@ function validateEmail() {
     if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
         if (document.getElementById("email_warning") == null) {
             let newp = document.createElement("p");
+            newp.classList.add("signup_warning");
             newp.innerHTML = "Invalid email";
             newp.id = "email_warning";
             form.insertBefore(newp, email_br);
@@ -223,6 +288,7 @@ function validateID() {
             if (duplicate) {
                 if (document.getElementById("id_warning") == null) {
                     let newp = document.createElement("p");
+                    newp.classList.add("signup_warning");
                     newp.innerHTML = "This ID is already associated with an account";
                     newp.id = "id_warning";
                     form.insertBefore(newp, id_br);
@@ -261,6 +327,7 @@ function validatePassword() {
     if (password.length < 5 || !hasNumber || !hasSymbol) {
         if (document.getElementById("pw_warning") == null) {
             let newp = document.createElement("p");
+            newp.classList.add("signup_warning");
             newp.innerHTML = "Password must be at least 5 characters long and contain at least 1 number and 1 symbol";
             newp.id = "pw_warning";
             form.insertBefore(newp, pw_br);
@@ -285,6 +352,7 @@ function confirmPassword() {
     if (pw != conf_pw) {
         if (document.getElementById("conf_pw_warning") == null) {
             let newp = document.createElement("p");
+            newp.classList.add("signup_warning");
             newp.innerHTML = "Passwords do not match";
             newp.id = "conf_pw_warning";
             form.insertBefore(newp, conf_pw_br);
@@ -298,6 +366,16 @@ function confirmPassword() {
             conf_pw_br.style.display = "block";
         }
     }
+}
+
+function submitSignup() {
+    let name = document.getElementById("name");
+
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8047/signup?name=" + name + "&email=" + email + "&id=" + id
+                + "&password=" + password + "&account_type=" + account_type + "&sec_q1=" + sec_q1 + "&sec_a1=" + sec_a1
+                + "&sec_q2=" + sec_q2 + "&sec_a2=" + sec_a2 + "&sec_q3=" + sec_q3 + "&sec_a3=" + sec_a3, true);
+    xhttp.send();
 }
 
 var sqlite3 = require('sqlite3').verbose();
@@ -527,51 +605,17 @@ app.listen(8045, function() {
 })
 
 app.post("/addcourse", function(req, response){
-    db.run('INSERT INTO courses VALUES(?, ?, ?, ?, ?)', [req.query.name, req.query.teacher, req.query.desc, 0, req.query.capacity]);
+    db.run('INSERT INTO courses VALUES(?, ?, ?, ?, ?)', [req.query.name, req.query.teacher, req.query.desc, 0,
+            req.query.capacity]);
 })
 app.listen(8046, function() {
   console.log("server initialized");
 })
 
 app.post("/signup", function(req, response) {
-    /*let name = req.query.name;
-
-    let email = req.query.email;
-    if (!email.value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
-        //reject - email not valid
-    }
-
-    let id = req.query.id;
-
-    let password = req.query.password;
-    let hasNumber = false;
-    let hasSymbol = false;
-    for (i = 0; i < password.length; i++) {
-        let asciival = password.charCodeAt(i)
-        if (asciival >= 48 && asciival <= 57) {
-            hasNumber = true;
-        }
-        else if ((asciival >= 33 && asciival <= 47) || (asciival >= 58 && asciival <= 64)
-                  || (asciival >= 91 && asciival <= 96) || (asciival >= 123 && asciival <= 126)) {
-            hasSymbol = true;
-        }
-    }
-    if (password.length < 5) {
-        //reject - password too short
-    }
-    else if (!hasNumber) {
-        //reject - password needs number
-    }
-    else if (!hasSymbol) {
-        //reject - password needs symbol
-    }
-
-    let pw_confirm = req.query.password_confirm;
-    if (password != pw_confirm) {
-        //reject - passwords not equal
-    }
-
-    let account_type = req.query.account_type;*/
+    db.run('INSERT INTO users VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [req.query.name, req.query.email,
+            req.query.id, req.query.password, req.query.account_type, "inactive", req.query.sec_q1, req.query.sec_q2,
+            req.query.sec_q3, req.query.sec_a1, req.query.sec_a2, req.query.sec_a3]);
 })
 app.listen(8047, function() {
   console.log("server initialized");

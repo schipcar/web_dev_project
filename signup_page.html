@@ -7,12 +7,12 @@
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>Signup</title>
     </head>
-    <body>
+    <body onload="validateForm()">
         <div>
             <center>
                 <h1>Sign Up for CAAnvas</h1>
 
-                <form id="signup_form" action="http://localhost:8047/signup">
+                <form id="signup_form" action="http://localhost:8047/signup" method="post" onchange="validateForm()">
                     <label for="signup_name">Name:</label>
                         <input type="text" id="signup_name" name="name"/><br/>
                     <label for="signup_email">Email:</label>
@@ -29,7 +29,6 @@
                             <option value="Teacher">Teacher</option>
                         </select><br/><br/><br/>
                     <label for="signup_security_q1">Security question 1:</label>
-                        <!-- <input list="security_qs_list" id ="signup_security_q1" name="Security Q1"/><br/> -->
                         <select id="signup_security_q1" name="sec_q1">
                             <option value="Pet">What was the name of your first pet?</option>
                             <option value="Ice cream">What was your favorite ice cream flavor as a child?</option>
@@ -41,7 +40,6 @@
                     <label for="signup_answer_q1">Answer:</label>
                         <input type="text" id="signup_answer_q1" name="sec_a1/"><br/>
                     <label for="signup_security_q2">Security question 2:</label>
-                        <!-- <input list="security_qs_list" id ="signup_security_q2" name="Security Q2"/><br/> -->
                         <select id="signup_security_q2" name="sec_q2">
                             <option value="Pet">What was the name of your first pet?</option>
                             <option value="Ice cream">What was your favorite ice cream flavor as a child?</option>
@@ -52,8 +50,7 @@
                         </select><br/>
                     <label for="signup_answer_q2">Answer:</label>
                         <input type="text" id="signup_answer_q2" name="sec_a2/"><br/>
-                    <label for="signup_security_q3">Security question 1:</label>
-                        <!-- <input list="security_qs_list" id ="signup_security_q3" name="Security Q3"/><br/> -->
+                    <label for="signup_security_q3">Security question 3:</label>
                         <select id="signup_security_q3" name="sec_q3">
                             <option value="Pet">What was the name of your first pet?</option>
                             <option value="Ice cream">What was your favorite ice cream flavor as a child?</option>
@@ -64,16 +61,7 @@
                         </select><br/>
                     <label for="signup_answer_q3">Answer:</label>
                         <input type="text" id="signup_answer_q3" name="sec_a3/"><br/>
-                        <!--
-                            <datalist id="security_qs_list">
-                                <option value="What was the name of your first pet?"/>
-                                <option value="What was your favorite ice cream flavor as a child?"/>
-                                <option value="When did you lose your first baby tooth?"/>
-                                <option value="What was your favorite song in middle school?"/>
-                                <option value="Which parent is your favorite?"/>
-                                <option value="Why?"/>
-                            </datalist> -->
-                    <input type="submit" value="Sign Up">
+                    <button id="signup_submit" onclick="submitSignup">Sign Up</button>
                 </form>
             </center>
         </div>
