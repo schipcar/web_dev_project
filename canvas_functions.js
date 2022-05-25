@@ -1,6 +1,6 @@
 function add_announcement_form() {
 
-    div = document.createElement("div");
+    div = document.createElement("form");
     div.className = 'announcement_form';
     div.id = 'announcement_form_div';
 
@@ -35,7 +35,6 @@ function add_announcement_form() {
     div.appendChild(linebreak);
     div.appendChild(submit_button);
     document.getElementById('main_panel').appendChild(div);
-
 }
 
 
@@ -610,6 +609,15 @@ app.get("/getallids", function(req, response) {
 app.listen(8049, function () {
     console.log("server initialized");
 })
+
+app.post('/putannouncement', function(req, res) {
+  db.run('INSERT INTO announcements VALUES (?, ?)', [req.body.subject, req.body.body]);
+  db.run('INSERT INTO courses_announcements VALUES (?, ?)', [req.query.course_name, req.body.subject]);
+});
+app.listen(8010, function() {
+  console.log("server initialized");
+})
+
 
 function LoadCoursesStudent() {
   var url = document.location.href,
