@@ -46,7 +46,6 @@ function add_announcement_form() {
 }
 
 function add_announcement_onclick() {
-    document.getElementById('main_panel').innerHTML += 'test'
     data = get_url_params()
     
     subject_box = document.getElementById("subject")
@@ -55,6 +54,7 @@ function add_announcement_onclick() {
     let xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://localhost:8010/putannouncement?course_name=" + data.course_name + "&subject=" + subject_box.value + "&body=" + text_box.value, true);
     xhttp.send();
+    document.getElementById('main_panel').innerHTML += 'test'
 }
 
 
