@@ -23,12 +23,10 @@ function add_announcement_form() {
     subject_box.setAttribute("type", "text");
     text_box.rows = '4';
     
-    div.action = "http://localhost:8010/putannouncement?user=" + data.user
-    div.method = "post"
-
-    submit_button = document.createElement("button");
-    submit_button.innerHTML = 'Submit';
-    submit_button.addEventListener("click", function() {
+    submit_button = document.createElement("input")
+    submit_button.type = "submit"
+    submit_button.value = "Submit"
+    submit_button.onclick = function() {
         document.getElementById('announcement_form_div').remove();
     })
 
