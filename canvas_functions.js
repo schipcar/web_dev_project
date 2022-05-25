@@ -1,4 +1,5 @@
 function add_announcement_form() {
+    data = get_url_params()
 
     div = document.createElement("form");
     div.className = 'announcement_form';
@@ -18,6 +19,9 @@ function add_announcement_form() {
 
     subject_box.setAttribute("type", "text");
     text_box.rows = '4';
+    
+    div.action = "http://localhost:8010/putannouncement?user=" + data.user
+    div.method = "post"
 
     submit_button = document.createElement("button");
     submit_button.innerHTML = 'Submit';
