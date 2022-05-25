@@ -12,7 +12,7 @@
             <center>
                 <h1>Sign Up for CAAnvas</h1>
 
-                <form id="signup_form" action="http://localhost:8047/signup" method="post" onchange="validateForm()">
+                <form id="signup_form" onchange="validateForm()">
                     <label for="signup_name">Name:</label>
                         <input type="text" id="signup_name" name="name"/><br/>
                     <label for="signup_email">Email:</label>
@@ -61,8 +61,8 @@
                         </select><br/>
                     <label for="signup_answer_q3">Answer:</label>
                         <input type="text" id="signup_answer_q3" name="sec_a3/"><br/>
-                    <button id="signup_submit" onclick="submitSignup">Sign Up</button>
                 </form>
+                <button id="signup_submit" onclick="submitSignup()">Sign Up</button>
             </center>
         </div>
     </body>

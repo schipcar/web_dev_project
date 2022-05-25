@@ -17,14 +17,14 @@ function add_announcement_form() {
     subject_box.className = 'announcement_form';
     subject_box.name = 'subject'
     subject_box.id = 'subject'
-    
+
     text_box.className = 'announcement_form';
     text_box.name = 'body'
     text_box.id = 'body'
 
     subject_box.setAttribute("type", "text");
     text_box.rows = '4';
-    
+
     submit_button = document.createElement("input")
     submit_button.type = "submit"
     submit_button.value = "Submit"
@@ -47,10 +47,10 @@ function add_announcement_form() {
 
 function add_announcement_onclick() {
     data = get_url_params()
-    
+
     subject_box = document.getElementById("subject")
     text_box = document.getElementById("body")
-    
+
     let xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://localhost:8010/putannouncement?course_name=" + data.course_name + "&subject=" + subject_box.value + "&body=" + text_box.value, true);
     xhttp.send();
@@ -82,12 +82,12 @@ function add_assignment_form() {
     duedate_box.className = 'announcement_form';
     points_box.className = 'announcement_form';
     description_box.className = 'announcement_form';
-    
+
     name_box.name = "assignment_name"
     duedate_box.name = "duedate"
     points_box.name = "points"
     description_box.name = "description"
-    
+
     name_box.id = "assignment_name"
     duedate_box.id = "duedate"
     points_box.id = "points"
@@ -126,12 +126,12 @@ function add_assignment_form() {
 
 function add_assignment_onclick() {
     data = get_url_params()
-    
+
     name_box = document.getElementById("assignment_name")
     duedate_box = document.getElementById("duedate")
     points_box = document.getElementById("points")
     description_box = document.getElementById("description")
-    
+
     let xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://localhost:8020/putassignment?course_name=" + data.course_name + "&assignment_name=" + name_box.value + "&duedate=" + duedate_box.value + "&points=" + points_box.value + "&description=" + description_box.value, true);
     xhttp.send();
@@ -248,7 +248,7 @@ function validateForm() {
             newp.classList.add("signup_warning");
             newp.innerHTML = "All fields must be filled";
             newp.id = "unfilled_warning";
-            form.insertBefore(newp, submit);
+            form.appendChild(newp);
         }
     }
     else {
@@ -265,7 +265,7 @@ function validateForm() {
             newp.classList.add("signup_warning");
             newp.innerHTML = "Security questions must be unique";
             newp.id = "same_qs_warning";
-            form.insertBefore(newp, submit);
+            form.appendChild(newp);
         }
     }
     else {
@@ -411,13 +411,25 @@ function confirmPassword() {
 }
 
 function submitSignup() {
-    let name = document.getElementById("name");
+    let name = document.getElementById("signup_name").value;
+    let email = document.getElementById("signup_email").value;
+    let id = document.getElementById("signup_id").value;
+    let password = document.getElementById("signup_pw").value;
+    let account_type = document.getElementById("signup_account_type").value.toLowerCase();
+    let sec_q1 = document.getElementById("signup_security_q1").value;
+    let sec_a1 = document.getElementById("signup_answer_q1").value;
+    let sec_q2 = document.getElementById("signup_security_q2").value;
+    let sec_a2 = document.getElementById("signup_answer_q2").value;
+    let sec_q3 = document.getElementById("signup_security_q3").value;
+    let sec_a3 = document.getElementById("signup_answer_q3").value;
 
     let xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://localhost:8047/signup?name=" + name + "&email=" + email + "&id=" + id
                 + "&password=" + password + "&account_type=" + account_type + "&sec_q1=" + sec_q1 + "&sec_a1=" + sec_a1
                 + "&sec_q2=" + sec_q2 + "&sec_a2=" + sec_a2 + "&sec_q3=" + sec_q3 + "&sec_a3=" + sec_a3, true);
     xhttp.send();
+
+    location.href="login_page.html";
 }
 
 var sqlite3 = require('sqlite3').verbose();
@@ -655,8 +667,19 @@ app.listen(8046, function() {
 })
 
 app.post("/signup", function(req, response) {
+    console.log(req.query.name);
+    console.log(req.query.email);
+    console.log(req.query.id);
+    console.log(req.query.password);
+    console.log(req.query.account_type);
+    console.log(req.query.sec_q1);
+    console.log(req.query.sec_a1);
+    console.log(req.query.sec_q2);
+    console.log(req.query.sec_a2);
+    console.log(req.query.sec_q3);
+    console.log(req.query.sec_a3);
     db.run('INSERT INTO users VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [req.query.name, req.query.email,
-            req.query.id, req.query.password, req.query.account_type, "inactive", req.query.sec_q1, req.query.sec_q2,
+            req.query.id, req.query.account_type, "inactive", req.query.password, req.query.sec_q1, req.query.sec_q2,
             req.query.sec_q3, req.query.sec_a1, req.query.sec_a2, req.query.sec_a3]);
 })
 app.listen(8047, function() {
@@ -797,7 +820,7 @@ function AddAnnouncement(announcement, i) {
     new_heading = document.createElement("H4")
     new_heading.className = "announcement_title"
     new_heading.appendChild(document.createTextNode(announcement["subject"]))
-    
+
     new_text = document.createElement("p")
     new_text.appendChild(document.createTextNode(announcement["body"]))
 
