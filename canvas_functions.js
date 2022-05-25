@@ -26,8 +26,9 @@ function add_announcement_form() {
     submit_button = document.createElement("input")
     submit_button.type = "submit"
     submit_button.value = "Submit"
-    submit_button.onclick = function() {
+    submit_button.onclick = function(subject_box, text_box) {
         document.getElementById('announcement_form_div').remove();
+        add_announcement_onclick(subject_box, text_box)
     }
 
     linebreak = document.createElement("br");
@@ -40,6 +41,10 @@ function add_announcement_form() {
     div.appendChild(linebreak);
     div.appendChild(submit_button);
     document.getElementById('main_panel').appendChild(div);
+}
+
+function add_announcement_onclick(subject_box, text_box) {
+    data = get_url_params()
     
     let xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://localhost:8010/putannouncement?course_name=" + data.course_name + "&subject=" + subject_box.value + "&body=" + text_box.value, true);
