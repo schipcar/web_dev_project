@@ -1,6 +1,7 @@
 function add_announcement_form() {
+    data = get_url_params()
 
-    div = document.createElement("div");
+    div = document.createElement("form");
     div.className = 'announcement_form';
     div.id = 'announcement_form_div';
 
@@ -14,16 +15,23 @@ function add_announcement_form() {
     text_box = document.createElement("textarea");
 
     subject_box.className = 'announcement_form';
+    subject_box.name = 'subject'
+    subject_box.id = 'subject'
+    
     text_box.className = 'announcement_form';
+    text_box.name = 'body'
+    text_box.id = 'body'
 
     subject_box.setAttribute("type", "text");
     text_box.rows = '4';
-
-    submit_button = document.createElement("button");
-    submit_button.innerHTML = 'Submit';
-    submit_button.addEventListener("click", function() {
+    
+    submit_button = document.createElement("input")
+    submit_button.type = "submit"
+    submit_button.value = "Submit"
+    submit_button.onclick = function() {
+        add_announcement_onclick()
         document.getElementById('announcement_form_div').remove();
-    })
+    }
 
     linebreak = document.createElement("br");
 
@@ -35,13 +43,23 @@ function add_announcement_form() {
     div.appendChild(linebreak);
     div.appendChild(submit_button);
     document.getElementById('main_panel').appendChild(div);
+}
 
+function add_announcement_onclick() {
+    data = get_url_params()
+    
+    subject_box = document.getElementById("subject")
+    text_box = document.getElementById("body")
+    
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8010/putannouncement?course_name=" + data.course_name + "&subject=" + subject_box.value + "&body=" + text_box.value, true);
+    xhttp.send();
 }
 
 
 function add_assignment_form() {
 
-    div = document.createElement("div");
+    div = document.createElement("form");
     div.className = 'assignment_form';
     div.id = 'assignment_form_div';
 
@@ -64,17 +82,29 @@ function add_assignment_form() {
     duedate_box.className = 'announcement_form';
     points_box.className = 'announcement_form';
     description_box.className = 'announcement_form';
+    
+    name_box.name = "assignment_name"
+    duedate_box.name = "duedate"
+    points_box.name = "points"
+    description_box.name = "description"
+    
+    name_box.id = "assignment_name"
+    duedate_box.id = "duedate"
+    points_box.id = "points"
+    description_box.id = "description"
 
     name_box.setAttribute("type", "text");
     duedate_box.setAttribute("type", "text");
     points_box.setAttribute("type", "text");
     description_box.rows = '4';
 
-    submit_button = document.createElement("button");
-    submit_button.innerHTML = 'Submit';
-    submit_button.addEventListener("click", function() {
+    submit_button = document.createElement("input")
+    submit_button.type = "submit"
+    submit_button.value = "Submit"
+    submit_button.onclick = function() {
+        add_assignment_onclick()
         document.getElementById('assignment_form_div').remove();
-    })
+    }
 
     linebreak = document.createElement("br");
 
@@ -92,7 +122,19 @@ function add_assignment_form() {
     div.appendChild(linebreak);
     div.appendChild(submit_button);
     document.getElementById('main_panel').appendChild(div);
+}
 
+function add_assignment_onclick() {
+    data = get_url_params()
+    
+    name_box = document.getElementById("assignment_name")
+    duedate_box = document.getElementById("duedate")
+    points_box = document.getElementById("points")
+    description_box = document.getElementById("description")
+    
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8020/putassignment?course_name=" + data.course_name + "&assignment_name=" + name_box.value + "&duedate=" + duedate_box.value + "&points=" + points_box.value + "&description=" + description_box.value, true);
+    xhttp.send();
 }
 
 
@@ -655,6 +697,22 @@ app.listen(8049, function () {
     console.log("server initialized");
 })
 
+app.post('/putannouncement', function(req, res) {
+  db.run('INSERT INTO announcements VALUES (?, ?)', [req.query.subject, req.query.body]);
+  db.run('INSERT INTO courses_announcements VALUES (?, ?)', [req.query.course_name, req.query.subject]);
+});
+app.listen(8010, function() {
+  console.log("server initialized");
+})
+
+app.post('/putassignment', function(req, res) {
+  db.run('INSERT INTO assignments VALUES (?, ?, ?, ?, ?)', [req.query.assignment_name, req.query.course_name, req.query.duedate, req.query.points, req.query.description]);
+});
+app.listen(8020, function() {
+  console.log("server initialized");
+})
+
+
 function LoadCoursesStudent() {
   var url = document.location.href,
   params = url.split('?')
@@ -722,22 +780,7 @@ function LoadAnnouncements() {
       if (this.readyState == 4 && this.status == 200) {
           let announcements = JSON.parse(this.responseText);
           for (let i=0; i<announcements.length; i++) {
-              let announcement = announcements[i]
-
-              new_div = document.createElement("div")
-              new_div.className = "announcement"
-
-              new_heading = document.createElement("H4")
-              new_heading.className = "announcement_title"
-              new_heading.appendChild(document.createTextNode(announcement["subject"]))
-
-              new_text = document.createElement("p")
-              new_text.appendChild(document.createTextNode(announcement["body"]))
-
-              new_div.appendChild(new_heading)
-              new_div.appendChild(new_text)
-              prev_child = document.querySelector("#main_panel :nth-child(" + String(i + 1) + ")")
-              prev_child.parentNode.insertBefore(new_div, prev_child.nextSibling)
+              AddAnnouncement(announcements[i], i)
           }
           if (document.getElementById("main_panel").childElementCount==1) {
               document.getElementById("main_panel").innerHTML += "There are no announcements yet."
@@ -745,6 +788,23 @@ function LoadAnnouncements() {
       }
   }
   xhttp.send();
+}
+
+function AddAnnouncement(announcement, i) {
+    new_div = document.createElement("div")
+    new_div.className = "announcement"
+
+    new_heading = document.createElement("H4")
+    new_heading.className = "announcement_title"
+    new_heading.appendChild(document.createTextNode(announcement["subject"]))
+    
+    new_text = document.createElement("p")
+    new_text.appendChild(document.createTextNode(announcement["body"]))
+
+    new_div.appendChild(new_heading)
+    new_div.appendChild(new_text)
+    prev_child = document.querySelector("#main_panel :nth-child(" + String(i + 1) + ")")
+    prev_child.parentNode.insertBefore(new_div, prev_child.nextSibling)
 }
 
 
