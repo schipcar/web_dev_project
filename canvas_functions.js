@@ -59,7 +59,7 @@ function add_announcement_onclick() {
 
 function add_assignment_form() {
 
-    div = document.createElement("div");
+    div = document.createElement("form");
     div.className = 'assignment_form';
     div.id = 'assignment_form_div';
 
@@ -82,17 +82,29 @@ function add_assignment_form() {
     duedate_box.className = 'announcement_form';
     points_box.className = 'announcement_form';
     description_box.className = 'announcement_form';
+    
+    name_box.name = "assignment_name"
+    duedate_box.name = "duedate"
+    points_box.name = "points"
+    description_box.name = "description"
+    
+    name_box.id = "assignment_name"
+    duedate_box.id = "duedate"
+    points_box.id = "points"
+    description_box.id = "description"
 
     name_box.setAttribute("type", "text");
     duedate_box.setAttribute("type", "text");
     points_box.setAttribute("type", "text");
     description_box.rows = '4';
 
-    submit_button = document.createElement("button");
-    submit_button.innerHTML = 'Submit';
-    submit_button.addEventListener("click", function() {
+    submit_button = document.createElement("input")
+    submit_button.type = "submit"
+    submit_button.value = "Submit"
+    submit_button.onclick = function() {
+        add_assignment_onclick()
         document.getElementById('assignment_form_div').remove();
-    })
+    }
 
     linebreak = document.createElement("br");
 
@@ -110,7 +122,19 @@ function add_assignment_form() {
     div.appendChild(linebreak);
     div.appendChild(submit_button);
     document.getElementById('main_panel').appendChild(div);
+}
 
+function add_assignment_onclick() {
+    data = get_url_params()
+    
+    name_box = document.getElementById("assignment_name")
+    duedate_box = document.getElementById("duedate")
+    points_box = document.getElementById("points")
+    description_box = document.getElementById("description")
+    
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8020/putassignment?course_name=" + data.course_name + "&assignment_name=" + name_box.value + "&duedate=" + duedate_box.value + "&points=" + points_box.value + "&description=" + description_box.value, true);
+    xhttp.send();
 }
 
 
@@ -632,6 +656,13 @@ app.listen(8049, function () {
 app.post('/putannouncement', function(req, res) {
   db.run('INSERT INTO announcements VALUES (?, ?)', [req.query.subject, req.query.body]);
   db.run('INSERT INTO courses_announcements VALUES (?, ?)', [req.query.course_name, req.query.subject]);
+});
+app.listen(8010, function() {
+  console.log("server initialized");
+})
+
+app.post('/putassignment', function(req, res) {
+  db.run('INSERT INTO assignments VALUES (?, ?, ?, ?, ?)', [req.query.assignment_name, req.query.course_name, req.query.duedate, req.query.points, req.query.description]);
 });
 app.listen(8010, function() {
   console.log("server initialized");
