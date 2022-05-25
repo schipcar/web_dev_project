@@ -689,6 +689,7 @@ function LoadAnnouncements() {
 }
 
 function AddAnnouncement(announcement) {
+    document.getElementById("main_panel").innerHTML += 'test'
     new_div = document.createElement("div")
     new_div.className = "announcement"
 
