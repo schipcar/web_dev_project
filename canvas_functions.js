@@ -664,7 +664,7 @@ app.listen(8010, function() {
 app.post('/putassignment', function(req, res) {
   db.run('INSERT INTO assignments VALUES (?, ?, ?, ?, ?)', [req.query.assignment_name, req.query.course_name, req.query.duedate, req.query.points, req.query.description]);
 });
-app.listen(8010, function() {
+app.listen(8020, function() {
   console.log("server initialized");
 })
 
