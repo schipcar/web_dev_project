@@ -689,7 +689,6 @@ function LoadAnnouncements() {
 }
 
 function AddAnnouncement(announcement) {
-    document.getElementById("main_panel").innerHTML += 'test'
     new_div = document.createElement("div")
     new_div.className = "announcement"
 
@@ -697,6 +696,8 @@ function AddAnnouncement(announcement) {
     new_heading.className = "announcement_title"
     new_heading.appendChild(document.createTextNode(announcement["subject"]))
 
+    document.getElementById("main_panel").innerHTML += 'test'
+    
     new_text = document.createElement("p")
     new_text.appendChild(document.createTextNode(announcement["body"]))
 
