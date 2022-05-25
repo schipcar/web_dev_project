@@ -678,7 +678,7 @@ function LoadAnnouncements() {
       if (this.readyState == 4 && this.status == 200) {
           let announcements = JSON.parse(this.responseText);
           for (let i=0; i<announcements.length; i++) {
-              AddAnnouncements(announcements[i])
+              AddAnnouncement(announcements[i])
           }
           if (document.getElementById("main_panel").childElementCount==1) {
               document.getElementById("main_panel").innerHTML += "There are no announcements yet."
