@@ -678,22 +678,7 @@ function LoadAnnouncements() {
       if (this.readyState == 4 && this.status == 200) {
           let announcements = JSON.parse(this.responseText);
           for (let i=0; i<announcements.length; i++) {
-              let announcement = announcements[i]
-
-              new_div = document.createElement("div")
-              new_div.className = "announcement"
-
-              new_heading = document.createElement("H4")
-              new_heading.className = "announcement_title"
-              new_heading.appendChild(document.createTextNode(announcement["subject"]))
-
-              new_text = document.createElement("p")
-              new_text.appendChild(document.createTextNode(announcement["body"]))
-
-              new_div.appendChild(new_heading)
-              new_div.appendChild(new_text)
-              prev_child = document.querySelector("#main_panel :nth-child(" + String(i + 1) + ")")
-              prev_child.parentNode.insertBefore(new_div, prev_child.nextSibling)
+              AddAnnouncements(announcements[i])
           }
           if (document.getElementById("main_panel").childElementCount==1) {
               document.getElementById("main_panel").innerHTML += "There are no announcements yet."
@@ -701,6 +686,23 @@ function LoadAnnouncements() {
       }
   }
   xhttp.send();
+}
+
+function AddAnnouncement(announcement) {
+    new_div = document.createElement("div")
+    new_div.className = "announcement"
+
+    new_heading = document.createElement("H4")
+    new_heading.className = "announcement_title"
+    new_heading.appendChild(document.createTextNode(announcement["subject"]))
+
+    new_text = document.createElement("p")
+    new_text.appendChild(document.createTextNode(announcement["body"]))
+
+    new_div.appendChild(new_heading)
+    new_div.appendChild(new_text)
+    prev_child = document.querySelector("#main_panel :nth-child(" + String(i + 1) + ")")
+    prev_child.parentNode.insertBefore(new_div, prev_child.nextSibling)
 }
 
 
