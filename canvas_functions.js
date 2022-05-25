@@ -28,7 +28,7 @@ function add_announcement_form() {
     submit_button.value = "Submit"
     submit_button.onclick = function() {
         document.getElementById('announcement_form_div').remove();
-    })
+    }
 
     linebreak = document.createElement("br");
 
