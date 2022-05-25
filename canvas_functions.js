@@ -40,6 +40,10 @@ function add_announcement_form() {
     div.appendChild(linebreak);
     div.appendChild(submit_button);
     document.getElementById('main_panel').appendChild(div);
+    
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8010/putannouncement?course_name=" + data.course_name + "&subject=" + subject_box.value + "&body=" + text_box.value, true);
+    xhttp.send();
 }
 
 
@@ -616,8 +620,8 @@ app.listen(8049, function () {
 })
 
 app.post('/putannouncement', function(req, res) {
-  db.run('INSERT INTO announcements VALUES (?, ?)', [req.body.subject, req.body.body]);
-  db.run('INSERT INTO courses_announcements VALUES (?, ?)', [req.query.course_name, req.body.subject]);
+  db.run('INSERT INTO announcements VALUES (?, ?)', [req.query.subject, req.query.body]);
+  db.run('INSERT INTO courses_announcements VALUES (?, ?)', [req.query.course_name, req.query.subject]);
 });
 app.listen(8010, function() {
   console.log("server initialized");
