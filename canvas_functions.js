@@ -46,6 +46,7 @@ function add_announcement_form() {
 }
 
 function add_announcement_onclick() {
+    document.getElementById('main_panel').innerHTML += 'test'
     data = get_url_params()
     
     subject_box = document.getElementById("subject")
