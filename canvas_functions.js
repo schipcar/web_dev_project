@@ -18,7 +18,7 @@ function add_announcement_form() {
     subject_box.name = 'subject'
     
     text_box.className = 'announcement_form';
-    text_dox.name = 'body'
+    text_box.name = 'body'
 
     subject_box.setAttribute("type", "text");
     text_box.rows = '4';
