@@ -1384,3 +1384,66 @@ function LoadCourseMenuLinksTeacher() {
   document.getElementById("assignments_link").href = "assignments_teacher.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("grades_link").href = "grades.html?user=" + data.user + "&course_name=" + data.course_name
 }
+
+function LoadAllGrades() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.overrideMimeType("application/json");
+    xhttp.open("GET", "http://localhost:8080/getdictionary", true);
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+             var dict_all = JSON.parse(this.responseText);
+             var list_array = new Array();
+             for (var i=0; i<dict_all.length; i++) {
+               const dict_t = dict_all[i];
+               const array1 = [dict_t.email, dict_t.name, dict_t.punctuation, dict_t.possible, dict_t.course_name];
+               list_array.push(array1)}
+               nrows = dict_all.length
+            createtable("tbl", list_array, nrows);}
+     }
+     xhttp.send();
+  }
+
+var counter = 0;
+var Preferences = 0;
+var nrows = 0;
+Preferences.id = "tbl";
+
+  function createtable(id, list_array, nrows){
+    var TableDiv = document.getElementById("main_panel");  
+    var ncells = 5;
+    var names = ["Email", "Name", "Punctuation", "Possible", "Course"];
+    
+    var table = document.createElement('TABLE');
+    table.border='1';
+    var tableBody = document.createElement('TBODY');
+    table.appendChild(tableBody);
+    table.id = id
+    var header = table.createTHead();
+    var row = header.insertRow(0);
+    
+    for (var p=0; p<5; p++){
+           var cell = row.insertCell(p);
+           cell.innerHTML = names[p];
+    }
+
+    for (var i=0; i<nrows; i++){
+       var tr = document.createElement('TR');
+       tableBody.appendChild(tr);
+       
+       for (var j=0; j<ncells; j++){
+           var td = document.createElement('TD');
+           console.log(list_array[i])
+           td.appendChild(document.createTextNode(String(list_array[i][j])));
+           tr.appendChild(td);
+       }
+    }
+    if (Preferences == 0) {
+      Preferences = table;
+      TableDiv.appendChild(table) 
+    } else {
+      TableDiv.removeChild(TableDiv.lastChild)
+      Preferences = table;
+    }
+    
+    TableDiv.appendChild(table)   
+}
