@@ -1390,14 +1390,14 @@ function LoadCourseMenuLinksTeacher() {
 function LoadAllGrades() {
     var xhttp = new XMLHttpRequest();
     xhttp.overrideMimeType("application/json");
-    xhttp.open("GET", "http://localhost:8080/getdictionary", true);
+    xhttp.open("GET", "http://localhost:8088/getdictionary", true);
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
              var dict_all = JSON.parse(this.responseText);
              var list_array = new Array();
              for (var i=0; i<dict_all.length; i++) {
                const dict_t = dict_all[i];
-               const array1 = [dict_t.email, dict_t.name, dict_t.punctuation, dict_t.possible, dict_t.course_name];
+               const array1 = [dict_t.email, dict_t.name, dict_t.user, dict_t.punctuation, dict_t.possible, dict_t.course_name];
                list_array.push(array1)}
                nrows = dict_all.length
             createtable("tbl", list_array, nrows);}
@@ -1412,8 +1412,8 @@ Preferences.id = "tbl";
 
   function createtable(id, list_array, nrows){
     var TableDiv = document.getElementById("main_panel");  
-    var ncells = 5;
-    var names = ["Email", "Name", "Punctuation", "Possible", "Course"];
+    var ncells = 6;
+    var names = ["Email", "Name", "User", "Punctuation", "Possible", "Course"];
     
     var table = document.createElement('TABLE');
     table.border='1';
@@ -1423,7 +1423,7 @@ Preferences.id = "tbl";
     var header = table.createTHead();
     var row = header.insertRow(0);
     
-    for (var p=0; p<5; p++){
+    for (var p=0; p<6; p++){
            var cell = row.insertCell(p);
            cell.innerHTML = names[p];
     }
@@ -1486,7 +1486,7 @@ app.post('/putdictionary', function(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
   res.setHeader('Access-Control-Max-Age', 2592000);
   res.setHeader('Content-Type', 'application/json');
-  db.run('INSERT INTO grades(email, name, punctuation, possible, course_name) VALUES(?,?,?,?,?)', [req.body.email, req.body.name, req.body.punctuation, req.body.possible, req.body.course_name]);
+  db.run('INSERT INTO grades(email, name, user, punctuation, possible, course_name) VALUES(?,?,?,?,?,?)', [req.body.email, req.body.name, req.body.user, req.body.punctuation, req.body.possible, req.body.course_name]);
   renew()
   res.status(204).send()
 });
@@ -1495,7 +1495,7 @@ app.post('/gradestudent', function(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
   res.setHeader('Access-Control-Max-Age', 2592000);
   res.setHeader('Content-Type', 'application/json');
-  string_student = 'SELECT * FROM grades WHERE email=' + '"' + String(req.body.student) + '"'
+  string_student = 'SELECT * FROM grades WHERE user=' + '"' + String(req.body.student) + '"'
   renew()
   res.status(204).send()
 });

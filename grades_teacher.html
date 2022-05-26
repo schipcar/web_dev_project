@@ -8,7 +8,7 @@
   <title>Grades</title>
 </head>
 
-<body onload="LoadAllGrades()">
+<body onload="LoadAllGrades(); LoadCourseMenuLinksTeacher(); LoadCourseMenuLinksTeacher();">
 <div id="main">
 
   <div class="column" id="main_menu">
@@ -32,11 +32,13 @@
   <div class="column" id="main_panel">
     <h3>Grades</h3>
     <div class="courses_panel" id="dinamic"></div>
-    <form class ="assignment_form" id= "myform" name="myform" action="http://localhost:8080/putdictionary" method="post" onsubmit="setTimeout(function() { window.location.reload(); }, 1)">
+    <form class ="assignment_form" id= "myform" name="myform" action="http://localhost:8088/putdictionary" method="post" onsubmit="setTimeout(function() { window.location.reload(); }, 1)">
           <label for="email">Email:</label>
           <input type="text" id="email" name="email" placeholder="email" />
           <label for="name">Name:</label>
           <input type="text" id="name" name="name" placeholder="name" />
+          <label for="user">User:</label>
+          <input type="user" id="user" name="user" placeholder="user" />
           <label for="punctuation">Punctuation:</label>
           <input type="number" id="punctuation" name="punctuation" placeholder="punctuation" />
           <label for="possible">Possible:</label>
