@@ -1,3 +1,13 @@
+var http = require('http');
+    sqlite3 = require('sqlite3');
+    fs = require('fs');
+    url = require('url');
+    request = require('request');
+    myParser = require("body-parser");
+    express = require("express");
+    pag = require('https');
+    db = 0
+
 function add_announcement_form() {
     data = get_url_params()
 
@@ -432,15 +442,7 @@ function submitSignup() {
     location.href="login_page.html";
 }
 
-var sqlite3 = require('sqlite3').verbose();
-var http = require('http');
-    fs = require('fs');
-    url = require('url');
-    request = require('request');
-    myParser = require("body-parser");
-    express = require("express");
-    pag = require('https');
-    db = 0
+
 var grades_row = 2;
 var courses_row_student;
 var courses_row_teacher;
