@@ -1376,7 +1376,7 @@ function LoadCourseMenuLinksStudent() {
   document.getElementById("course_homepage_link").href = "course_homepage_student.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("announcements_link").href = "announcements_student.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("assignments_link").href = "assignments_student.html?user=" + data.user + "&course_name=" + data.course_name
-  document.getElementById("grades_link").href = "grades.html?user=" + data.user + "&course_name=" + data.course_name
+  document.getElementById("grades_link").href = "grades_student.html?user=" + data.user + "&course_name=" + data.course_name
 }
 
 function LoadCourseMenuLinksTeacher() {
@@ -1384,7 +1384,7 @@ function LoadCourseMenuLinksTeacher() {
   document.getElementById("course_homepage_link").href = "course_homepage_teacher.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("announcements_link").href = "announcements_teacher.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("assignments_link").href = "assignments_teacher.html?user=" + data.user + "&course_name=" + data.course_name
-  document.getElementById("grades_link").href = "grades.html?user=" + data.user + "&course_name=" + data.course_name
+  document.getElementById("grades_link").href = "grades_teacher.html?user=" + data.user + "&course_name=" + data.course_name
 }
 
 function LoadAllGrades() {
