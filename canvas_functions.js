@@ -1495,8 +1495,8 @@ app.post('/gradestudent', function(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
   res.setHeader('Access-Control-Max-Age', 2592000);
   res.setHeader('Content-Type', 'application/json');
-  string_student = 'SELECT * FROM grades WHERE user=' + '"' + String(req.body.student) + '"'
-  renew()
+  string_student = 'SELECT * FROM grades WHERE user=' + '"' + String(req.body.student) + '"' + " AND course_name=" + '"' + String(req.body.course_name) + '"'
+  renew() 
   res.status(204).send()
 });
 app.get('/gradestudent2', function(req, res) {
@@ -1507,6 +1507,15 @@ app.get('/gradestudent2', function(req, res) {
   renew()
   res.send(JSON.stringify(row_student)); 
 });
+app.post('/gradestudent3', function(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
+    res.setHeader('Access-Control-Max-Age', 2592000);
+    res.setHeader('Content-Type', 'application/json');
+    string_student = 'SELECT * FROM grades WHERE course_name=' + '"' + String(req.body.course_name) + '"'
+    renew() 
+    res.status(204).send()
+  });
 app.listen(8088, function() {
   console.log('Server running at http://127.0.0.1:8088/');
 });

@@ -9,7 +9,7 @@ CREATE TABLE announcements (subject TEXT, body TEXT, PRIMARY KEY (subject, body)
 
 
 /* Populate the tables with dummy data for testing */
-INSERT INTO grades VALUES ("anasof@uchicago.edu", "Assignment 1", "12345678", 100, 100, "Computer Systems");
+INSERT INTO grades VALUES ("anasof@uchicago.edu", "Homework 1", "12345678", 100, 100, "Web Development");
 
 INSERT INTO users VALUES ("Ana Sofia", "anasof@uchicago.edu", "12345678", "student", "active", "mynameisanasof", "", "", "", "", "", "");
 INSERT INTO users VALUES ("Alex", "alex@uchicago.edu", "12131981", "student", "active", "mynameisalex", "", "", "", "", "", "");

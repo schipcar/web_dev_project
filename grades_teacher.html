@@ -7,14 +7,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Grades</title>
 </head>
-
-<body onload="LoadAllGrades(); LoadCourseMenuLinksTeacher(); LoadCourseMenuLinksTeacher();">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<body onload="LoadCourseName_notitle(); Grades_teacher(); LoadMainMenuLinksTeacher(); LoadCourseMenuLinksTeacher();">
+<div id="header">
+  <h2 id="course_header"></h2>
+</div>
 <script>
 
 var url = document.location.href,
 params = url.split('=')
-console.log(params)
-var User = params[1]
+params_course = decodeURI(url.split('&course_name=')[1])
+var Student = params[1]
+var course = params_course
+
+function Grades_teacher(){
+    LoadGrades_p1()
+    LoadAllGrades()};
+
+
+function LoadGrades_p1() {
+  $.ajax({
+        type: "POST",
+        async: false,
+        url: "http://localhost:8088/gradestudent3",
+        crossDomain: true,
+        data: {course_name:course},
+        success: function (data) {
+            // SOMETHING
+        },
+        error: function (err) {
+            // SOMETHING
+        }
+    });
+  };
 
 </script>
 <div id="main">
