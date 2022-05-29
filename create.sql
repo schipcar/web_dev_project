@@ -10,6 +10,9 @@ CREATE TABLE announcements (subject TEXT, body TEXT, PRIMARY KEY (subject, body)
 
 /* Populate the tables with dummy data for testing */
 INSERT INTO grades VALUES ("anasof@uchicago.edu", "Homework 1", "12345678", 100, 100, "Web Development");
+INSERT INTO grades VALUES ("alex@uchicago.edu", "Homework 1", "12131981", 100, 100, "Web Development");
+INSERT INTO grades VALUES ("carly@uchicago.edu", "Homework 1", "34567890", 85, 100, "Web Development");
+INSERT INTO grades VALUES ("anasof@uchicago.edu", "Homework 2", "12345678", 80, 80, "Web Development");
 
 INSERT INTO users VALUES ("Ana Sofia", "anasof@uchicago.edu", "12345678", "student", "active", "mynameisanasof", "", "", "", "", "", "");
 INSERT INTO users VALUES ("Alex", "alex@uchicago.edu", "12131981", "student", "active", "mynameisalex", "", "", "", "", "", "");
@@ -30,8 +33,8 @@ INSERT INTO courses_students VALUES ("Algorithms", "12345678");
 
 INSERT INTO assignments VALUES ("Homework 1", "Web Development", "04/20/2022", 100, "This is the description for HW1");
 INSERT INTO assignments VALUES ("Homework 2", "Web Development", "05/17/2022", 100, "This is the description for HW2");
-INSERT INTO assignments VALUES ("Homework 3", "Web Development", "05/20/2022", 100, "This is the description for HW3");
-INSERT INTO assignments VALUES ("Homework 4", "Web Development", "05/31/2022", 100, "This is the description for HW4");
+INSERT INTO assignments VALUES ("Homework 3", "Web Development", "06/02/2022", 100, "This is the description for HW3");
+INSERT INTO assignments VALUES ("Homework 4", "Web Development", "06/10/2022", 100, "This is the description for HW4");
 INSERT INTO assignments VALUES ("Project 1", "Machine Learning", "06/01/2022", 100, "This is the description for Project 1");
 
 INSERT INTO announcements VALUES ("HW deadline pushed back", "HW3 will now be due on Friday. Good luck!");
