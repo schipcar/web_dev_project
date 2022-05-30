@@ -1406,6 +1406,45 @@ function LoadUsersAdmin() {
    xhttp.send();
 }
 
+function LoadDashboardAdmin() {
+    let xhttp0 = new XMLHttpRequest();
+    xhttp0.open("GET", "http://localhost:8041/getallusers", true);
+    xhttp0.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let users = JSON.parse(this.responseText);
+            let numActiveStudents = 0;
+            let numActiveTeachers = 0;
+            for (i = 0; i < users.length; i++) {
+                let user = users[i];
+                if (user.status == "active") {
+                    if (user.role == "student") {
+                        numActiveStudents++;
+                    }
+                    else if (user.role == "teacher") {
+                        numActiveTeachers++;
+                    }
+                }
+            }
+
+            let sysInfo = document.getElementById("system_info");
+            sysInfo.children[0].children[0].innerHTML = "&nbsp;" + numActiveStudents;
+            sysInfo.children[1].children[0].innerHTML = "&nbsp;" + numActiveTeachers;
+         }
+     }
+     xhttp0.send();
+
+     let xhttp1 = new XMLHttpRequest();
+     xhttp1.open("GET", "http://localhost:8040/getallcourses", true);
+     xhttp1.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+             let courses = JSON.parse(this.responseText);
+             let sysInfo = document.getElementById("system_info");
+             sysInfo.children[2].children[0].innerHTML = "&nbsp;" + courses.length;
+          }
+      }
+      xhttp1.send();
+}
+
 
 function get_url_params() {
   var url = document.location.href,

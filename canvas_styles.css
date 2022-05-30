@@ -85,6 +85,13 @@ h2 {
       flex-direction: column;
       padding: 1%;
   }
+
+  #system_info {
+      flex: 50%;
+      display: flex;
+      flex-direction: column;
+      padding: 1%;
+  }
 }
 
 @media (max-width: 767px) {
@@ -146,6 +153,13 @@ h2 {
   }
 
   #all_courses_div {
+      flex: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 1%;
+  }
+
+  #system_info {
       flex: 100%;
       display: flex;
       flex-direction: column;
@@ -360,4 +374,8 @@ input, textarea, select {
 
 .add_specific_class_button {
     margin: 5px;
+}
+
+#system_info>* {
+    background-color: maroon;
 }
