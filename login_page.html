@@ -12,13 +12,13 @@
             <center>
                 <h1>Log In to CAAnvas</h1>
 
-                <form>
+                <form id="login_form">
                     <label for="email_entry">Email:</label>
                         <input type="text" id="email_entry" name="Username"/><br/>
                     <label for="password_entry">Password:</label>
-                        <input type="password" id="password_entry" name="Password"/><br/>
-                    <input type="submit" value="Log In">
+                        <input type="password" id="password_entry" name="Password"/>
                 </form>
+                <button value="Log In" onclick="login()">Log In</button>
                 <br/>
                 <div>
                     Forgot your password?

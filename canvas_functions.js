@@ -429,7 +429,63 @@ function submitSignup() {
                 + "&sec_q2=" + sec_q2 + "&sec_a2=" + sec_a2 + "&sec_q3=" + sec_q3 + "&sec_a3=" + sec_a3, true);
     xhttp.send();
 
-    location.href="login_page.html";
+    location.href = "login_page.html";
+}
+
+function login() {
+    let form = document.getElementById("login_form");
+    let email = document.getElementById("email_entry").value;
+    let password = document.getElementById("password_entry").value;
+
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "http://localhost:8051/getuserlogin?email=" + email + "&password=" + password, true);
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let user = JSON.parse(this.responseText);
+            if (user.length == 0) {
+                if (document.getElementById("account_dne_warning") == null) {
+                    alert("user dne");
+                    let newp = document.createElement("p");
+                    newp.classList.add("signup_warning");
+                    newp.innerHTML = "Account does not exist";
+                    newp.id = "account_dne_warning";
+                    form.appendChild(newp);
+                }
+            }
+            else {
+                alert("user found");
+                let oldp = document.getElementById("account_dne_warning");
+                if (oldp != null) {
+                    oldp.remove();
+                }
+
+                user = user[0];
+                if (user.status == "inactive") {
+                    if (document.getElementById("account_inactive_warning") == null) {
+                        let newp = document.createElement("p");
+                        newp.classList.add("signup_warning");
+                        newp.innerHTML = "Account is currently inactive and must be activated by an admin";
+                        newp.id = "account_inactive_warning";
+                        form.appendChild(newp);
+                    }
+                }
+                else {
+                    alert(user.role);
+                    if (user.role == "student") {
+                        location.href = "dashboard_student.html?user=" + user.user;
+                    }
+                    else if (user.role == "teacher") {
+                        location.href = "dashboard_teacher.html?user=" + user.user;
+                    }
+                    else {
+                        location.href = "dashboard_admin.html?user=" + user.user;
+                    }
+                }
+            }
+         }
+     }
+     xhttp.send();
+
 }
 
 var sqlite3 = require('sqlite3').verbose();
@@ -452,6 +508,7 @@ var all_courses;
 var all_users;
 var all_teachers;
 var all_ids;
+var user;
 
 var db = new sqlite3.Database('./canvas.db', (err) => {
     if (err) {
@@ -720,6 +777,27 @@ app.listen(8049, function () {
     console.log("server initialized");
 })
 
+app.get("/getuserlogin", function(req, response) {
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      response.setHeader('Access-Control-Max-Age', 2592000);
+      response.setHeader('Content-Type', 'application/json');
+
+      let email = req.query.email;
+      let password = req.query.password;
+      console.log(email + "\n" + password);
+
+      db.all("SELECT * FROM users WHERE email=? and password=?", [email, password], function(err, row) {
+        user=row;
+        const jsonContent = JSON.stringify(user);
+        response.end(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8051, function () {
+    console.log("server initialized");
+})
+
 app.post('/putannouncement', function(req, res) {
   db.run('INSERT INTO announcements VALUES (?, ?)', [req.query.subject, req.query.body]);
   db.run('INSERT INTO courses_announcements VALUES (?, ?)', [req.query.course_name, req.query.subject]);
@@ -734,7 +812,6 @@ app.post('/putassignment', function(req, res) {
 app.listen(8020, function() {
   console.log("server initialized");
 })
-
 
 function LoadCoursesStudent() {
   var url = document.location.href,
