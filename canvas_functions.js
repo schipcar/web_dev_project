@@ -454,7 +454,6 @@ function login() {
             let user = JSON.parse(this.responseText);
             if (user.length == 0) {
                 if (document.getElementById("account_dne_warning") == null) {
-                    alert("user dne");
                     let newp = document.createElement("p");
                     newp.classList.add("signup_warning");
                     newp.innerHTML = "Account does not exist";
@@ -463,7 +462,6 @@ function login() {
                 }
             }
             else {
-                alert("user found");
                 let oldp = document.getElementById("account_dne_warning");
                 if (oldp != null) {
                     oldp.remove();
@@ -480,7 +478,6 @@ function login() {
                     }
                 }
                 else {
-                    alert(user.role);
                     if (user.role == "student") {
                         location.href = "dashboard_student.html?user=" + user.user;
                     }
@@ -1488,10 +1485,10 @@ var nrows = 0;
 Preferences.id = "tbl";
 
   function createtable(id, list_array, nrows){
-    var TableDiv = document.getElementById("main_panel");  
+    var TableDiv = document.getElementById("main_panel");
     var ncells = 6;
     var names = ["Email", "Name", "User", "Punctuation", "Possible", "Course"];
-    
+
     var table = document.createElement('TABLE');
     table.border='1';
     var tableBody = document.createElement('TBODY');
@@ -1499,7 +1496,7 @@ Preferences.id = "tbl";
     table.id = id
     var header = table.createTHead();
     var row = header.insertRow(0);
-    
+
     for (var p=0; p<6; p++){
            var cell = row.insertCell(p);
            cell.innerHTML = names[p];
@@ -1508,7 +1505,7 @@ Preferences.id = "tbl";
     for (var i=0; i<nrows; i++){
        var tr = document.createElement('TR');
        tableBody.appendChild(tr);
-       
+
        for (var j=0; j<ncells; j++){
            var td = document.createElement('TD');
            console.log(list_array[i])
@@ -1518,13 +1515,13 @@ Preferences.id = "tbl";
     }
     if (Preferences == 0) {
       Preferences = table;
-      TableDiv.appendChild(table) 
+      TableDiv.appendChild(table)
     } else {
       TableDiv.removeChild(TableDiv.lastChild)
       Preferences = table;
     }
-    
-    TableDiv.appendChild(table)   
+
+    TableDiv.appendChild(table)
 }
 
 var row_sent = 2;
@@ -1536,7 +1533,7 @@ function renew() {
   db = new sqlite3.Database('./canvas.db', (err) => {
   if (err) {
     console.error(err.message);
-  } 
+  }
   db.all("SELECT * FROM grades", function(err, row) {
     row_sent=row
   });
@@ -1556,7 +1553,7 @@ app.get("/getdictionary", function(req, res) {
   res.setHeader('Access-Control-Max-Age', 2592000);
   res.setHeader('Content-Type', 'application/json');
   renew()
-  res.send(JSON.stringify(row_sent)); 
+  res.send(JSON.stringify(row_sent));
 });
 app.post('/putdictionary', function(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -1573,7 +1570,7 @@ app.post('/gradestudent', function(req, res) {
   res.setHeader('Access-Control-Max-Age', 2592000);
   res.setHeader('Content-Type', 'application/json');
   string_student = 'SELECT * FROM grades WHERE user=' + '"' + String(req.body.student) + '"' + " AND course_name=" + '"' + String(req.body.course_name) + '"'
-  renew() 
+  renew()
   res.status(204).send()
 });
 app.get('/gradestudent2', function(req, res) {
@@ -1582,7 +1579,7 @@ app.get('/gradestudent2', function(req, res) {
   res.setHeader('Access-Control-Max-Age', 2592000);
   res.setHeader('Content-Type', 'application/json');
   renew()
-  res.send(JSON.stringify(row_student)); 
+  res.send(JSON.stringify(row_student));
 });
 app.post('/gradestudent3', function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -1590,12 +1587,9 @@ app.post('/gradestudent3', function(req, res) {
     res.setHeader('Access-Control-Max-Age', 2592000);
     res.setHeader('Content-Type', 'application/json');
     string_student = 'SELECT * FROM grades WHERE course_name=' + '"' + String(req.body.course_name) + '"'
-    renew() 
+    renew()
     res.status(204).send()
   });
 app.listen(8088, function() {
   console.log('Server running at http://127.0.0.1:8088/');
 });
-
-
-
