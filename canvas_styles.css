@@ -379,3 +379,8 @@ input, textarea, select {
 #system_info>* {
     background-color: maroon;
 }
+
+.form_span {
+    background-color: gray;
+    margin: 3px;
+}

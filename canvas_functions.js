@@ -495,6 +495,10 @@ function login() {
 
 }
 
+function resetPassword() {
+
+}
+
 
 var grades_row = 2;
 var courses_row_student;
@@ -1443,6 +1447,41 @@ function LoadDashboardAdmin() {
           }
       }
       xhttp1.send();
+}
+
+function loadSecurityQs() {
+  let xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "http://localhost:8041/getallusers", true);
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+          let users = JSON.parse(this.responseText);
+          let email = document.getElementById("email_entry").value;
+          let user;
+          for (i = 0; i < users.length; i++) {
+              if (users[i].email == email) {
+                  user = users[i];
+              }
+          }
+
+          let getSecQsForm = document.getElementById("get_sec_qs_form");
+          let getSecQsButton = document.getElementById("get_sec_qs_button");
+          getSecQsForm.style.display = "none";
+          getSecQsButton.style.display = "none";
+
+          let resetPwForm = document.getElementById("reset_password_form");
+          let resetPwButton = document.getElementById("reset_password_button");
+          resetPwForm.style.display = "block";
+          resetPwButton.style.display = "block";
+
+          let secQ1 = document.getElementById("sec_q1");
+          let secQ2 = document.getElementById("sec_q2");
+          let secQ3 = document.getElementById("sec_q3");
+          secQ1.innerHTML = "&nbsp;" + user.sec_q1;
+          secQ2.innerHTML = "&nbsp;" + user.sec_q2;
+          secQ3.innerHTML = "&nbsp;" + user.sec_q3;
+       }
+   }
+   xhttp.send();
 }
 
 
