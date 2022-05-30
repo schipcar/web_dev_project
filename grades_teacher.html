@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel=stylesheet href="canvas_styles.css" TYPE="text/css">
+  <script src="canvas_functions.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grades</title>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<body onload="LoadCourseName_notitle(); Grades_teacher(); LoadMainMenuLinksTeacher(); LoadCourseMenuLinksTeacher();">
+<div id="header">
+  <h2 id="course_header"></h2>
+</div>
+<script>
+
+var url = document.location.href,
+params = url.split('=')
+params_course = decodeURI(url.split('&course_name=')[1])
+var Student = params[1]
+var course = params_course
+
+function Grades_teacher(){
+    LoadGrades_p1()
+    LoadAllGrades()};
+
+
+function LoadGrades_p1() {
+  $.ajax({
+        type: "POST",
+        async: false,
+        url: "http://localhost:8088/gradestudent3",
+        crossDomain: true,
+        data: {course_name:course},
+        success: function (data) {
+            // SOMETHING
+        },
+        error: function (err) {
+            // SOMETHING
+        }
+    });
+  };
+
+</script>
+<div id="main">
+
+  <div class="column" id="main_menu">
+    <ul class="main_menu_items">
+      <li class="main_menu_items"><a class="main_menu_items" id="myaccount_link">My Account</a></li>
+      <li class="main_menu_items"><a class="main_menu_items" id="dashboard_link">Dashboard</a></li>
+      <li class="selected_menu_item"><a class="main_menu_items" id="courses_link">Courses</a></li>
+      <li class="main_menu_items"><a class="main_menu_items" id="logout_link">Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="column" id="course_menu">
+    <ul class="course_menu_items">
+      <li class="course_menu_items"><a class="course_menu_items" id="course_homepage_link">Course Home</a></li>
+      <li class="course_menu_items"><a class="course_menu_items" id="announcements_link">Announcements</a></li>
+      <li class="course_menu_items"><a class="course_menu_items" id="assignments_link">Assignments</a></li>
+      <li class="selected_course_menu_item"><a class="course_menu_items" id="grades_link">Grades</a></li>
+    </ul>
+ </div>
+
+  <div class="column" id="main_panel">
+    <h3>Grades</h3>
+    <div class="courses_panel" id="dinamic"></div>
+    <form class ="assignment_form" id= "myform" name="myform" action="http://localhost:8088/putdictionary" method="post" onsubmit="setTimeout(function() { window.location.reload(); }, 1)">
+          <label for="email">Email:</label>
+          <input type="text" id="email" name="email" placeholder="email" />
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" placeholder="name" />
+          <label for="user">User:</label>
+          <input type="user" id="user" name="user" placeholder="user" />
+          <label for="punctuation">Punctuation:</label>
+          <input type="number" id="punctuation" name="punctuation" placeholder="punctuation" />
+          <label for="possible">Possible:</label>
+          <input type="number" id="possible" name="possible" placeholder="possible" />
+          <label for="course_name">Course:</label>
+          <input type="text" id="course_name" name="course_name" placeholder="course_name" />    
+          <input type="submit" id="button" value="Submit">
+    </form>
+  </div>
+</div>
+</body>
+</html>

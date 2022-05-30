@@ -1,3 +1,13 @@
+var http = require('http');
+    sqlite3 = require('sqlite3');
+    fs = require('fs');
+    url = require('url');
+    request = require('request');
+    myParser = require("body-parser");
+    express = require("express");
+    pag = require('https');
+    db = 0
+
 function add_announcement_form() {
     data = get_url_params()
 
@@ -488,15 +498,7 @@ function login() {
 
 }
 
-var sqlite3 = require('sqlite3').verbose();
-var http = require('http');
-    fs = require('fs');
-    url = require('url');
-    request = require('request');
-    myParser = require("body-parser");
-    express = require("express");
-    pag = require('https');
-    db = 0
+
 var grades_row = 2;
 var courses_row_student;
 var courses_row_teacher;
@@ -1451,7 +1453,7 @@ function LoadCourseMenuLinksStudent() {
   document.getElementById("course_homepage_link").href = "course_homepage_student.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("announcements_link").href = "announcements_student.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("assignments_link").href = "assignments_student.html?user=" + data.user + "&course_name=" + data.course_name
-  document.getElementById("grades_link").href = "grades.html?user=" + data.user + "&course_name=" + data.course_name
+  document.getElementById("grades_link").href = "grades_student.html?user=" + data.user + "&course_name=" + data.course_name
 }
 
 function LoadCourseMenuLinksTeacher() {
@@ -1459,5 +1461,141 @@ function LoadCourseMenuLinksTeacher() {
   document.getElementById("course_homepage_link").href = "course_homepage_teacher.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("announcements_link").href = "announcements_teacher.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("assignments_link").href = "assignments_teacher.html?user=" + data.user + "&course_name=" + data.course_name
-  document.getElementById("grades_link").href = "grades.html?user=" + data.user + "&course_name=" + data.course_name
+  document.getElementById("grades_link").href = "grades_teacher.html?user=" + data.user + "&course_name=" + data.course_name
 }
+
+function LoadAllGrades() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.overrideMimeType("application/json");
+    xhttp.open("GET", "http://localhost:8088/getdictionary", true);
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+             var dict_all = JSON.parse(this.responseText);
+             var list_array = new Array();
+             for (var i=0; i<dict_all.length; i++) {
+               const dict_t = dict_all[i];
+               const array1 = [dict_t.email, dict_t.name, dict_t.user, dict_t.punctuation, dict_t.possible, dict_t.course_name];
+               list_array.push(array1)}
+               nrows = dict_all.length
+            createtable("tbl", list_array, nrows);}
+     }
+     xhttp.send();
+  }
+
+var counter = 0;
+var Preferences = 0;
+var nrows = 0;
+Preferences.id = "tbl";
+
+  function createtable(id, list_array, nrows){
+    var TableDiv = document.getElementById("main_panel");  
+    var ncells = 6;
+    var names = ["Email", "Name", "User", "Punctuation", "Possible", "Course"];
+    
+    var table = document.createElement('TABLE');
+    table.border='1';
+    var tableBody = document.createElement('TBODY');
+    table.appendChild(tableBody);
+    table.id = id
+    var header = table.createTHead();
+    var row = header.insertRow(0);
+    
+    for (var p=0; p<6; p++){
+           var cell = row.insertCell(p);
+           cell.innerHTML = names[p];
+    }
+
+    for (var i=0; i<nrows; i++){
+       var tr = document.createElement('TR');
+       tableBody.appendChild(tr);
+       
+       for (var j=0; j<ncells; j++){
+           var td = document.createElement('TD');
+           console.log(list_array[i])
+           td.appendChild(document.createTextNode(String(list_array[i][j])));
+           tr.appendChild(td);
+       }
+    }
+    if (Preferences == 0) {
+      Preferences = table;
+      TableDiv.appendChild(table) 
+    } else {
+      TableDiv.removeChild(TableDiv.lastChild)
+      Preferences = table;
+    }
+    
+    TableDiv.appendChild(table)   
+}
+
+var row_sent = 2;
+var row_student = 0;
+var string_student = "SELECT * FROM grades";
+
+
+function renew() {
+  db = new sqlite3.Database('./canvas.db', (err) => {
+  if (err) {
+    console.error(err.message);
+  } 
+  db.all("SELECT * FROM grades", function(err, row) {
+    row_sent=row
+  });
+  db.all(string_student, function(err, row) {
+    console.log(row)
+    row_student=row
+  });
+});
+}
+
+renew()
+
+app.use(myParser.urlencoded({ extended: true }));
+app.get("/getdictionary", function(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+  res.setHeader('Access-Control-Max-Age', 2592000);
+  res.setHeader('Content-Type', 'application/json');
+  renew()
+  res.send(JSON.stringify(row_sent)); 
+});
+app.post('/putdictionary', function(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
+  res.setHeader('Access-Control-Max-Age', 2592000);
+  res.setHeader('Content-Type', 'application/json');
+  db.run('INSERT INTO grades(email, name, user, punctuation, possible, course_name) VALUES(?,?,?,?,?,?)', [req.body.email, req.body.name, req.body.user, req.body.punctuation, req.body.possible, req.body.course_name]);
+  renew()
+  res.status(204).send()
+});
+app.post('/gradestudent', function(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
+  res.setHeader('Access-Control-Max-Age', 2592000);
+  res.setHeader('Content-Type', 'application/json');
+  string_student = 'SELECT * FROM grades WHERE user=' + '"' + String(req.body.student) + '"' + " AND course_name=" + '"' + String(req.body.course_name) + '"'
+  renew() 
+  res.status(204).send()
+});
+app.get('/gradestudent2', function(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+  res.setHeader('Access-Control-Max-Age', 2592000);
+  res.setHeader('Content-Type', 'application/json');
+  renew()
+  res.send(JSON.stringify(row_student)); 
+});
+app.post('/gradestudent3', function(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
+    res.setHeader('Access-Control-Max-Age', 2592000);
+    res.setHeader('Content-Type', 'application/json');
+    string_student = 'SELECT * FROM grades WHERE course_name=' + '"' + String(req.body.course_name) + '"'
+    renew() 
+    res.status(204).send()
+  });
+app.listen(8088, function() {
+  console.log('Server running at http://127.0.0.1:8088/');
+});
+
+
+
