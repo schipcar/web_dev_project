@@ -359,10 +359,10 @@ function validateID() {
      xhttp.send();
 }
 
-function validatePassword() {
-    let form = document.getElementById("signup_form");
-    let password = document.getElementById("signup_pw").value;
-    let pw_br = document.getElementById("pw_br");
+function validatePassword(form_id, pw_id, pw_br_id) {
+    let form = document.getElementById(form_id);
+    let password = document.getElementById(pw_id).value;
+    let pw_br = document.getElementById(pw_br_id);
 
     let hasNumber = false;
     let hasSymbol = false;
@@ -395,11 +395,11 @@ function validatePassword() {
     }
 }
 
-function confirmPassword() {
-    let form = document.getElementById("signup_form");
-    let pw = document.getElementById("signup_pw").value;
-    let conf_pw = document.getElementById("signup_confirm_pw").value;
-    let conf_pw_br = document.getElementById("conf_pw_br");
+function confirmPassword(form_id, pw_id, conf_pw_id, conf_pw_br_id) {
+    let form = document.getElementById(form_id);
+    let pw = document.getElementById(pw_id).value;
+    let conf_pw = document.getElementById(conf_pw_id).value;
+    let conf_pw_br = document.getElementById(conf_pw_br_id);
 
     if (pw != conf_pw) {
         if (document.getElementById("conf_pw_warning") == null) {
@@ -492,11 +492,109 @@ function login() {
          }
      }
      xhttp.send();
+}
 
+function loadSecurityQs() {
+  let xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "http://localhost:8041/getallusers", true);
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+          let users = JSON.parse(this.responseText);
+          let email = document.getElementById("email_entry").value;
+          let user;
+          for (i = 0; i < users.length; i++) {
+              if (users[i].email == email) {
+                  user = users[i];
+              }
+          }
+
+          let getSecQsForm = document.getElementById("get_sec_qs_form");
+          let getSecQsButton = document.getElementById("get_sec_qs_button");
+          getSecQsForm.style.display = "none";
+          getSecQsButton.style.display = "none";
+
+          let resetPwForm = document.getElementById("reset_password_form");
+          resetPwForm.style.display = "block";
+
+          let secQ1 = document.getElementById("sec_q1");
+          let secQ2 = document.getElementById("sec_q2");
+          let secQ3 = document.getElementById("sec_q3");
+          secQ1.innerHTML = "&nbsp;" + user.sec_q1;
+          secQ2.innerHTML = "&nbsp;" + user.sec_q2;
+          secQ3.innerHTML = "&nbsp;" + user.sec_q3;
+       }
+   }
+   xhttp.send();
+}
+
+function validateResetPassword() {
+    let form = document.getElementById("reset_password_form");
+    let button = document.getElementById("reset_password_button");
+
+    allFilled = true;
+    for (i = 0; i < form.children.length; i++) {
+        el = form.children[i];
+        if (el.tagName.toLowerCase() == "input") {
+            if (el.value == "") {
+                allFilled = false;
+                break;
+            }
+        }
+    }
+
+    if (allFilled == false) {
+        if (document.getElementById("unfilled_warning") == null) {
+            let newp = document.createElement("p");
+            newp.classList.add("signup_warning");
+            newp.innerHTML = "All fields must be filled";
+            newp.id = "unfilled_warning";
+            form.appendChild(newp);
+        }
+    }
+    else {
+        let oldp = document.getElementById("unfilled_warning");
+        if (oldp != null) {
+            oldp.remove();
+        }
+    }
+
+    let allValid = document.getElementById("pw_warning") == null && document.getElementById("conf_pw_warning") == null;
+    if (allValid && allFilled) {
+        button.style.display = "block";
+    }
+    else {
+        button.style.display = "none";
+    }
 }
 
 function resetPassword() {
+    let form = document.getElementById("reset_password_form");
+    let email = document.getElementById("email_entry").value;
+    let answer1 = document.getElementById("answer1").value;
+    let answer2 = document.getElementById("answer2").value;
+    let answer3 = document.getElementById("answer3").value;
+    let password = document.getElementById("new_password_entry").value;
 
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "http://localhost:8052/resetpassword?email=" + email + "&answer1=" + answer1 + "&answer2=" + answer2 + "&answer3=" + answer3 + "&password=" + password, true);
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let user = JSON.parse(this.responseText);
+            if (user.length == 0) {
+                if (document.getElementById("incorrect_answers_warning") == null) {
+                    let newp = document.createElement("p");
+                    newp.classList.add("signup_warning");
+                    newp.innerHTML = "Answers incorrect";
+                    newp.id = "incorrect_answers_warning";
+                    form.appendChild(newp);
+                }
+            }
+            else {
+                location.href = "login_page.html";
+            }
+         }
+     }
+     xhttp.send();
 }
 
 
@@ -507,11 +605,6 @@ var announcements_row;
 var all_assignments_row_student;
 var all_assignments_row_teacher
 var course_assignments_row;
-var all_courses;
-var all_users;
-var all_teachers;
-var all_ids;
-var user;
 
 var db = new sqlite3.Database('./canvas.db', (err) => {
     if (err) {
@@ -660,7 +753,7 @@ app.get("/getallcourses", function(req, response) {
       response.setHeader('Content-Type', 'application/json');
 
       db.all("SELECT * FROM courses", function(err, row) {
-        all_courses=row;
+        let all_courses=row;
         const jsonContent = JSON.stringify(all_courses);
         response.end(jsonContent);
         console.log(jsonContent);
@@ -677,7 +770,7 @@ app.get("/getallusers", function(req, response) {
       response.setHeader('Content-Type', 'application/json');
 
       db.all("SELECT * FROM users", function(err, row) {
-        all_users=row;
+        let all_users=row;
         const jsonContent = JSON.stringify(all_users);
         response.end(jsonContent);
         console.log(jsonContent);
@@ -753,7 +846,7 @@ app.get("/getallteachers", function(req, response) {
       response.setHeader('Content-Type', 'application/json');
 
       db.all("SELECT * FROM users WHERE role = 'teacher'", function(err, row) {
-        all_teachers=row;
+        let all_teachers=row;
         const jsonContent = JSON.stringify(all_teachers);
         response.end(jsonContent);
         console.log(jsonContent);
@@ -770,7 +863,7 @@ app.get("/getallids", function(req, response) {
       response.setHeader('Content-Type', 'application/json');
 
       db.all("SELECT user FROM users", function(err, row) {
-        all_ids=row;
+        let all_ids=row;
         const jsonContent = JSON.stringify(all_ids);
         response.end(jsonContent);
         console.log(jsonContent);
@@ -791,13 +884,33 @@ app.get("/getuserlogin", function(req, response) {
       console.log(email + "\n" + password);
 
       db.all("SELECT * FROM users WHERE email=? and password=?", [email, password], function(err, row) {
-        user=row;
+        let user=row;
         const jsonContent = JSON.stringify(user);
         response.end(jsonContent);
         console.log(jsonContent);
       });
 })
 app.listen(8051, function () {
+    console.log("server initialized");
+})
+
+app.get("/resetpassword", function(req, response) {
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      response.setHeader('Access-Control-Max-Age', 2592000);
+      response.setHeader('Content-Type', 'application/json');
+
+      db.all("SELECT * FROM users WHERE email=? and sec_a1=? and sec_a2=? and sec_a3=?", [req.query.email, req.query.answer1, req.query.answer2, req.query.answer3], function(err, row) {
+        let user=row;
+        const jsonContent = JSON.stringify(user);
+        if (jsonContent.length != 0) {
+            db.run("UPDATE users SET password=? WHERE user=?", [req.query.password, JSON.parse(jsonContent)[0].user]);
+        }
+        response.end(jsonContent);
+        console.log(jsonContent);
+      });
+})
+app.listen(8052, function () {
     console.log("server initialized");
 })
 
@@ -1448,42 +1561,6 @@ function LoadDashboardAdmin() {
       }
       xhttp1.send();
 }
-
-function loadSecurityQs() {
-  let xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:8041/getallusers", true);
-  xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-          let users = JSON.parse(this.responseText);
-          let email = document.getElementById("email_entry").value;
-          let user;
-          for (i = 0; i < users.length; i++) {
-              if (users[i].email == email) {
-                  user = users[i];
-              }
-          }
-
-          let getSecQsForm = document.getElementById("get_sec_qs_form");
-          let getSecQsButton = document.getElementById("get_sec_qs_button");
-          getSecQsForm.style.display = "none";
-          getSecQsButton.style.display = "none";
-
-          let resetPwForm = document.getElementById("reset_password_form");
-          let resetPwButton = document.getElementById("reset_password_button");
-          resetPwForm.style.display = "block";
-          resetPwButton.style.display = "block";
-
-          let secQ1 = document.getElementById("sec_q1");
-          let secQ2 = document.getElementById("sec_q2");
-          let secQ3 = document.getElementById("sec_q3");
-          secQ1.innerHTML = "&nbsp;" + user.sec_q1;
-          secQ2.innerHTML = "&nbsp;" + user.sec_q2;
-          secQ3.innerHTML = "&nbsp;" + user.sec_q3;
-       }
-   }
-   xhttp.send();
-}
-
 
 function get_url_params() {
   var url = document.location.href,
