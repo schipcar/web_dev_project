@@ -1,5 +1,5 @@
 /* Make tables */
-CREATE TABLE grades (email TEXT, name TEXT, user INTEGER, punctuation INTEGER, possible INTEGER, course_name TEXT, PRIMARY KEY (name, user));
+CREATE TABLE grades (email TEXT, name TEXT, user INTEGER, punctuation INTEGER, possible INTEGER, course_name TEXT);
 CREATE TABLE users (name TEXT, email TEXT, user INTEGER, role TEXT check(role='student' or role='teacher' or role='admin'), status TEXT check(status='active' or status='inactive'), password TEXT, sec_q1 TEXT, sec_q2 TEXT, sec_q3 TEXT, sec_a1 TEXT, sec_a2 TEXT, sec_a3 TEXT, PRIMARY KEY (user));
 CREATE TABLE courses (name TEXT, teacher TEXT, description TEXT, enrolled INTEGER, capacity INTEGER, PRIMARY KEY (name));
 CREATE TABLE courses_students (course_name TEXT, user TEXT);
@@ -10,9 +10,9 @@ CREATE TABLE announcements (subject TEXT, body TEXT, PRIMARY KEY (subject, body)
 
 /* Populate the tables with dummy data for testing */
 INSERT INTO grades VALUES ("anasof@uchicago.edu", "Homework 1", "12345678", 100, 100, "Web Development");
-/*INSERT INTO grades VALUES ("alex@uchicago.edu", "Homework 1", "12131981", 100, 100, "Web Development");*/
-/*INSERT INTO grades VALUES ("carly@uchicago.edu", "Homework 1", "34567890", 85, 100, "Web Development");*/
-/*INSERT INTO grades VALUES ("anasof@uchicago.edu", "Homework 2", "12345678", 80, 80, "Web Development");*/
+INSERT INTO grades VALUES ("alex@uchicago.edu", "Homework 1", "12131981", 100, 100, "Web Development");
+INSERT INTO grades VALUES ("carly@uchicago.edu", "Homework 1", "34567890", 85, 100, "Web Development");
+INSERT INTO grades VALUES ("anasof@uchicago.edu", "Homework 2", "12345678", 80, 80, "Web Development");
 
 INSERT INTO users VALUES ("Ana Sofia", "anasof@uchicago.edu", "12345678", "student", "active", "mynameisanasof", "", "", "", "", "", "");
 INSERT INTO users VALUES ("Alex", "alex@uchicago.edu", "12131981", "student", "active", "mynameisalex", "", "", "", "", "", "");
