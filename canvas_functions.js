@@ -631,7 +631,7 @@ http.createServer(function(request, response){
       response.end(jsonContent);
       console.log(jsonContent);
   }
-}).listen(8079);
+}).listen(8080);
 console.log("server initialized");
 
 app.get("/getcourses_student", function(req, response){
