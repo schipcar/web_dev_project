@@ -1,5 +1,5 @@
 # Web Development Final Project
-## Spring 2022
+# Spring 2022
 ### Ana Sofia Muñoz Valadez, Alexander Roche, Carly Schippits
 
 ## Overview
