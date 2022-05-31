@@ -6,8 +6,9 @@
 For our project, we built our own version of the Canvas by Instructure website.
 
 ## Instructions for using the application
-1. Clone the repository
+1. Clone the repository.
 2. In a linux terminal, navigate to the web_dev_project/ folder and type:
+
 node canvas_functions.js
 3. With canvas_functions.js still running, open login_page.html in a browser.
 
