@@ -1589,7 +1589,7 @@ function LoadMainMenuLinksStudent() {
   document.getElementById("myaccount_link").href = ".html?user=" + data.user // NEED TO ADD LINK LATER
   document.getElementById("dashboard_link").href = "dashboard_student.html?user=" + data.user
   document.getElementById("courses_link").href = "dashboard_student.html?user=" + data.user
-  document.getElementById("logout_link").href = "login_page.html?user=" + data.user
+  document.getElementById("logout_link").href = "login_page.html"
 }
 
 function LoadMainMenuLinksTeacher() {
@@ -1597,7 +1597,7 @@ function LoadMainMenuLinksTeacher() {
   document.getElementById("myaccount_link").href = ".html?user=" + data.user // NEED TO ADD LINK LATER
   document.getElementById("dashboard_link").href = "dashboard_teacher.html?user=" + data.user
   document.getElementById("courses_link").href = "dashboard_teacher.html?user=" + data.user
-  document.getElementById("logout_link").href = "login_page.html?user=" + data.user
+  document.getElementById("logout_link").href = "login_page.html"
 }
 
 function LoadCourseMenuLinksStudent() {
