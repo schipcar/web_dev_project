@@ -1,6 +1,6 @@
 # Web Development Final Project
-#### Spring 2022
 #### Ana Sofia Muñoz Valadez, Alexander Roche, Carly Schippits
+#### Spring 2022
 
 ## Overview
 For our project, we built our own version of the Canvas by Instructure website.
