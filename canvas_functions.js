@@ -1767,6 +1767,25 @@ app.get('/info_account', function(req, res) {
     renew()
     res.send(JSON.stringify(row_info_account));
 });
+app.post('/edit', function(req, res) {
+    db.run('REPLACE INTO users (name, email, user) VALUES (?, ?, ?)', [req.query.account_name, req.query.account_email, req.query.account_id]);
+    console.log(req.query.account_name)
+  });
 app.listen(8088, function() {
   console.log('Server running at http://127.0.0.1:8088/');
 });
+
+function edit_info() {
+    data = get_url_params()
+
+    name_box = document.getElementById("Name")
+    duedate_box = document.getElementById("Email")
+    points_box = document.getElementById("ID")
+
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8088/edit?account_name=" + name_box.value + "&account_email=" + duedate_box.value + "&account_id=" + points_box.value, true);
+    xhttp.send();
+}
+
+
+

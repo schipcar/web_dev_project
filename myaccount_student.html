@@ -80,11 +80,79 @@ function All(){
     <p class="info_student", id="id_account"></p>
   </div>
 
-  <div class="column" id="assignments_panel">
-    <h3></h3> <!-- Empty header so that canvas_functions.js knows where to insert assignments divs -->
+  <div class="column" id="main_panel">
+    <h3>Edit Information</h3>
+    <button onclick="add_assignment_form()">Edit</button>
   </div>
   
 </div>
+
+<script>
+function add_assignment_form() {
+
+div = document.createElement("form");
+div.className = 'assignment_form';
+div.id = 'assignment_form_div';
+
+name_prompt = document.createElement("p");
+duedate_prompt = document.createElement("p");
+points_prompt = document.createElement("p");
+
+
+name_prompt.innerHTML = 'Name:';
+duedate_prompt.innerHTML = 'Email:';
+points_prompt.innerHTML = 'ID:';
+
+name_box = document.createElement("input");
+duedate_box = document.createElement("input");
+points_box = document.createElement("input");
+
+
+name_box.className = 'announcement_form';
+duedate_box.className = 'announcement_form';
+points_box.className = 'announcement_form';
+
+
+name_box.name = "Name"
+duedate_box.name = "Email"
+points_box.name = "ID"
+
+
+name_box.id = "Name"
+duedate_box.id = "Email"
+points_box.id = "ID"
+
+name_box.setAttribute("type", "text");
+duedate_box.setAttribute("type", "text");
+points_box.setAttribute("type", "number");
+
+
+submit_button = document.createElement("input")
+submit_button.type = "submit"
+submit_button.value = "Submit"
+submit_button.onclick = function() {
+    edit_info()
+    document.getElementById('assignment_form_div').remove();
+}
+
+linebreak = document.createElement("br");
+
+div.appendChild(name_prompt);
+div.appendChild(name_box);
+div.appendChild(linebreak);
+div.appendChild(duedate_prompt);
+div.appendChild(duedate_box);
+div.appendChild(linebreak);
+div.appendChild(points_prompt);
+div.appendChild(points_box);
+div.appendChild(linebreak);
+div.appendChild(submit_button);
+document.getElementById('main_panel').appendChild(div);
+}
+
+
+
+</script>
 
 </body>
 </html>
