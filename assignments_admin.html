@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel=stylesheet href="canvas_styles.css" TYPE="text/css">
+  <script src="canvas_functions.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assignments</title>
+</head>
+
+<body onload="LoadCourseName_notitle(); LoadMainMenuLinksTeacher(); LoadCourseMenuLinksTeacher(); LoadAllCourseAssignmentsTeacher('main_panel');">
+
+<div id="header">
+  <h2 id="course_header"></h2>
+</div>
+
+<div id="main">
+
+   <div class="column" id="main_menu">
+     <ul class="main_menu_items">
+       <li class="main_menu_items"><a class="main_menu_items" id="myaccount_link">My Account</a></li>
+       <li class="main_menu_items"><a class="main_menu_items" id="dashboard_link">Dashboard</a></li>
+       <li class="selected_menu_item"><a class="main_menu_items" id="courses_link">Courses</a></li>
+       <li class="main_menu_items"><a class="main_menu_items" id="logout_link">Logout</a></li>
+     </ul>
+   </div>
+
+   <div class="column" id="course_menu">
+     <ul class="course_menu_items">
+       <li class="course_menu_items"><a class="course_menu_items" id="course_homepage_link">Course Home</a></li>
+       <li class="course_menu_items"><a class="course_menu_items" id="announcements_link">Announcements</a></li>
+       <li class="selected_course_menu_item"><a class="course_menu_items" id="assignments_link">Assignments</a></li>
+       <li class="course_menu_items"><a class="course_menu_items" id="grades_link">Grades</a></li>
+     </ul>
+  </div>
+
+  <div class="column" id="main_panel">
+    <h3>Assignments</h3>
+    <button onclick="add_assignment_form()">Create a new assignment</button>
+  </div>
+  
+</div>
+
+</body>
+</html>
