@@ -1273,6 +1273,7 @@ function addCourseAdminHelperLink(row, item) {
     let link = document.createElement("a");
     let link_text = document.createTextNode(item);
         link.href =  "course_homepage_admin.html?user=" + data.user + "&course_name=" + item
+        link.className = assignment_title
         link.appendChild(link_text)
         cell.appendChild(link);
         row.appendChild(cell);
