@@ -1040,7 +1040,7 @@ function LoadAllAssignmentsStudent(main_div_id) {
    xhttp.send();
 }
 
-function LoadAllAssignmentsTeacher(main_div_id, role) {
+function LoadAllAssignmentsTeacher(main_div_id) {
   var url = document.location.href,
   params = url.split('?')
 
@@ -1050,7 +1050,7 @@ function LoadAllAssignmentsTeacher(main_div_id, role) {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
-           AddAssignmentsTeacher(assignments, main_div_id, role)
+           AddAssignmentsTeacher(assignments, main_div_id)
        }
    }
    xhttp.send();
@@ -1072,7 +1072,7 @@ function LoadCourseAssignmentsStudent(main_div_id) {
    xhttp.send();
 }
 
-function LoadCourseAssignmentsTeacher(main_div_id, role) {
+function LoadCourseAssignmentsTeacher(main_div_id) {
   var url = document.location.href,
   params = url.split('?')
 
@@ -1082,13 +1082,13 @@ function LoadCourseAssignmentsTeacher(main_div_id, role) {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
-           AddAssignmentsTeacher(assignments, main_div_id, role)
+           AddAssignmentsTeacher(assignments, main_div_id)
        }
    }
    xhttp.send();
 }
 
-function LoadAllCourseAssignmentsTeacher(main_div_id, role) {
+function LoadAllCourseAssignmentsTeacher(main_div_id) {
   var url = document.location.href,
   params = url.split('?')
 
@@ -1098,7 +1098,7 @@ function LoadAllCourseAssignmentsTeacher(main_div_id, role) {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
-           AddAllAssignmentsTeacher(assignments, main_div_id, role)
+           AddAllAssignmentsTeacher(assignments, main_div_id)
        }
    }
    xhttp.send();
@@ -1124,11 +1124,11 @@ function AddAssignmentsStudent(assignments, main_div_id) {
     }
 }
 
-function AddAssignmentsTeacher(assignments, main_div_id, role) {
+function AddAssignmentsTeacher(assignments, main_div_id) {
      AddDiv("past", "To Do", main_div_id, "1")  /* for teachers, past assignments go in 'To Do' section*/
 
      for (let i=0; i<assignments.length; i++) {
-         AddAssignment(assignments[i], role)
+         AddAssignment(assignments[i], "teacher")
      }
 
      if (document.getElementById("past").childElementCount==1) {
@@ -1136,7 +1136,7 @@ function AddAssignmentsTeacher(assignments, main_div_id, role) {
      }
 }
 
-function AddAllAssignmentsTeacher(assignments, main_div_id, role) {
+function AddAllAssignmentsTeacher(assignments, main_div_id) {
      AddDiv("past", "To Do", main_div_id, "1")  /* for teachers, past assignments go in 'To Do' section*/
      AddDiv("upcoming", "Upcoming Assignments", main_div_id, "2")
 
@@ -1150,7 +1150,7 @@ function AddAllAssignmentsTeacher(assignments, main_div_id, role) {
          new_heading.className = "assignment_title"
 
          new_link = document.createElement("a")
-         new_link.href = "assignment_" + role + ".html?user=" + data.user + "&course_name=" + assignment["course_name"] + "&assignment_name=" + assignment["assignment_name"]
+         new_link.href = "assignment_teacher.html?user=" + data.user + "&course_name=" + assignment["course_name"] + "&assignment_name=" + assignment["assignment_name"]
          new_link.innerHTML += assignment["assignment_name"]
          new_link.className = "assignment_title"
 
@@ -1267,25 +1267,13 @@ function addCourseAdminHelper(row, item) {
         row.appendChild(cell);
 }
 
-function addCourseAdminHelperLink(row, item) {
-    data = get_url_params()
-    let cell = document.createElement("td");
-    let link = document.createElement("a");
-    let link_text = document.createTextNode(item);
-        link.href =  "course_homepage_admin.html?user=" + data.user + "&course_name=" + item
-        link.className = 'course_link'
-        link.appendChild(link_text)
-        cell.appendChild(link);
-        row.appendChild(cell);
-}
-
 function addCourseAdmin(course) {
     let courseTable = document.getElementById("all_courses_list");
     let ctBody = courseTable.children[1];
     let newRow = document.createElement("tr");
     ctBody.appendChild(newRow);
 
-    addCourseAdminHelperLink(newRow, course.name);
+    addCourseAdminHelper(newRow, course.name);
     addCourseAdminHelper(newRow, course.description);
     addCourseAdminHelper(newRow, course.enrolled);
     addCourseAdminHelper(newRow, course.capacity);
@@ -1598,7 +1586,7 @@ function LoadCourseName_notitle() {
 
 function LoadMainMenuLinksStudent() {
   data = get_url_params()
-  document.getElementById("myaccount_link").href = "myaccount_student.html?user=" + data.user // NEED TO ADD LINK LATER
+  document.getElementById("myaccount_link").href = "myaccount_student.html?user=" + data.user 
   document.getElementById("dashboard_link").href = "dashboard_student.html?user=" + data.user
   document.getElementById("courses_link").href = "dashboard_student.html?user=" + data.user
   document.getElementById("logout_link").href = "login_page.html"
@@ -1606,18 +1594,9 @@ function LoadMainMenuLinksStudent() {
 
 function LoadMainMenuLinksTeacher() {
   data = get_url_params()
-  document.getElementById("myaccount_link").href = "myaccount_teacher.html?user=" + data.user // NEED TO ADD LINK LATER
+  document.getElementById("myaccount_link").href = "myaccount_teacher.html?user=" + data.user 
   document.getElementById("dashboard_link").href = "dashboard_teacher.html?user=" + data.user
   document.getElementById("courses_link").href = "dashboard_teacher.html?user=" + data.user
-  document.getElementById("logout_link").href = "login_page.html"
-}
-
-function LoadMainMenuLinksAdmin() {
-  data = get_url_params()
-  document.getElementById("myaccount_link").href = "myaccount_admin.html?user=" + data.user
-  document.getElementById("settings_link").href = "settings_admin.html?user=" + data.user
-  document.getElementById("dashboard_link").href = "dashboard_admin.html?user=" + data.user
-  document.getElementById("courses_link").href = "courses_admin.html?user=" + data.user
   document.getElementById("logout_link").href = "login_page.html"
 }
 
@@ -1635,14 +1614,6 @@ function LoadCourseMenuLinksTeacher() {
   document.getElementById("announcements_link").href = "announcements_teacher.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("assignments_link").href = "assignments_teacher.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("grades_link").href = "grades_teacher.html?user=" + data.user + "&course_name=" + data.course_name
-}
-
-function LoadCourseMenuLinksAdmin() {
-  data = get_url_params()
-  document.getElementById("course_homepage_link").href = "course_homepage_admin.html?user=" + data.user + "&course_name=" + data.course_name
-  document.getElementById("announcements_link").href = "announcements_admin.html?user=" + data.user + "&course_name=" + data.course_name
-  document.getElementById("assignments_link").href = "assignments_admin.html?user=" + data.user + "&course_name=" + data.course_name
-  document.getElementById("grades_link").href = "grades_admin.html?user=" + data.user + "&course_name=" + data.course_name
 }
 
 function LoadAllGrades() {
@@ -1798,6 +1769,7 @@ app.get('/info_account', function(req, res) {
 });
 app.post('/edit', function(req, res) {
     db.run('REPLACE INTO users (name, email, user) VALUES (?, ?, ?)', [req.query.account_name, req.query.account_email, req.query.account_id]);
+    renew()
     console.log(req.query.account_name)
   });
 app.listen(8088, function() {
@@ -1814,6 +1786,7 @@ function edit_info() {
     let xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://localhost:8088/edit?account_name=" + name_box.value + "&account_email=" + duedate_box.value + "&account_id=" + points_box.value, true);
     xhttp.send();
+    setTimeout(function() { window.location.reload(); }, 1)
 }
 
 
