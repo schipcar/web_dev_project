@@ -90,6 +90,12 @@ function All(){
 <script>
 function add_form() {
 
+var element =  document.getElementById('assignment_form_div');
+if (typeof(element) != 'undefined' && element != null)
+{
+  document.getElementById('assignment_form_div').remove()
+}
+
 div = document.createElement("form");
 div.className = 'assignment_form';
 div.id = 'assignment_form_div';
