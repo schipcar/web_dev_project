@@ -1575,7 +1575,7 @@ function LoadCourseName_notitle() {
 
 function LoadMainMenuLinksStudent() {
   data = get_url_params()
-  document.getElementById("myaccount_link").href = ".html?user=" + data.user // NEED TO ADD LINK LATER
+  document.getElementById("myaccount_link").href = "myaccount_student.html?user=" + data.user 
   document.getElementById("dashboard_link").href = "dashboard_student.html?user=" + data.user
   document.getElementById("courses_link").href = "dashboard_student.html?user=" + data.user
   document.getElementById("logout_link").href = "login_page.html"
@@ -1583,7 +1583,7 @@ function LoadMainMenuLinksStudent() {
 
 function LoadMainMenuLinksTeacher() {
   data = get_url_params()
-  document.getElementById("myaccount_link").href = ".html?user=" + data.user // NEED TO ADD LINK LATER
+  document.getElementById("myaccount_link").href = "myaccount_teacher.html?user=" + data.user 
   document.getElementById("dashboard_link").href = "dashboard_teacher.html?user=" + data.user
   document.getElementById("courses_link").href = "dashboard_teacher.html?user=" + data.user
   document.getElementById("logout_link").href = "login_page.html"
@@ -1668,9 +1668,11 @@ Preferences.id = "tbl";
     TableDiv.appendChild(table)
 }
 
+var row_info_account = 2;
 var row_sent = 2;
 var row_student = 0;
 var string_student = "SELECT * FROM grades";
+var string_info = "SELECT * FROM users WHERE user=12345678"
 
 
 function renew() {
@@ -1680,6 +1682,9 @@ function renew() {
   }
   db.all("SELECT * FROM grades", function(err, row) {
     row_sent=row
+  });
+  db.all(string_info, function(err, row) {
+    row_info_account=row
   });
   db.all(string_student, function(err, row) {
     console.log(row)
@@ -1734,6 +1739,44 @@ app.post('/gradestudent3', function(req, res) {
     renew()
     res.status(204).send()
   });
+app.post('/info_account1', function(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
+    res.setHeader('Access-Control-Max-Age', 2592000);
+    res.setHeader('Content-Type', 'application/json');
+    string_info = 'SELECT * FROM users WHERE user=' + String(req.body.user)
+    renew()
+    res.status(204).send()
+});
+app.get('/info_account', function(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+    res.setHeader('Access-Control-Max-Age', 2592000);
+    res.setHeader('Content-Type', 'application/json');
+    renew()
+    res.send(JSON.stringify(row_info_account));
+});
+app.post('/edit', function(req, res) {
+    db.run('REPLACE INTO users (name, email, user) VALUES (?, ?, ?)', [req.query.account_name, req.query.account_email, req.query.account_id]);
+    renew()
+    console.log(req.query.account_name)
+  });
 app.listen(8088, function() {
   console.log('Server running at http://127.0.0.1:8088/');
 });
+
+function edit_info() {
+    data = get_url_params()
+
+    name_box = document.getElementById("Name")
+    duedate_box = document.getElementById("Email")
+    points_box = document.getElementById("ID")
+
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8088/edit?account_name=" + name_box.value + "&account_email=" + duedate_box.value + "&account_id=" + points_box.value, true);
+    xhttp.send();
+    setTimeout(function() { window.location.reload(); }, 1)
+}
+
+
+

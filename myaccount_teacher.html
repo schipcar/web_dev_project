@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel=stylesheet href="canvas_styles.css" TYPE="text/css">
+  <script src="canvas_functions.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<body onload="LoadMainMenuLinksTeacher(); All();">
+
+<script>
+var url = document.location.href,
+id_user = decodeURI(url.split('=')[1])
+
+function LoadInfo1() {
+  $.ajax({
+        type: "POST",
+        async: false,
+        url: "http://localhost:8088/info_account1",
+        crossDomain: true,
+        data: {user:id_user},
+        success: function (data) {
+            // SOMETHING
+        },
+        error: function (err) {
+            // SOMETHING
+        }
+    });
+  };
+
+
+function LoadInfo() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.overrideMimeType("application/json");
+  xhttp.open("GET", "http://localhost:8088/info_account", true);
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var dict_all = JSON.parse(this.responseText)
+      console.log(dict_all)
+      document.getElementById("name_account").innerHTML = dict_all[0].name;
+      document.getElementById("email_account").innerHTML = dict_all[0].email;
+      document.getElementById("id_account").innerHTML = dict_all[0].user;
+    }
+   }
+   xhttp.send();
+}
+
+function All(){
+  LoadInfo1();
+  LoadInfo();
+}
+
+
+</script>
+
+<div id="header">
+  <h2 id="course_header"></h2>
+</div>
+
+<div id="main">
+
+   <div class="column" id="main_menu">
+     <ul class="main_menu_items">
+       <li class="selected_menu_item"><a class="main_menu_items" id="myaccount_link">My Account</a></li>
+       <li class="main_menu_items"><a class="main_menu_items" id="dashboard_link">Dashboard</a></li>
+       <li class="main_menu_items"><a class="main_menu_items" id="courses_link">Courses</a></li>
+       <li class="main_menu_items"><a class="main_menu_items" id="logout_link">Logout</a></li>
+     </ul>
+   </div>
+
+  <div class="column" id="main_panel">
+    <h3>My personal information</h3>
+    <p style="color:maroon;" style="font-weight:bold;" class="main_menu"> Name: </p>
+    <p class="info_student", id="name_account"></p>
+    <p style="color:maroon;"class="main_menu"> Email: </p>
+    <p class="info_student", id="email_account"></p>
+    <p  style="color:maroon;"class="main_menu"> ID: </p>
+    <p class="info_student", id="id_account"></p>
+  </div>
+
+  <div class="column" id="main_panel">
+    <h3>Edit Information</h3>
+    <button onclick="add_form()">Edit</button>
+  </div>
+  
+</div>
+
+<script>
+function add_form() {
+
+div = document.createElement("form");
+div.className = 'assignment_form';
+div.id = 'assignment_form_div';
+
+name_prompt = document.createElement("p");
+duedate_prompt = document.createElement("p");
+points_prompt = document.createElement("p");
+
+
+name_prompt.innerHTML = 'Name:';
+duedate_prompt.innerHTML = 'Email:';
+points_prompt.innerHTML = 'ID:';
+
+name_box = document.createElement("input");
+duedate_box = document.createElement("input");
+points_box = document.createElement("input");
+
+
+name_box.className = 'announcement_form';
+duedate_box.className = 'announcement_form';
+points_box.className = 'announcement_form';
+
+
+name_box.name = "Name"
+duedate_box.name = "Email"
+points_box.name = "ID"
+
+
+name_box.id = "Name"
+duedate_box.id = "Email"
+points_box.id = "ID"
+
+name_box.setAttribute("type", "text");
+duedate_box.setAttribute("type", "text");
+points_box.setAttribute("type", "number");
+
+
+submit_button = document.createElement("input")
+submit_button.type = "submit"
+submit_button.value = "Submit"
+submit_button.onclick = function() {
+    edit_info()
+    document.getElementById('assignment_form_div').remove();
+}
+
+linebreak = document.createElement("br");
+
+div.appendChild(name_prompt);
+div.appendChild(name_box);
+div.appendChild(linebreak);
+div.appendChild(duedate_prompt);
+div.appendChild(duedate_box);
+div.appendChild(linebreak);
+div.appendChild(points_prompt);
+div.appendChild(points_box);
+div.appendChild(linebreak);
+div.appendChild(submit_button);
+document.getElementById('main_panel').appendChild(div);
+}
+
+</script>
+
+</body>
+</html>

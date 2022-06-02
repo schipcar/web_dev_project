@@ -317,7 +317,7 @@ input, textarea, select {
     display: none;
 }
 
-#user_search, #user_search>* {
+#user_search, #user_search>*, .course_link {
     background-color: lightgray;
 }
 
