@@ -11,8 +11,8 @@ For our project, we built our own version of the Canvas by Instructure website.
 3. With canvas_functions.js still running, open login_page.html in a browser.
 
 ####   To log in as an administrator:
-4. 
-5. 
+4. Enter admin@uchicago.edu as your email address.
+5. Enter mynameisadmin as your password.
 6. Have fun navigating the website!
 
 ####   To log in as a student:
