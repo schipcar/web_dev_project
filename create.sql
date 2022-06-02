@@ -14,11 +14,11 @@ INSERT INTO grades VALUES ("alex@uchicago.edu", "Homework 1", "12131981", 100, 1
 INSERT INTO grades VALUES ("carly@uchicago.edu", "Homework 1", "34567890", 85, 100, "Web Development");
 INSERT INTO grades VALUES ("anasof@uchicago.edu", "Homework 2", "12345678", 80, 80, "Web Development");
 
-INSERT INTO users VALUES ("Admin", "admin@uchicago.edu", "0004", "admin", "active", "mynameisadmin", "", "", "", "", "", "");
-INSERT INTO users VALUES ("Ana Sofia", "anasof@uchicago.edu", "12345678", "student", "active", "mynameisanasof", "", "", "", "", "", "");
-INSERT INTO users VALUES ("Alex", "alex@uchicago.edu", "12131981", "student", "active", "mynameisalex", "", "", "", "", "", "");
-INSERT INTO users VALUES ("Carly", "carly@uchicago.edu", "34567890", "student", "active", "mynameiscarly", "", "", "", "", "", "");
-INSERT INTO users VALUES ("Rafi", "rafi@uchicago.edu", "00112233", "teacher", "active", "mynameisrafi", "", "", "", "", "", "");
+INSERT INTO users VALUES ("Admin", "admin@uchicago.edu", "0004", "admin", "active", "mynameisadmin", "What was the name of your first pet?", "What was your favorite ice cream flavor as a child?", "When did you lose your first baby tooth?", "Buster", "Chocolate", "2000");
+INSERT INTO users VALUES ("Ana Sofia", "anasof@uchicago.edu", "12345678", "student", "active", "mynameisanasof", "What was the name of your first pet?", "What was your favorite ice cream flavor as a child?", "When did you lose your first baby tooth?", "Buster", "Chocolate", "2000");
+INSERT INTO users VALUES ("Alex", "alex@uchicago.edu", "12131981", "student", "active", "mynameisalex", "What was the name of your first pet?", "What was your favorite ice cream flavor as a child?", "When did you lose your first baby tooth?", "Buster", "Chocolate", "2000");
+INSERT INTO users VALUES ("Carly", "carly@uchicago.edu", "34567890", "student", "active", "mynameiscarly", "What was the name of your first pet?", "What was your favorite ice cream flavor as a child?", "When did you lose your first baby tooth?", "Buster", "Chocolate", "2000");
+INSERT INTO users VALUES ("Rafi", "rafi@uchicago.edu", "00112233", "teacher", "active", "mynameisrafi", "What was the name of your first pet?", "What was your favorite ice cream flavor as a child?", "When did you lose your first baby tooth?", "Buster", "Chocolate", "2000");
 
 INSERT INTO courses VALUES ("Web Development", "Rafi", "This is the course description for Web Development", 40, 50);
 INSERT INTO courses VALUES ("Machine Learning", "Chenhao", "This is the course description for Machine Learning", 30, 30);
