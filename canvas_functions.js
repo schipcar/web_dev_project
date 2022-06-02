@@ -820,17 +820,6 @@ app.listen(8046, function() {
 })
 
 app.post("/signup", function(req, response) {
-    console.log(req.query.name);
-    console.log(req.query.email);
-    console.log(req.query.id);
-    console.log(req.query.password);
-    console.log(req.query.account_type);
-    console.log(req.query.sec_q1);
-    console.log(req.query.sec_a1);
-    console.log(req.query.sec_q2);
-    console.log(req.query.sec_a2);
-    console.log(req.query.sec_q3);
-    console.log(req.query.sec_a3);
     db.run('INSERT INTO users VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [req.query.name, req.query.email,
             req.query.id, req.query.account_type, "inactive", req.query.password, req.query.sec_q1, req.query.sec_q2,
             req.query.sec_q3, req.query.sec_a1, req.query.sec_a2, req.query.sec_a3]);
