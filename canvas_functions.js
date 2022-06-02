@@ -1040,7 +1040,7 @@ function LoadAllAssignmentsStudent(main_div_id) {
    xhttp.send();
 }
 
-function LoadAllAssignmentsTeacher(main_div_id) {
+function LoadAllAssignmentsTeacher(main_div_id, role) {
   var url = document.location.href,
   params = url.split('?')
 
@@ -1050,7 +1050,7 @@ function LoadAllAssignmentsTeacher(main_div_id) {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
-           AddAssignmentsTeacher(assignments, main_div_id)
+           AddAssignmentsTeacher(assignments, main_div_id, role)
        }
    }
    xhttp.send();
@@ -1072,7 +1072,7 @@ function LoadCourseAssignmentsStudent(main_div_id) {
    xhttp.send();
 }
 
-function LoadCourseAssignmentsTeacher(main_div_id) {
+function LoadCourseAssignmentsTeacher(main_div_id, role) {
   var url = document.location.href,
   params = url.split('?')
 
@@ -1082,7 +1082,7 @@ function LoadCourseAssignmentsTeacher(main_div_id) {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
-           AddAssignmentsTeacher(assignments, main_div_id)
+           AddAssignmentsTeacher(assignments, main_div_id, role)
        }
    }
    xhttp.send();
@@ -1124,11 +1124,11 @@ function AddAssignmentsStudent(assignments, main_div_id) {
     }
 }
 
-function AddAssignmentsTeacher(assignments, main_div_id) {
+function AddAssignmentsTeacher(assignments, main_div_id, role) {
      AddDiv("past", "To Do", main_div_id, "1")  /* for teachers, past assignments go in 'To Do' section*/
 
      for (let i=0; i<assignments.length; i++) {
-         AddAssignment(assignments[i], "teacher")
+         AddAssignment(assignments[i], role)
      }
 
      if (document.getElementById("past").childElementCount==1) {
