@@ -1291,7 +1291,7 @@ function revealForm() {
     form.style.display = "block";
     formButton.style.display = "inline";
 
-    let teach_datalist = document.getElementById("teachers_datalist");
+    let teach_datalist = document.getElementById("course_teacher_input");
     let xhttp = new XMLHttpRequest();
     xhttp.open("GET", "http://localhost:8048/getallteachers", true);
     xhttp.onreadystatechange = function() {
@@ -1300,6 +1300,7 @@ function revealForm() {
              for (let i=0; i<teachers.length; i++) {
                  let newOption = document.createElement("option");
                     newOption.value = teachers[i].name;
+                    newOption.innerHTML = teachers[i].name;
                     teach_datalist.appendChild(newOption);
              }
          }

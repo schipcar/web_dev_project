@@ -16,7 +16,6 @@
         <div id="main">
             <div class="column" id="main_menu">
                 <ul class="main_menu_items">
-                    <li class="main_menu_items"><a href="[insert link]" class="main_menu_items">My Account</a></li>
                     <li class="main_menu_items"><a href="dashboard_admin.html" class="main_menu_items">Dashboard</a></li>
                     <li class="selected_menu_item">Courses</li>
                     <li class="main_menu_items"><a href="settings_admin.html" class="main_menu_items">Settings</a></li>
@@ -37,15 +36,14 @@
                         <label for="course_capacity_input">Capacity:</label>
                             <input type="number" id="course_capacity_input" name="Capacity"/><br/>
                         <label for="course_teacher_input">Teacher:</label>
-                            <input list="teachers_datalist" id ="course_teacher_input" name="Teacher"/><br/>
-                            <datalist id="teachers_datalist">
+                            <select id="course_teacher_input">
                                 <!-- <option value="Twilight Sparkle"/>
                                 <option value="Pinkie Pie"/>
                                 <option value="Applejack"/>
                                 <option value="Rainbow Dash"/>
                                 <option value="Rarity"/>
                                 <option value="Fluttershy"/> -->
-                            </datalist>
+                            </select>
                     </form>
                     <button id="submit_course" onclick=addCourse()>Submit</button>
                 </div>
