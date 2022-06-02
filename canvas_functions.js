@@ -1357,27 +1357,57 @@ function addSpecificClass(user, coursename, oldCoursesUl) {
 }
 
 function addClassForUser(user, newCoursesUl, oldCoursesUl) {
+    if (newCoursesUl.style.display != "block" && !newCoursesUl.classList.contains("already_created")) {
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "http://localhost:8040/getallcourses", true);
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                newCoursesUl.style.display = "block";
+                let courses = JSON.parse(this.responseText);
+                for (i = 0; i<courses.length; i++) {
+                    let coursename = courses[i].name;
+
+                    let newCourse = document.createElement("li");
+                    newCourse.innerHTML = coursename;
+                    newCoursesUl.appendChild(newCourse);
+
+                    let addClassButton = document.createElement("button");
+                    addClassButton.classList.add("add_specific_class_button");
+                    addClassButton.innerHTML = "Add";
+                    addClassButton.addEventListener("click", function() {addSpecificClass(user, coursename, oldCoursesUl);});
+                    newCourse.appendChild(addClassButton);
+                }
+                newCoursesUl.classList.add("already_created");
+                let closeButton = document.createElement("button");
+                closeButton.innerHTML = "Close";
+                closeButton.addEventListener("click", function() {newCoursesUl.style.display = "none";});
+                newCoursesUl.appendChild(closeButton);
+             }
+         }
+         xhttp.send();
+    }
+    else if (newCoursesUl.style.display != "block") {
+        newCoursesUl.style.display = "block"
+    }
+}
+
+function addTeachersClasses(ul, name) {
     let xhttp = new XMLHttpRequest();
     xhttp.open("GET", "http://localhost:8040/getallcourses", true);
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-
-            newCoursesUl.style.display = "block";
             let courses = JSON.parse(this.responseText);
-            for (let i=0; i<courses.length; i++) {
-                let newCourse = document.createElement("li");
-                newCourse.innerHTML = courses[i].name;
-                newCoursesUl.appendChild(newCourse);
-
-                let addClassButton = document.createElement("button");
-                addClassButton.classList.add("add_specific_class_button");
-                addClassButton.innerHTML = "Add";
-                addClassButton.addEventListener("click", function() {addSpecificClass(user, courses[i].name, oldCoursesUl);});
-                newCourse.appendChild(addClassButton);
+            for (i = 0; i < courses.length; i++) {
+                if (courses[i].teacher == name) {
+                    let newCourseLi = document.createElement("li");
+                    newCourseLi.classList.add("class_li");
+                    newCourseLi.innerHTML = courses[i].name;
+                    ul.prepend(newCourseLi);
+                }
             }
-         }
-     }
-     xhttp.send();
+        }
+    }
+    xhttp.send();
 }
 
 function addUsersClasses(ul, username) {
@@ -1472,23 +1502,25 @@ function addUserToListAdmin(user) {
     else if (user.role == "teacher") {
         addUserToListAdminHelper(newLi, "Teacher");
     }
-    else {
-        addUserToListAdminHelper(newLi, "Admin");
-    }
     addUserToListAdminHelper(newLi, "Classes:", false);
     let currCoursesUl = document.createElement("ul");
         currCoursesUl.classList.add("class_list");
         newLi.appendChild(currCoursesUl);
-    addUsersClasses(currCoursesUl, user.user);
-    let addClassUl = document.createElement("ul");
-        addClassUl.classList.add("add_class_ul");
-        addClassUl.style.display = "none";
-        newLi.appendChild(addClassUl);
-    let addClassesButton = document.createElement("button");
-        addClassesButton.classList.add("inline_button");
-        addClassesButton.innerHTML = "Add Class";
-        addClassesButton.addEventListener("click", function() {addClassForUser(user, addClassUl, currCoursesUl);});
-        currCoursesUl.appendChild(addClassesButton);
+    if (user.role == "teacher") {
+        addTeachersClasses(currCoursesUl, user.name);
+    }
+    else if (user.role == "student") {
+        addUsersClasses(currCoursesUl, user.user);
+        let addClassUl = document.createElement("ul");
+            addClassUl.classList.add("add_class_ul");
+            addClassUl.style.display = "none";
+            newLi.appendChild(addClassUl);
+        let addClassesButton = document.createElement("button");
+            addClassesButton.classList.add("inline_button");
+            addClassesButton.innerHTML = "Add Class";
+            addClassesButton.addEventListener("click", function() {addClassForUser(user, addClassUl, currCoursesUl);});
+            currCoursesUl.appendChild(addClassesButton);
+    }
     newLi.appendChild(document.createElement("br"));
     if (user.status == "active") {
         loadActiveSpan(newLi, user);
@@ -1505,7 +1537,9 @@ function LoadUsersAdmin() {
       if (this.readyState == 4 && this.status == 200) {
           let users = JSON.parse(this.responseText);
           for (let i=0; i<users.length; i++) {
-              addUserToListAdmin(users[i]);
+              if (users[i].role != "admin") {
+                  addUserToListAdmin(users[i]);
+              }
           }
        }
    }
@@ -1575,7 +1609,7 @@ function LoadCourseName_notitle() {
 
 function LoadMainMenuLinksStudent() {
   data = get_url_params()
-  document.getElementById("myaccount_link").href = "myaccount_student.html?user=" + data.user 
+  document.getElementById("myaccount_link").href = "myaccount_student.html?user=" + data.user
   document.getElementById("dashboard_link").href = "dashboard_student.html?user=" + data.user
   document.getElementById("courses_link").href = "dashboard_student.html?user=" + data.user
   document.getElementById("logout_link").href = "login_page.html"
@@ -1583,7 +1617,7 @@ function LoadMainMenuLinksStudent() {
 
 function LoadMainMenuLinksTeacher() {
   data = get_url_params()
-  document.getElementById("myaccount_link").href = "myaccount_teacher.html?user=" + data.user 
+  document.getElementById("myaccount_link").href = "myaccount_teacher.html?user=" + data.user
   document.getElementById("dashboard_link").href = "dashboard_teacher.html?user=" + data.user
   document.getElementById("courses_link").href = "dashboard_teacher.html?user=" + data.user
   document.getElementById("logout_link").href = "login_page.html"
@@ -1777,6 +1811,3 @@ function edit_info() {
     xhttp.send();
     setTimeout(function() { window.location.reload(); }, 1)
 }
-
-
-
