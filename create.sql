@@ -34,7 +34,7 @@ INSERT INTO courses_students VALUES ("Algorithms", "12345678");
 
 INSERT INTO assignments VALUES ("Homework 1", "Web Development", "04/20/2022", 100, "This is the description for HW1");
 INSERT INTO assignments VALUES ("Homework 2", "Web Development", "05/17/2022", 100, "This is the description for HW2");
-INSERT INTO assignments VALUES ("Homework 3", "Web Development", "06/02/2022", 100, "This is the description for HW3");
+INSERT INTO assignments VALUES ("Homework 3", "Web Development", "06/04/2022", 100, "This is the description for HW3");
 INSERT INTO assignments VALUES ("Homework 4", "Web Development", "06/10/2022", 100, "This is the description for HW4");
 INSERT INTO assignments VALUES ("Project 1", "Machine Learning", "06/01/2022", 100, "This is the description for Project 1");
 
