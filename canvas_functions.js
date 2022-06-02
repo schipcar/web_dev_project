@@ -1267,13 +1267,24 @@ function addCourseAdminHelper(row, item) {
         row.appendChild(cell);
 }
 
+function addCourseAdminHelperLink(row, item) {
+    data = get_url_params()
+    let cell = document.createElement("td");
+    let link = document.createElement("a");
+    let link_text = document.createTextNode(item);
+        link.href =  "course_homepage_admin.html?user=" + data.user + "&course_name=" + item
+        link.appendChild(link_text)
+        cell.appendChild(link);
+        row.appendChild(cell);
+}
+
 function addCourseAdmin(course) {
     let courseTable = document.getElementById("all_courses_list");
     let ctBody = courseTable.children[1];
     let newRow = document.createElement("tr");
     ctBody.appendChild(newRow);
 
-    addCourseAdminHelper(newRow, course.name);
+    addCourseAdminHelperLink(newRow, course.name);
     addCourseAdminHelper(newRow, course.description);
     addCourseAdminHelper(newRow, course.enrolled);
     addCourseAdminHelper(newRow, course.capacity);
