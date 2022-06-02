@@ -1638,7 +1638,6 @@ function LoadMainMenuLinksTeacher() {
 
 function LoadMainMenuLinksAdmin() {
   data = get_url_params()
-  document.getElementById("myaccount_link").href = "myaccount_admin.html?user=" + data.user
   document.getElementById("settings_link").href = "settings_admin.html?user=" + data.user
   document.getElementById("dashboard_link").href = "dashboard_admin.html?user=" + data.user
   document.getElementById("courses_link").href = "courses_admin.html?user=" + data.user
