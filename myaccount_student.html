@@ -83,6 +83,7 @@ function All(){
   <div class="column" id="main_panel">
     <h3>Edit Information</h3>
     <button onclick="add_form()">Edit</button>
+    <button onclick="reset()">Reset Password</button>
   </div>
   
 </div>
@@ -155,7 +156,107 @@ div.appendChild(submit_button);
 document.getElementById('main_panel').appendChild(div);
 }
 
-</script>
+function reset() {
 
+var element =  document.getElementById('password_form_div');
+if (typeof(element) != 'undefined' && element != null)
+{
+  document.getElementById('password_form_div').remove()
+}
+div = document.createElement("form");
+div.className = 'password_form';
+div.id = 'password_form_div';
+
+var header = document.createElement('h3');
+header.append("Edit Password and Questions");
+Password_prompt = document.createElement("p");
+Question1_prompt = document.createElement("p");
+Answer1_prompt = document.createElement("p");
+Question2_prompt = document.createElement("p");
+Answer2_prompt = document.createElement("p");
+Question3_prompt = document.createElement("p");
+Answer3_prompt = document.createElement("p");
+
+
+Password_prompt.innerHTML = 'New Password:';
+Question1_prompt.innerHTML = 'Answer 1:';
+Answer1_prompt.innerHTML = 'Answer 1:';
+Question2_prompt.innerHTML = 'Question 2:';
+Answer2_prompt.innerHTML = 'Answer 2:';
+Question3_prompt.innerHTML = 'Question 3:';
+Answer3_prompt.innerHTML = 'Answer 3:';
+
+Password = document.createElement("input");
+Question1 = document.createElement("input");
+Answer1 = document.createElement("input");
+Question2 = document.createElement("input");
+Answer2 = document.createElement("input");
+Question3 = document.createElement("input");
+Answer3 = document.createElement("input");
+
+Password.className = 'password_form';
+Question1.className = 'password_form';
+Answer1.className = 'password_form';
+Question2.className = 'password_form';
+Answer2.className = 'password_form';
+Question3.className = 'password_form';
+Answer3.className = 'password_form';
+
+Password.name = "Password"
+Question1.name = "Question1"
+Answer1.name = "Answer1"
+Question2.name = "Question2"
+Answer2.name = "Answer2"
+Question3.name = "Question3"
+Answer3.name = "Answer3"
+
+Password.id = "Password"
+Question1.id = "Question1"
+Answer1.id = "Answer1"
+Question2.id = "Question2"
+Answer2.id = "Answer2"
+Question3.id = "Question3"
+Answer3.id = "Answer3"
+
+Password.setAttribute("type", "text");
+Question1.setAttribute("type", "text");
+Answer1.setAttribute("type", "text");
+Question2.setAttribute("type", "text");
+Answer2.setAttribute("type", "text");
+Question3.setAttribute("type", "text");
+Answer3.setAttribute("type", "text");
+
+
+submit_button2 = document.createElement("input")
+submit_button2.type = "submit"
+submit_button2.value = "Submit"
+submit_button2.onclick = function() {
+    edit_info_password()
+    document.getElementById('password_form_div').remove();
+}
+
+linebreak = document.createElement("br");
+div.appendChild(header);
+div.appendChild(Password_prompt)
+div.appendChild(Password)
+div.appendChild(Question1_prompt);
+div.appendChild(Question1);
+div.appendChild(Answer1_prompt);
+div.appendChild(Answer1);
+div.appendChild(Question2_prompt);
+div.appendChild(Question2);
+div.appendChild(Answer2_prompt);
+div.appendChild(Answer2);
+div.appendChild(Question3_prompt);
+div.appendChild(Question3);
+div.appendChild(Answer3_prompt);
+div.appendChild(Answer3);
+div.appendChild(linebreak);
+div.appendChild(submit_button2);
+document.getElementById('main_panel').appendChild(div);
+}
+
+
+</script>
 </body>
 </html>

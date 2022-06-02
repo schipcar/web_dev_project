@@ -820,6 +820,17 @@ app.listen(8046, function() {
 })
 
 app.post("/signup", function(req, response) {
+    console.log(req.query.name);
+    console.log(req.query.email);
+    console.log(req.query.id);
+    console.log(req.query.password);
+    console.log(req.query.account_type);
+    console.log(req.query.sec_q1);
+    console.log(req.query.sec_a1);
+    console.log(req.query.sec_q2);
+    console.log(req.query.sec_a2);
+    console.log(req.query.sec_q3);
+    console.log(req.query.sec_a3);
     db.run('INSERT INTO users VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [req.query.name, req.query.email,
             req.query.id, req.query.account_type, "inactive", req.query.password, req.query.sec_q1, req.query.sec_q2,
             req.query.sec_q3, req.query.sec_a1, req.query.sec_a2, req.query.sec_a3]);
@@ -1029,7 +1040,7 @@ function LoadAllAssignmentsStudent(main_div_id) {
    xhttp.send();
 }
 
-function LoadAllAssignmentsTeacher(main_div_id, role) {
+function LoadAllAssignmentsTeacher(main_div_id) {
   var url = document.location.href,
   params = url.split('?')
 
@@ -1039,7 +1050,7 @@ function LoadAllAssignmentsTeacher(main_div_id, role) {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
-           AddAssignmentsTeacher(assignments, main_div_id, role)
+           AddAssignmentsTeacher(assignments, main_div_id)
        }
    }
    xhttp.send();
@@ -1061,7 +1072,7 @@ function LoadCourseAssignmentsStudent(main_div_id) {
    xhttp.send();
 }
 
-function LoadCourseAssignmentsTeacher(main_div_id, role) {
+function LoadCourseAssignmentsTeacher(main_div_id) {
   var url = document.location.href,
   params = url.split('?')
 
@@ -1071,13 +1082,13 @@ function LoadCourseAssignmentsTeacher(main_div_id, role) {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
-           AddAssignmentsTeacher(assignments, main_div_id, role)
+           AddAssignmentsTeacher(assignments, main_div_id)
        }
    }
    xhttp.send();
 }
 
-function LoadAllCourseAssignmentsTeacher(main_div_id, role) {
+function LoadAllCourseAssignmentsTeacher(main_div_id) {
   var url = document.location.href,
   params = url.split('?')
 
@@ -1087,7 +1098,7 @@ function LoadAllCourseAssignmentsTeacher(main_div_id, role) {
   xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
            let assignments = JSON.parse(this.responseText);
-           AddAllAssignmentsTeacher(assignments, main_div_id, role)
+           AddAllAssignmentsTeacher(assignments, main_div_id)
        }
    }
    xhttp.send();
@@ -1113,11 +1124,11 @@ function AddAssignmentsStudent(assignments, main_div_id) {
     }
 }
 
-function AddAssignmentsTeacher(assignments, main_div_id, role) {
+function AddAssignmentsTeacher(assignments, main_div_id) {
      AddDiv("past", "To Do", main_div_id, "1")  /* for teachers, past assignments go in 'To Do' section*/
 
      for (let i=0; i<assignments.length; i++) {
-         AddAssignment(assignments[i], role)
+         AddAssignment(assignments[i], "teacher")
      }
 
      if (document.getElementById("past").childElementCount==1) {
@@ -1125,7 +1136,7 @@ function AddAssignmentsTeacher(assignments, main_div_id, role) {
      }
 }
 
-function AddAllAssignmentsTeacher(assignments, main_div_id, role) {
+function AddAllAssignmentsTeacher(assignments, main_div_id) {
      AddDiv("past", "To Do", main_div_id, "1")  /* for teachers, past assignments go in 'To Do' section*/
      AddDiv("upcoming", "Upcoming Assignments", main_div_id, "2")
 
@@ -1139,7 +1150,7 @@ function AddAllAssignmentsTeacher(assignments, main_div_id, role) {
          new_heading.className = "assignment_title"
 
          new_link = document.createElement("a")
-         new_link.href = "assignment_" + role + ".html?user=" + data.user + "&course_name=" + assignment["course_name"] + "&assignment_name=" + assignment["assignment_name"]
+         new_link.href = "assignment_teacher.html?user=" + data.user + "&course_name=" + assignment["course_name"] + "&assignment_name=" + assignment["assignment_name"]
          new_link.innerHTML += assignment["assignment_name"]
          new_link.className = "assignment_title"
 
@@ -1256,25 +1267,13 @@ function addCourseAdminHelper(row, item) {
         row.appendChild(cell);
 }
 
-function addCourseAdminHelperLink(row, item) {
-    data = get_url_params()
-    let cell = document.createElement("td");
-    let link = document.createElement("a");
-    let link_text = document.createTextNode(item);
-        link.href =  "course_homepage_admin.html?user=" + data.user + "&course_name=" + item
-        link.className = 'course_link'
-        link.appendChild(link_text)
-        cell.appendChild(link);
-        row.appendChild(cell);
-}
-
 function addCourseAdmin(course) {
     let courseTable = document.getElementById("all_courses_list");
     let ctBody = courseTable.children[1];
     let newRow = document.createElement("tr");
     ctBody.appendChild(newRow);
 
-    addCourseAdminHelperLink(newRow, course.name);
+    addCourseAdminHelper(newRow, course.name);
     addCourseAdminHelper(newRow, course.description);
     addCourseAdminHelper(newRow, course.enrolled);
     addCourseAdminHelper(newRow, course.capacity);
@@ -1303,7 +1302,7 @@ function revealForm() {
     form.style.display = "block";
     formButton.style.display = "inline";
 
-    let teach_datalist = document.getElementById("course_teacher_input");
+    let teach_datalist = document.getElementById("teachers_datalist");
     let xhttp = new XMLHttpRequest();
     xhttp.open("GET", "http://localhost:8048/getallteachers", true);
     xhttp.onreadystatechange = function() {
@@ -1312,7 +1311,6 @@ function revealForm() {
              for (let i=0; i<teachers.length; i++) {
                  let newOption = document.createElement("option");
                     newOption.value = teachers[i].name;
-                    newOption.innerHTML = teachers[i].name;
                     teach_datalist.appendChild(newOption);
              }
          }
@@ -1370,57 +1368,27 @@ function addSpecificClass(user, coursename, oldCoursesUl) {
 }
 
 function addClassForUser(user, newCoursesUl, oldCoursesUl) {
-    if (newCoursesUl.style.display != "block" && !newCoursesUl.classList.contains("already_created")) {
-        let xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "http://localhost:8040/getallcourses", true);
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                newCoursesUl.style.display = "block";
-                let courses = JSON.parse(this.responseText);
-                for (i = 0; i<courses.length; i++) {
-                    let coursename = courses[i].name;
-
-                    let newCourse = document.createElement("li");
-                    newCourse.innerHTML = coursename;
-                    newCoursesUl.appendChild(newCourse);
-
-                    let addClassButton = document.createElement("button");
-                    addClassButton.classList.add("add_specific_class_button");
-                    addClassButton.innerHTML = "Add";
-                    addClassButton.addEventListener("click", function() {addSpecificClass(user, coursename, oldCoursesUl);});
-                    newCourse.appendChild(addClassButton);
-                }
-                newCoursesUl.classList.add("already_created");
-                let closeButton = document.createElement("button");
-                closeButton.innerHTML = "Close";
-                closeButton.addEventListener("click", function() {newCoursesUl.style.display = "none";});
-                newCoursesUl.appendChild(closeButton);
-             }
-         }
-         xhttp.send();
-    }
-    else if (newCoursesUl.style.display != "block") {
-        newCoursesUl.style.display = "block"
-    }
-}
-
-function addTeachersClasses(ul, name) {
     let xhttp = new XMLHttpRequest();
     xhttp.open("GET", "http://localhost:8040/getallcourses", true);
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+
+            newCoursesUl.style.display = "block";
             let courses = JSON.parse(this.responseText);
-            for (i = 0; i < courses.length; i++) {
-                if (courses[i].teacher == name) {
-                    let newCourseLi = document.createElement("li");
-                    newCourseLi.classList.add("class_li");
-                    newCourseLi.innerHTML = courses[i].name;
-                    ul.prepend(newCourseLi);
-                }
+            for (let i=0; i<courses.length; i++) {
+                let newCourse = document.createElement("li");
+                newCourse.innerHTML = courses[i].name;
+                newCoursesUl.appendChild(newCourse);
+
+                let addClassButton = document.createElement("button");
+                addClassButton.classList.add("add_specific_class_button");
+                addClassButton.innerHTML = "Add";
+                addClassButton.addEventListener("click", function() {addSpecificClass(user, courses[i].name, oldCoursesUl);});
+                newCourse.appendChild(addClassButton);
             }
-        }
-    }
-    xhttp.send();
+         }
+     }
+     xhttp.send();
 }
 
 function addUsersClasses(ul, username) {
@@ -1515,25 +1483,23 @@ function addUserToListAdmin(user) {
     else if (user.role == "teacher") {
         addUserToListAdminHelper(newLi, "Teacher");
     }
+    else {
+        addUserToListAdminHelper(newLi, "Admin");
+    }
     addUserToListAdminHelper(newLi, "Classes:", false);
     let currCoursesUl = document.createElement("ul");
         currCoursesUl.classList.add("class_list");
         newLi.appendChild(currCoursesUl);
-    if (user.role == "teacher") {
-        addTeachersClasses(currCoursesUl, user.name);
-    }
-    else if (user.role == "student") {
-        addUsersClasses(currCoursesUl, user.user);
-        let addClassUl = document.createElement("ul");
-            addClassUl.classList.add("add_class_ul");
-            addClassUl.style.display = "none";
-            newLi.appendChild(addClassUl);
-        let addClassesButton = document.createElement("button");
-            addClassesButton.classList.add("inline_button");
-            addClassesButton.innerHTML = "Add Class";
-            addClassesButton.addEventListener("click", function() {addClassForUser(user, addClassUl, currCoursesUl);});
-            currCoursesUl.appendChild(addClassesButton);
-    }
+    addUsersClasses(currCoursesUl, user.user);
+    let addClassUl = document.createElement("ul");
+        addClassUl.classList.add("add_class_ul");
+        addClassUl.style.display = "none";
+        newLi.appendChild(addClassUl);
+    let addClassesButton = document.createElement("button");
+        addClassesButton.classList.add("inline_button");
+        addClassesButton.innerHTML = "Add Class";
+        addClassesButton.addEventListener("click", function() {addClassForUser(user, addClassUl, currCoursesUl);});
+        currCoursesUl.appendChild(addClassesButton);
     newLi.appendChild(document.createElement("br"));
     if (user.status == "active") {
         loadActiveSpan(newLi, user);
@@ -1550,9 +1516,7 @@ function LoadUsersAdmin() {
       if (this.readyState == 4 && this.status == 200) {
           let users = JSON.parse(this.responseText);
           for (let i=0; i<users.length; i++) {
-              if (users[i].role != "admin") {
-                  addUserToListAdmin(users[i]);
-              }
+              addUserToListAdmin(users[i]);
           }
        }
    }
@@ -1622,7 +1586,7 @@ function LoadCourseName_notitle() {
 
 function LoadMainMenuLinksStudent() {
   data = get_url_params()
-  document.getElementById("myaccount_link").href = "myaccount_student.html?user=" + data.user
+  document.getElementById("myaccount_link").href = "myaccount_student.html?user=" + data.user 
   document.getElementById("dashboard_link").href = "dashboard_student.html?user=" + data.user
   document.getElementById("courses_link").href = "dashboard_student.html?user=" + data.user
   document.getElementById("logout_link").href = "login_page.html"
@@ -1630,17 +1594,9 @@ function LoadMainMenuLinksStudent() {
 
 function LoadMainMenuLinksTeacher() {
   data = get_url_params()
-  document.getElementById("myaccount_link").href = "myaccount_teacher.html?user=" + data.user
+  document.getElementById("myaccount_link").href = "myaccount_teacher.html?user=" + data.user 
   document.getElementById("dashboard_link").href = "dashboard_teacher.html?user=" + data.user
   document.getElementById("courses_link").href = "dashboard_teacher.html?user=" + data.user
-  document.getElementById("logout_link").href = "login_page.html"
-}
-
-function LoadMainMenuLinksAdmin() {
-  data = get_url_params()
-  document.getElementById("settings_link").href = "settings_admin.html?user=" + data.user
-  document.getElementById("dashboard_link").href = "dashboard_admin.html?user=" + data.user
-  document.getElementById("courses_link").href = "courses_admin.html?user=" + data.user
   document.getElementById("logout_link").href = "login_page.html"
 }
 
@@ -1658,14 +1614,6 @@ function LoadCourseMenuLinksTeacher() {
   document.getElementById("announcements_link").href = "announcements_teacher.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("assignments_link").href = "assignments_teacher.html?user=" + data.user + "&course_name=" + data.course_name
   document.getElementById("grades_link").href = "grades_teacher.html?user=" + data.user + "&course_name=" + data.course_name
-}
-
-function LoadCourseMenuLinksAdmin() {
-  data = get_url_params()
-  document.getElementById("course_homepage_link").href = "course_homepage_admin.html?user=" + data.user + "&course_name=" + data.course_name
-  document.getElementById("announcements_link").href = "announcements_admin.html?user=" + data.user + "&course_name=" + data.course_name
-  document.getElementById("assignments_link").href = "assignments_admin.html?user=" + data.user + "&course_name=" + data.course_name
-  document.getElementById("grades_link").href = "grades_admin.html?user=" + data.user + "&course_name=" + data.course_name
 }
 
 function LoadAllGrades() {
@@ -1824,6 +1772,11 @@ app.post('/edit', function(req, res) {
     renew()
     console.log(req.query.account_name)
   });
+app.post('/edit_info', function(req, res) {
+    db.run('REPLACE INTO users (sec_q1, sec_q2, sec_q2, sec_a1, sec_a2, sec_a3) VALUES (?, ?, ?, ?, ?, ?)', [req.query.question1, req.query.question2, req.query.question3, req.query.answer1, req.query.answer2, req.query.answer3]);
+    renew()
+    console.log(req.query.question1)
+  });
 app.listen(8088, function() {
   console.log('Server running at http://127.0.0.1:8088/');
 });
@@ -1840,3 +1793,18 @@ function edit_info() {
     xhttp.send();
     setTimeout(function() { window.location.reload(); }, 1)
 }
+
+function edit_info_password() {
+    data = get_url_params()
+
+    name_box = document.getElementById("Name")
+    duedate_box = document.getElementById("Email")
+    points_box = document.getElementById("ID")
+
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8088/edit_info?password=" + Password.value + "&question1=" + Question1.value + "&answer1=" + Answer1.value + "&question2=" + Question2.value + "&answer2=" + Answer2.value + "&question3=" + Question3.value + "&answer3=" + Answer3.value, true);
+    xhttp.send();
+    setTimeout(function() { window.location.reload(); }, 1)
+}
+
+
