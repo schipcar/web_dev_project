@@ -217,7 +217,8 @@ function toggleUserDisplay(activityState) {
     let usersList = document.getElementById("users_list");
     for (i = 0; i < usersList.children.length; i++) {
         let user = usersList.children[i];
-        if (user.children[10].innerHTML == activityState + " |") {
+        if (user.children[10].innerHTML == activityState + " |"
+                || user.children[9].innerHTML == activityState + " |") {
             if (checkbox.checked) {
                 let searchVal = document.getElementById("name_email_search").value.toLowerCase();
                 let name = user.children[0].innerHTML.toLowerCase();
