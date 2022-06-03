@@ -315,6 +315,7 @@ input, textarea, select {
 
 #add_course_form, #submit_course {
     display: none;
+    width: 400px;
 }
 
 #user_search, #user_search>*, .course_link {

@@ -1314,7 +1314,7 @@ function revealForm() {
     form.style.display = "block";
     formButton.style.display = "inline";
 
-    let teach_datalist = document.getElementById("teachers_datalist");
+    let teach_datalist = document.getElementById("course_teacher_input");
     let xhttp = new XMLHttpRequest();
     xhttp.open("GET", "http://localhost:8048/getallteachers", true);
     xhttp.onreadystatechange = function() {
@@ -1323,6 +1323,7 @@ function revealForm() {
              for (let i=0; i<teachers.length; i++) {
                  let newOption = document.createElement("option");
                     newOption.value = teachers[i].name;
+                    newOption.innerHTML = teachers[i].name;
                     teach_datalist.appendChild(newOption);
              }
          }
@@ -1330,7 +1331,7 @@ function revealForm() {
      xhttp.send();
 }
 
-function addCourse() {
+function addNewCourseAdmin() {
     let nameInp = document.getElementById("course_name_input");
         let name = nameInp.value;
         nameInp.value = "";
@@ -1348,17 +1349,8 @@ function addCourse() {
     xhttp.open("POST", "http://localhost:8046/addcourse?name=" + name + "&teacher=" + teacher + "&desc=" + desc + "&capacity=" + capacity, true);
     xhttp.send();
 
-    let courseTable = document.getElementById("all_courses_list");
-    let ctBody = courseTable.children[1];
-    let newRow = document.createElement("tr");
-    ctBody.appendChild(newRow);
-
-    let tableValues = [name, desc, 0, capacity, teacher];
-    for (i = 0; i < tableValues.length; i++) {
-        let newCell = document.createElement("td");
-        newCell.innerHTML = tableValues[i];
-        newRow.appendChild(newCell);
-    }
+    let newCourse = {name:name, teacher:teacher, description:desc, enrolled:0, capacity:capacity};
+    addCourseAdmin(newCourse);
 
     let addCourseButton = document.getElementById("add_course_button");
     let form = document.getElementById("add_course_form");
@@ -1598,7 +1590,7 @@ function LoadCourseName_notitle() {
 
 function LoadMainMenuLinksStudent() {
   data = get_url_params()
-  document.getElementById("myaccount_link").href = "myaccount_student.html?user=" + data.user 
+  document.getElementById("myaccount_link").href = "myaccount_student.html?user=" + data.user
   document.getElementById("dashboard_link").href = "dashboard_student.html?user=" + data.user
   document.getElementById("courses_link").href = "dashboard_student.html?user=" + data.user
   document.getElementById("logout_link").href = "login_page.html"
@@ -1606,7 +1598,7 @@ function LoadMainMenuLinksStudent() {
 
 function LoadMainMenuLinksTeacher() {
   data = get_url_params()
-  document.getElementById("myaccount_link").href = "myaccount_teacher.html?user=" + data.user 
+  document.getElementById("myaccount_link").href = "myaccount_teacher.html?user=" + data.user
   document.getElementById("dashboard_link").href = "dashboard_teacher.html?user=" + data.user
   document.getElementById("courses_link").href = "dashboard_teacher.html?user=" + data.user
   document.getElementById("logout_link").href = "login_page.html"
@@ -1798,7 +1790,7 @@ app.get('/info_account', function(req, res) {
     res.send(JSON.stringify(row_info_account));
 });
 app.post('/edit', function(req, res) {
-    var string_helper = "UPDATE users SET name=(?), email=(?), user=(?) WHERE user=" + String(req.query.account_id) 
+    var string_helper = "UPDATE users SET name=(?), email=(?), user=(?) WHERE user=" + String(req.query.account_id)
     db.run(string_helper, [req.query.account_name, req.query.account_email, req.query.account_id]);
     renew()
   });
@@ -1837,5 +1829,3 @@ function edit_info_password() {
     xhttp.send();
     setTimeout(function() { window.location.reload(); }, 1)
 }
-
-
