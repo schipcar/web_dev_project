@@ -1750,12 +1750,14 @@ app.post('/gradestudent3', function(req, res) {
     renew()
     res.status(204).send()
   });
+
 app.post('/info_account1', function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
     res.setHeader('Access-Control-Max-Age', 2592000);
     res.setHeader('Content-Type', 'application/json');
     string_info = 'SELECT * FROM users WHERE user=' + String(req.body.user)
+
     renew()
     res.status(204).send()
 });
@@ -1768,20 +1770,21 @@ app.get('/info_account', function(req, res) {
     res.send(JSON.stringify(row_info_account));
 });
 app.post('/edit', function(req, res) {
-    db.run('REPLACE INTO users (name, email, user) VALUES (?, ?, ?)', [req.query.account_name, req.query.account_email, req.query.account_id]);
+    var string_helper = "UPDATE users SET name=(?), email=(?), user=(?) WHERE user=" + String(req.query.account_id) 
+    db.run(string_helper, [req.query.account_name, req.query.account_email, req.query.account_id]);
     renew()
-    console.log(req.query.account_name)
   });
 app.post('/edit_info', function(req, res) {
-    db.run('REPLACE INTO users (sec_q1, sec_q2, sec_q2, sec_a1, sec_a2, sec_a3) VALUES (?, ?, ?, ?, ?, ?)', [req.query.question1, req.query.question2, req.query.question3, req.query.answer1, req.query.answer2, req.query.answer3]);
+    var string_helper = "UPDATE users SET password=(?), sec_q1=(?), sec_q2=(?), sec_q3=(?), sec_a1=(?), sec_a2=(?), sec_a3=(?) WHERE user=" + String(req.query.user1)
+    console.log(string_helper)
+    db.run(string_helper, [req.query.password, req.query.question1, req.query.question2, req.query.question3, req.query.answer1, req.query.answer2, req.query.answer3]);
     renew()
-    console.log(req.query.question1)
   });
 app.listen(8088, function() {
   console.log('Server running at http://127.0.0.1:8088/');
 });
 
-function edit_info() {
+function edit_info_f() {
     data = get_url_params()
 
     name_box = document.getElementById("Name")
@@ -1802,7 +1805,7 @@ function edit_info_password() {
     points_box = document.getElementById("ID")
 
     let xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://localhost:8088/edit_info?password=" + Password.value + "&question1=" + Question1.value + "&answer1=" + Answer1.value + "&question2=" + Question2.value + "&answer2=" + Answer2.value + "&question3=" + Question3.value + "&answer3=" + Answer3.value, true);
+    xhttp.open("POST", "http://localhost:8088/edit_info?password=" + Password.value + "&question1=" + Question1.value + "&answer1=" + Answer1.value + "&question2=" + Question2.value + "&answer2=" + Answer2.value + "&question3=" + Question3.value + "&answer3=" + Answer3.value + "&user1=" + id_user, true);
     xhttp.send();
     setTimeout(function() { window.location.reload(); }, 1)
 }

@@ -100,10 +100,10 @@ div = document.createElement("form");
 div.className = 'assignment_form';
 div.id = 'assignment_form_div';
 
+
 name_prompt = document.createElement("p");
 duedate_prompt = document.createElement("p");
 points_prompt = document.createElement("p");
-
 
 name_prompt.innerHTML = 'Name:';
 duedate_prompt.innerHTML = 'Email:';
@@ -137,7 +137,7 @@ submit_button = document.createElement("input")
 submit_button.type = "submit"
 submit_button.value = "Submit"
 submit_button.onclick = function() {
-    edit_info()
+    edit_info_f()
     document.getElementById('assignment_form_div').remove();
 }
 
