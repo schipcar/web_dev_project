@@ -1697,7 +1697,7 @@ Preferences.id = "tbl";
   function createtable(id, list_array, nrows){
     var TableDiv = document.getElementById("main_panel");
     var ncells = 6;
-    var names = ["Email", "Name", "User", "Punctuation", "Possible", "Course"];
+    var names = ["Email", "Name", "User", "Grades", "Possible", "Course"];
 
     var table = document.createElement('TABLE');
     table.border='1';
